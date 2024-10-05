@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import logo from "../assets/images/logo.png";
 
 const NavBar = () => {
   const linkClass = ({ isActive }) =>
@@ -9,28 +10,28 @@ const NavBar = () => {
 
   return (
     <>
-      <nav>
-        <div>
-          <div>
-            <div>
-              {/* <!-- Logo --> */}
-              <NavLink to="/">
-                <span>CMU Research</span>
-              </NavLink>
-              <div>
-                <div>
-                  <NavLink to="/" className={linkClass}>
-                    Dashboard
-                  </NavLink>
-                  <NavLink to="/jobs" className={linkClass}>
-                    Search
-                  </NavLink>
-                  <NavLink to="/add-job" className={linkClass}>
-                    Saved
-                  </NavLink>
-                </div>
-              </div>
-            </div>
+      <nav className="bg-pink-hippo block h-16 w-full pl-4">
+        <div className="flex flex-wrap justify-between items-center w-full h-full">
+          <div className="h-5/6 w-1/7 flex items-start">
+            {/* Logo */}
+            <NavLink className="w-full h-full inline-block" to="/">
+              <img
+                className="object-contain relative w-full h-full"
+                src={logo}
+                alt="logo"
+              />
+            </NavLink>
+          </div>
+          <div className="p-4">
+            <NavLink to="/" className={linkClass}>
+              Dashboard
+            </NavLink>
+            <NavLink to="/search" className={linkClass}>
+              Search
+            </NavLink>
+            <NavLink to="/saved" className={linkClass}>
+              Saved
+            </NavLink>
           </div>
         </div>
       </nav>
