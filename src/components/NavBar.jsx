@@ -15,7 +15,7 @@ const NavBar = () => {
             <div>
               {/* <!-- Logo --> */}
               <NavLink to="/">
-                <span>React Jobs</span>
+                <span>CMU Research</span>
               </NavLink>
               <div>
                 <div>
