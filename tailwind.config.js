@@ -6,10 +6,16 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    colors: {
-      'pink-hippo': '#fae0eb',
-    },
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Monospace']
+      },
+      colors: {
+        'pink-hippo': '#fae0eb',
+        'magenta-hippo': '#ac316a',
+        'magenta-dark-hippo': '#4a152e',
+      },
+    }
   },
   plugins: [],
 }
