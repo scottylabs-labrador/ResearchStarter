@@ -10,7 +10,7 @@ const NavBar = () => {
 
   return (
     <>
-      <nav className="bg-pink-hippo block h-[7vh] w-full pl-4 fixed">
+      <nav className="bg-pink-hippo block h-[7vh] w-full pl-4 fixed z-10">
         <div className="flex flex-wrap justify-between items-center w-full h-full">
           <div className="h-5/6 w-1/7 flex items-start">
             {/* Logo */}
