@@ -1,6 +1,6 @@
 import React from "react";
 
-const Card = ({ name }) => {
+const Card = ({ name, topics }) => {
   return (
     <div className="w-[47%] h-[45%] bg-white shadow-2xl mr-auto rounded-lg p-10">
       <div className="flex flex-col">
