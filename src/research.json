@@ -1,0 +1,172 @@
+{
+  "research": [
+    {
+      "id": "1",
+      "type": "professor",
+      "firstName": "Bobby",
+      "last Name": "McProfess",
+      "email": "bobprof@andrew.cmu.edu",
+      "officeHours": "MWF 5pm Wean 8215",
+      "topics": ["biology", "neuroscience"],
+      "researches": [
+        "Third Arm: An Additional Limb Project",
+        "Mutations in Caterpillars",
+        "Implanting Eyeglasses Efficient Child Replacement"
+      ],
+      "keywords": ["Mutation", "Frankenstein", "Medical Implants"],
+      "colleges": ["Mellon College of Science"],
+      "department": ["Modifications"],
+      "labs": ["CMutation"],
+      "requestedYear": "",
+      "requestedExp": "Have read Frankenstein",
+      "timeAvail": "Fall School Year",
+      "pastPapers": [],
+      "description": "",
+      "website": ""
+    },
+    {
+      "id": "2",
+      "type": "professor",
+      "firstName": "Theo",
+      "lastName": "Rem",
+      "email": "TheoRem@andrew.cmu.edu",
+      "officeHours": "MW GHC",
+      "topics": ["Discrete Math", "SAT Solver"],
+      "researches": [
+        "Prime Number Conjectures",
+        "3D Binary Numbers",
+        "Becpming a theorem"
+      ],
+      "keywords": ["Hedgehog", "Diet Coke"],
+      "colleges": ["School of Computer Science"],
+      "department": ["Mascots"],
+      "labs": ["Unknown"],
+      "requestedYear": "First Year",
+      "requestedExp": "151",
+      "timeAvail": "Winter",
+      "pastPapers": [],
+      "description": "A cute hedgehog",
+      "website": ""
+    },
+    {
+      "id": "3",
+      "type": "professor",
+      "firstName": "Bobby",
+      "last Name": "McProfess",
+      "email": "bobprof@andrew.cmu.edu",
+      "officeHours": "MWF 5pm Wean 8215",
+      "topics": ["biology", "neuroscience"],
+      "researches": [
+        "Third Arm: An Additional Limb Project",
+        "Mutations in Caterpillars",
+        "Implanting Eyeglasses Efficient Child Replacement"
+      ],
+      "keywords": ["Mutation", "Frankenstein", "Medical Implants"],
+      "colleges": ["Mellon College of Science"],
+      "department": ["Modifications"],
+      "labs": ["CMutation"],
+      "requestedYear": "",
+      "requestedExp": "Have read Frankenstein",
+      "timeAvail": "Fall School Year",
+      "pastPapers": [],
+      "description": "",
+      "website": ""
+    },
+    {
+      "id": "4",
+      "type": "professor",
+      "firstName": "Bobby",
+      "last Name": "McProfess",
+      "email": "bobprof@andrew.cmu.edu",
+      "officeHours": "MWF 5pm Wean 8215",
+      "topics": ["biology", "neuroscience"],
+      "researches": [
+        "Third Arm: An Additional Limb Project",
+        "Mutations in Caterpillars",
+        "Implanting Eyeglasses Efficient Child Replacement"
+      ],
+      "keywords": ["Mutation", "Frankenstein", "Medical Implants"],
+      "colleges": ["Mellon College of Science"],
+      "department": ["Modifications"],
+      "labs": ["CMutation"],
+      "requestedYear": "",
+      "requestedExp": "Have read Frankenstein",
+      "timeAvail": "Fall School Year",
+      "pastPapers": [],
+      "description": "",
+      "website": ""
+    },
+    {
+      "id": "5",
+      "type": "professor",
+      "firstName": "Bobby",
+      "last Name": "McProfess",
+      "email": "bobprof@andrew.cmu.edu",
+      "officeHours": "MWF 5pm Wean 8215",
+      "topics": ["biology", "neuroscience"],
+      "researches": [
+        "Third Arm: An Additional Limb Project",
+        "Mutations in Caterpillars",
+        "Implanting Eyeglasses Efficient Child Replacement"
+      ],
+      "keywords": ["Mutation", "Frankenstein", "Medical Implants"],
+      "colleges": ["Mellon College of Science"],
+      "department": ["Modifications"],
+      "labs": ["CMutation"],
+      "requestedYear": "",
+      "requestedExp": "Have read Frankenstein",
+      "timeAvail": "Fall School Year",
+      "pastPapers": [],
+      "description": "",
+      "website": ""
+    },
+    {
+      "id": "6",
+      "type": "professor",
+      "firstName": "Bobby",
+      "last Name": "McProfess",
+      "email": "bobprof@andrew.cmu.edu",
+      "officeHours": "MWF 5pm Wean 8215",
+      "topics": ["biology", "neuroscience"],
+      "researches": [
+        "Third Arm: An Additional Limb Project",
+        "Mutations in Caterpillars",
+        "Implanting Eyeglasses Efficient Child Replacement"
+      ],
+      "keywords": ["Mutation", "Frankenstein", "Medical Implants"],
+      "colleges": ["Mellon College of Science"],
+      "department": ["Modifications"],
+      "labs": ["CMutation"],
+      "requestedYear": "",
+      "requestedExp": "Have read Frankenstein",
+      "timeAvail": "Fall School Year",
+      "pastPapers": [],
+      "description": "",
+      "website": ""
+    },
+    {
+      "id": "7",
+      "type": "professor",
+      "firstName": "Bobby",
+      "last Name": "McProfess",
+      "email": "bobprof@andrew.cmu.edu",
+      "officeHours": "MWF 5pm Wean 8215",
+      "topics": ["biology", "neuroscience"],
+      "researches": [
+        "Third Arm: An Additional Limb Project",
+        "Mutations in Caterpillars",
+        "Implanting Eyeglasses Efficient Child Replacement"
+      ],
+      "keywords": ["Mutation", "Frankenstein", "Medical Implants"],
+      "colleges": ["Mellon College of Science"],
+      "department": ["Modifications"],
+      "labs": ["CMutation"],
+      "requestedYear": "",
+      "requestedExp": "Have read Frankenstein",
+      "timeAvail": "Fall School Year",
+      "pastPapers": [],
+      "description": "",
+      "website": ""
+    }
+  ]
+}
