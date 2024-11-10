@@ -9,6 +9,9 @@ import FilterPage from "./pages/FilterPage";
 import DashboardPage from "./pages/DashboardPage";
 import SavedPage from "./pages/SavedPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import SignInPage from "./pages/SignInPage";
+
+import { SignedIn, SignedOut } from "@clerk/clerk-react";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,7 +25,16 @@ const router = createBrowserRouter(
 );
 
 const App = () => {
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <SignedIn>
+        <RouterProvider router={router} />
+      </SignedIn>
+      <SignedOut>
+        <SignInPage />
+      </SignedOut>
+    </>
+  );
 };
 
 export default App;
