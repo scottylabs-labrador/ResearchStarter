@@ -16,8 +16,8 @@ import { SignedIn, SignedOut } from "@clerk/clerk-react";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />}>
-      <Route index element={<FilterPage />} />
-      <Route path="/dashboard" element={<DashboardPage />} />
+      <Route index element={<DashboardPage />} />
+      <Route path="/filter" element={<FilterPage />} />
       <Route path="/saved" element={<SavedPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Route>

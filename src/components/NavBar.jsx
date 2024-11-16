@@ -24,10 +24,10 @@ const NavBar = () => {
             </NavLink>
           </div>
           <div className="p-4 text-lg flex gap-x-4">
-            <NavLink to="/dashboard" className={linkClass}>
+            <NavLink to="/" className={linkClass}>
               Dashboard
             </NavLink>
-            <NavLink to="/" className={linkClass}>
+            <NavLink to="/filter" className={linkClass}>
               Search
             </NavLink>
             <NavLink to="/saved" className={linkClass}>
