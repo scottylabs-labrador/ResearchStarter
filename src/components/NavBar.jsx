@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 import { UserButton } from "@clerk/clerk-react";
+import "../styles/global.css";
 
 const NavBar = () => {
   const linkClass = ({ isActive }) =>
@@ -33,7 +34,7 @@ const NavBar = () => {
             <NavLink to="/saved" className={linkClass}>
               Saved
             </NavLink>
-            <UserButton />
+            <UserButton/>
           </div>
         </div>
       </nav>
