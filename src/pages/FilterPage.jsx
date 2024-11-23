@@ -9,6 +9,9 @@ const FilterPage = () => {
   const [researches, setResearches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [input, setInput] = useState("");
+  const [filterDep, setFilterDep] = useState([]);
+  const [filterCollege, setFilterCollege] = useState([]);
+  
   let filteredData = researches;
   useEffect(() => {
     const fetchResearches = async () => {
@@ -41,10 +44,7 @@ const FilterPage = () => {
   return (
     <>
       <div className="fixed bottom-0 left-0 shadow-2xl w-1/6 h-[93vh]">
-        <div className="flex flex-col justify-normal items-start p-6 gap-y-5">
-          <h2 className="">Filter</h2>
-          <FilterSection criteria="School" />
-        </div>
+        <FilterSection />
       </div>
       <div className="fixed top-[7vh] right-0 w-5/6 h-[6vh] z-10  bg-gray-300 flex justify-center items-center">
         <SearchBar data={researches} input={input} handleChange={handleChange} />
