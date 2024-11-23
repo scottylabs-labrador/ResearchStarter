@@ -61,7 +61,7 @@ const FilterPage = () => {
   const onChecked = (target) => {
     let temp = JSON.parse(JSON.stringify(filterCollege));
     temp[target.name] = target.checked; // Set new field
-    if (target.name == "All") {
+    if (target.name == "All" && target.checked) {
       const allC = document.getElementsByClassName("collegeCheck");
       Array.from(allC).forEach(element => {
         element.checked = true;
