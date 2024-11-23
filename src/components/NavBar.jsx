@@ -33,7 +33,7 @@ const NavBar = () => {
             <NavLink to="/saved" className={linkClass}>
               Saved
             </NavLink>
-            <UserButton />
+            <UserButton/>
           </div>
         </div>
       </nav>
