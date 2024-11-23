@@ -10,7 +10,8 @@ import DashboardPage from "./pages/DashboardPage";
 import SavedPage from "./pages/SavedPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import SignInPage from "./pages/SignInPage";
-
+import "./styles/global.css";
+import "./styles/animation.css"
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
 
 const router = createBrowserRouter(
