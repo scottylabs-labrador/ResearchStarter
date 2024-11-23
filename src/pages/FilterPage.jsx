@@ -49,6 +49,8 @@ const FilterPage = () => {
       <div className="fixed top-[7vh] right-0 w-5/6 h-[6vh] z-10  bg-gray-300 flex justify-center items-center">
         <SearchBar data={researches} input={input} handleChange={handleChange} />
       </div>
+      <div className="fixed top-[13vh] right-0 w-5/6 h-[3vh] z-10  bg-gradient-to-b from-gray-300/100 to-white/5">
+      </div>
       <div className="fixed top-[12vh] h-[88vh] right-0 w-5/6 bg-gray-300 -z-10" />
       <div className="absolute top-[12vh]  right-0 w-5/6  px-10 pb-10 pt-7 flex justify-center">
         <div className="w-full h-full grid grid-cols-1 items-stretch gap-5">
