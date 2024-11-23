@@ -10,7 +10,7 @@ const FilterPage = () => {
   const [loading, setLoading] = useState(true);
   const [input, setInput] = useState("");
   const [filterDep, setFilterDep] = useState({ "All": true });
-  const [filterCollege, setFilterCollege] = useState({ "All": true });
+  const [filterCollege, setFilterCollege] = useState({ "All": true, "College of Engineering": true, "College of Fine Arts": true, "Dietrich College of Humanities & Social Sciences": true, "Heinz College of Information Systems and Public Policy": true, "Mellon College of Science": true, "School of Computer Science": true, "Tepper School of Business": true });
 
   let filteredData = researches;
   useEffect(() => {
@@ -42,19 +42,44 @@ const FilterPage = () => {
     // filteredData = search(value, researches);
   }
 
+  const onSelected = (e) => {
+    let temp = {};
+    console.log(e);
+    if (e.length == 0) { // nothing is selected, no filter
+      temp["All"] = true;
+    } else {
+      temp["All"] = false;
+
+      for (var i = 0; i < e.length; i++) {
+        temp[e[i]["value"]] = true;
+      }
+    }
+    console.log(temp);
+    setFilterDep(temp); // Save the copy to state
+  }
+
   const onChecked = (target) => {
-    console.log(target);
-    let temp = filterCollege; // Create a copy with the spread operator
+    let temp = JSON.parse(JSON.stringify(filterCollege));
     temp[target.name] = target.checked; // Set new field
+    if (target.name == "All") {
+      const allC = document.getElementsByClassName("collegeCheck");
+      Array.from(allC).forEach(element => {
+        element.checked = true;
+        temp[element.name] = true;
+      });
+    }
+    if (!target.checked) {
+      const allB = document.getElementById('CollegeAll');
+      allB.checked = false;
+      temp["All"] = false;
+    }
     setFilterCollege(temp); // Save the copy to state
-    filteredData = search(input, researches, filterDep, filterCollege);
-    console.log("actualFound" + filteredData);
   }
 
   return (
     <>
       <div className="fixed bottom-0 left-0 shadow-2xl w-1/6 h-[93vh]">
-        <FilterSection onChecked={onChecked} />
+        <FilterSection onChecked={onChecked} onSelected={onSelected} />
       </div>
       <div className="fixed top-[7vh] right-0 w-5/6 h-[6vh] z-10  bg-gray-300 flex justify-center items-center">
         <SearchBar data={researches} input={input} handleChange={handleChange} />
@@ -84,7 +109,7 @@ const FilterPage = () => {
 
 // reference https://stackoverflow.com/questions/45615509/search-through-json-with-keywords
 function search(keyword, data, filterDep, filterCollege) {
-  console.log(filterCollege);
+  console.log(filterDep);
   console.log("Running Search");
 
   var filteredResults = [];
@@ -110,7 +135,7 @@ function search(keyword, data, filterDep, filterCollege) {
       const cList = data[i]["colleges"];
       if (cList == undefined) continue;
       for (var j = 0; j < cList.length; j++) {
-        const result = filterDep[cList[j]] ?? false;
+        const result = filterCollege[cList[j]] ?? false;
         if (result) {
           found = true;
         }
