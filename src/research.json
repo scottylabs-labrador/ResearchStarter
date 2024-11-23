@@ -4,19 +4,32 @@
       "id": "1",
       "type": "professor",
       "firstName": "Bobby",
-      "last Name": "McProfess",
+      "lastName": "McProfess",
       "email": "bobprof@andrew.cmu.edu",
       "officeHours": "MWF 5pm Wean 8215",
-      "topics": ["biology", "neuroscience"],
+      "topics": [
+        "biology",
+        "neuroscience"
+      ],
       "researches": [
         "Third Arm: An Additional Limb Project",
         "Mutations in Caterpillars",
         "Implanting Eyeglasses Efficient Child Replacement"
       ],
-      "keywords": ["Mutation", "Frankenstein", "Medical Implants"],
-      "colleges": ["Mellon College of Science"],
-      "department": ["Modifications"],
-      "labs": ["CMutation"],
+      "keywords": [
+        "Mutation",
+        "Frankenstein",
+        "Medical Implants"
+      ],
+      "colleges": [
+        "Mellon College of Science"
+      ],
+      "department": [
+        "Modifications"
+      ],
+      "labs": [
+        "CMutation"
+      ],
       "requestedYear": "",
       "requestedExp": "Have read Frankenstein",
       "timeAvail": "Fall School Year",
@@ -27,146 +40,896 @@
     {
       "id": "2",
       "type": "professor",
-      "firstName": "Hippo",
-      "lastName": "Rem",
-      "email": "TheoRem@andrew.cmu.edu",
-      "officeHours": "MW GHC",
-      "topics": ["Discrete Math", "SAT Solver"],
-      "researches": [
-        "Prime Number Conjectures",
-        "3D Binary Numbers",
-        "Becpming a theorem"
+      "firstName": "Emma",
+      "lastName": "Johnson",
+      "email": "emmaj@berkeley.edu",
+      "officeHours": "TTh 3pm Dwinelle 220",
+      "topics": [
+        "computer science",
+        "artificial intelligence"
       ],
-      "keywords": ["Hedgehog", "Diet Coke"],
-      "colleges": ["School of Computer Science"],
-      "department": ["Mascots"],
-      "labs": ["Unknown"],
-      "requestedYear": "First Year",
-      "requestedExp": "151",
-      "timeAvail": "Winter",
-      "pastPapers": [],
-      "description": "A cute hedgehog",
-      "website": ""
+      "researches": [
+        "Autonomous Vehicles",
+        "AI in Healthcare",
+        "Robotic Surgery"
+      ],
+      "keywords": [
+        "AI",
+        "Machine Learning",
+        "Robotics"
+      ],
+      "colleges": [
+        "College of Engineering"
+      ],
+      "department": [
+        "Electrical Engineering and Computer Science"
+      ],
+      "labs": [
+        "AI Lab",
+        "Robotics Lab"
+      ],
+      "requestedYear": "2024",
+      "requestedExp": "Experience with neural networks",
+      "timeAvail": "Spring School Year",
+      "pastPapers": [
+        "Deep Learning for Image Recognition",
+        "Advancements in Self-Driving Cars"
+      ],
+      "description": "Dr. Emma Johnson focuses on the intersection of artificial intelligence and healthcare.",
+      "website": "https://emma.johnson.edu"
     },
     {
       "id": "3",
       "type": "professor",
-      "firstName": "Bobby",
-      "last Name": "McProfess",
-      "email": "bobprof@andrew.cmu.edu",
-      "officeHours": "MWF 5pm Wean 8215",
-      "topics": ["biology", "neuroscience"],
-      "researches": [
-        "Third Arm: An Additional Limb Project",
-        "Mutations in Caterpillars",
-        "Implanting Eyeglasses Efficient Child Replacement"
+      "firstName": "Carlos",
+      "lastName": "Martinez",
+      "email": "carlos.m@harvard.edu",
+      "officeHours": "",
+      "topics": [
+        "quantum physics",
+        "mathematical modeling"
       ],
-      "keywords": ["Mutation", "Frankenstein", "Medical Implants"],
-      "colleges": ["Mellon College of Science"],
-      "department": ["Modifications"],
-      "labs": ["CMutation"],
-      "requestedYear": "",
-      "requestedExp": "Have read Frankenstein",
+      "researches": [
+        "Quantum Entanglement and Teleportation",
+        "Mathematics of Black Holes",
+        "Cosmic String Theory"
+      ],
+      "keywords": [
+        "Quantum Mechanics",
+        "General Relativity",
+        "Cosmology"
+      ],
+      "colleges": [
+        "Harvard College"
+      ],
+      "department": [
+        "Physics"
+      ],
+      "labs": [
+        "Quantum Lab"
+      ],
+      "requestedYear": "2024",
+      "requestedExp": "",
       "timeAvail": "Fall School Year",
       "pastPapers": [],
       "description": "",
-      "website": ""
+      "website": "https://carlos.martinez.edu"
     },
     {
       "id": "4",
       "type": "professor",
-      "firstName": "Bobby",
-      "last Name": "McProfess",
-      "email": "bobprof@andrew.cmu.edu",
-      "officeHours": "MWF 5pm Wean 8215",
-      "topics": ["biology", "neuroscience"],
-      "researches": [
-        "Third Arm: An Additional Limb Project",
-        "Mutations in Caterpillars",
-        "Implanting Eyeglasses Efficient Child Replacement"
+      "firstName": "Alicia",
+      "lastName": "Wong",
+      "email": "alicia.wong@mit.edu",
+      "officeHours": "TTh 9am, 4pm E40-440",
+      "topics": [
+        "mechanical engineering",
+        "robotics"
       ],
-      "keywords": ["Mutation", "Frankenstein", "Medical Implants"],
-      "colleges": ["Mellon College of Science"],
-      "department": ["Modifications"],
-      "labs": ["CMutation"],
-      "requestedYear": "",
-      "requestedExp": "Have read Frankenstein",
-      "timeAvail": "Fall School Year",
-      "pastPapers": [],
-      "description": "",
-      "website": ""
+      "researches": [
+        "Design of Autonomous Robots",
+        "3D Printing for Prosthetics",
+        "Mechanical Systems for Space Exploration"
+      ],
+      "keywords": [
+        "Robotics",
+        "3D Printing",
+        "Space Engineering"
+      ],
+      "colleges": [
+        "MIT College of Engineering"
+      ],
+      "department": [
+        "Mechanical Engineering"
+      ],
+      "labs": [
+        "Robotics Lab",
+        "Space Engineering Lab"
+      ],
+      "requestedYear": "2025",
+      "requestedExp": "Familiarity with robotic programming languages",
+      "timeAvail": "",
+      "pastPapers": [
+        "Prosthetic Designs Using 3D Printing",
+        "Robotics for Deep Space Exploration"
+      ],
+      "description": "Prof. Alicia Wong is a leading researcher in the development of autonomous robots for space missions.",
+      "website": "https://alicia.wong.mit.edu"
     },
     {
       "id": "5",
       "type": "professor",
-      "firstName": "Bobby",
-      "last Name": "McProfess",
-      "email": "bobprof@andrew.cmu.edu",
-      "officeHours": "MWF 5pm Wean 8215",
-      "topics": ["biology", "neuroscience"],
-      "researches": [
-        "Third Arm: An Additional Limb Project",
-        "Mutations in Caterpillars",
-        "Implanting Eyeglasses Efficient Child Replacement"
+      "firstName": "John",
+      "lastName": "Smith",
+      "email": "john.smith@stanford.edu",
+      "officeHours": "MWF 11am, Gates 420",
+      "topics": [
+        "data science",
+        "statistical analysis"
       ],
-      "keywords": ["Mutation", "Frankenstein", "Medical Implants"],
-      "colleges": ["Mellon College of Science"],
-      "department": ["Modifications"],
-      "labs": ["CMutation"],
+      "researches": [
+        "Predictive Analytics in Healthcare",
+        "Big Data and the Future of Finance",
+        "Social Media and Public Opinion"
+      ],
+      "keywords": [
+        "Data Science",
+        "Statistics",
+        "Big Data"
+      ],
+      "colleges": [
+        "Stanford University"
+      ],
+      "department": [
+        "Computer Science"
+      ],
+      "labs": [
+        "Data Science Lab",
+        "Social Media Lab"
+      ],
       "requestedYear": "",
-      "requestedExp": "Have read Frankenstein",
+      "requestedExp": "Experience with large datasets and R programming",
       "timeAvail": "Fall School Year",
-      "pastPapers": [],
-      "description": "",
+      "pastPapers": [
+        "Data Analysis in Healthcare",
+        ""
+      ],
+      "description": "Prof. John Smith specializes in data science and its applications to healthcare, finance, and social media analysis.",
       "website": ""
     },
     {
       "id": "6",
       "type": "professor",
-      "firstName": "Bobby",
-      "last Name": "McProfess",
-      "email": "bobprof@andrew.cmu.edu",
-      "officeHours": "MWF 5pm Wean 8215",
-      "topics": ["biology", "neuroscience"],
-      "researches": [
-        "Third Arm: An Additional Limb Project",
-        "Mutations in Caterpillars",
-        "Implanting Eyeglasses Efficient Child Replacement"
+      "firstName": "Linda",
+      "lastName": "Klein",
+      "email": "linda.klein@oxford.ac.uk",
+      "officeHours": "Mon 1pm, Thu 9am, Mathematical Institute",
+      "topics": [
+        "mathematics",
+        "cryptography"
       ],
-      "keywords": ["Mutation", "Frankenstein", "Medical Implants"],
-      "colleges": ["Mellon College of Science"],
-      "department": ["Modifications"],
-      "labs": ["CMutation"],
-      "requestedYear": "",
-      "requestedExp": "Have read Frankenstein",
-      "timeAvail": "Fall School Year",
-      "pastPapers": [],
+      "researches": [
+        "Algorithms for Secure Data Transmission",
+        "Cryptographic Methods in Blockchain",
+        "Number Theory and Encryption"
+      ],
+      "keywords": [
+        "Cryptography",
+        "Blockchain",
+        "Number Theory"
+      ],
+      "colleges": [
+        "Oxford University"
+      ],
+      "department": [
+        "Mathematics"
+      ],
+      "labs": [
+        "Cryptography Lab"
+      ],
+      "requestedYear": "2024",
+      "requestedExp": "Knowledge of advanced number theory",
+      "timeAvail": "Spring School Year",
+      "pastPapers": [
+        "Modern Encryption Techniques",
+        "Blockchain and Cryptographic Algorithms"
+      ],
       "description": "",
-      "website": ""
+      "website": "https://linda.klein.ox.ac.uk"
     },
     {
       "id": "7",
       "type": "professor",
-      "firstName": "Bobby",
-      "last Name": "McProfess",
-      "email": "bobprof@andrew.cmu.edu",
-      "officeHours": "MWF 5pm Wean 8215",
-      "topics": ["biology", "neuroscience"],
-      "researches": [
-        "Third Arm: An Additional Limb Project",
-        "Mutations in Caterpillars",
-        "Implanting Eyeglasses Efficient Child Replacement"
+      "firstName": "Anna",
+      "lastName": "Zhang",
+      "email": "anna.zhang@columbia.edu",
+      "officeHours": "",
+      "topics": [
+        "history",
+        "ancient civilizations"
       ],
-      "keywords": ["Mutation", "Frankenstein", "Medical Implants"],
-      "colleges": ["Mellon College of Science"],
-      "department": ["Modifications"],
-      "labs": ["CMutation"],
+      "researches": [
+        "Mesopotamian Architecture",
+        "Ancient Egyptian Economy",
+        "Roman Political Systems"
+      ],
+      "keywords": [
+        "Archaeology",
+        "Civilizations",
+        "History"
+      ],
+      "colleges": [
+        "Columbia University"
+      ],
+      "department": [
+        "History"
+      ],
+      "labs": [],
       "requestedYear": "",
-      "requestedExp": "Have read Frankenstein",
+      "requestedExp": "Knowledge of ancient languages",
       "timeAvail": "Fall School Year",
-      "pastPapers": [],
+      "pastPapers": [
+        "Architecture in Ancient Mesopotamia",
+        "Economy of Ancient Egypt"
+      ],
+      "description": "Prof. Zhang's work revolves around the ancient world, focusing on architecture, economy, and political systems.",
+      "website": ""
+    },
+    {
+      "id": "8",
+      "type": "professor",
+      "firstName": "David",
+      "lastName": "Lee",
+      "email": "david.lee@princeton.edu",
+      "officeHours": "Wed 1pm, Fri 11am, Fine Hall 101",
+      "topics": [
+        "astrophysics",
+        "space exploration"
+      ],
+      "researches": [],
+      "keywords": [
+        "Astrophysics",
+        "Space Exploration"
+      ],
+      "colleges": [
+        "Princeton University"
+      ],
+      "department": [
+        "Physics"
+      ],
+      "labs": [
+        "Astrophysics Lab"
+      ],
+      "requestedYear": "2025",
+      "requestedExp": "Knowledge of observational astronomy",
+      "timeAvail": "Spring School Year",
+      "pastPapers": [
+        "Observational Methods in Astrophysics"
+      ],
+      "description": "David Lee conducts research on space exploration and the study of celestial bodies.",
+      "website": "https://david.lee.princeton.edu"
+    },
+    {
+      "id": "9",
+      "type": "professor",
+      "firstName": "Sarah",
+      "lastName": "Mitchell",
+      "email": "sarah.mitchell@ucla.edu",
+      "officeHours": "Mon 9am, Wed 10am, UCLA Engineering Bldg.",
+      "topics": [
+        "environmental science",
+        "climate change"
+      ],
+      "researches": [
+        "Renewable Energy Solutions",
+        "Climate Change and Urban Planning"
+      ],
+      "keywords": [
+        "Renewable Energy",
+        "Climate Change",
+        "Sustainability"
+      ],
+      "colleges": [
+        "UCLA College of Engineering"
+      ],
+      "department": [
+        "Environmental Science"
+      ],
+      "labs": [
+        "Renewable Energy Lab"
+      ],
+      "requestedYear": "2024",
+      "requestedExp": "Experience with renewable energy systems",
+      "timeAvail": "",
+      "pastPapers": [
+        "Climate Change Impact on Coastal Cities"
+      ],
       "description": "",
       "website": ""
+    },
+    {
+      "id": "10",
+      "type": "professor",
+      "firstName": "Hippo",
+      "lastName": "Rem",
+      "email": "HRem@andrew.cmu.edu",
+      "officeHours": "MWF 9am, GHC 8211",
+      "topics": [
+        "animals"
+      ],
+      "researches": [
+        "Hippo Animal Kingdom"
+      ],
+      "keywords": [
+        "Animal Care"
+      ],
+      "colleges": [
+        "School of Computer Science"
+      ],
+      "department": [
+        "Environmental Science"
+      ],
+      "labs": [
+        "Hippo Yay"
+      ],
+      "requestedYear": "2024",
+      "requestedExp": "Need to be hippo",
+      "timeAvail": "",
+      "pastPapers": [
+        "On how hippos is the best animal"
+      ],
+      "description": "",
+      "website": ""
+    },
+    {
+      "id": "11",
+      "type": "professor",
+      "firstName": "Evelyn",
+      "lastName": "Taylor",
+      "email": "evelyn.taylor@bio.uni.edu",
+      "topics": [
+        "genetics",
+        "microbiology"
+      ],
+      "colleges": [
+        "Life Sciences"
+      ],
+      "labs": [
+        "MicroGen Lab"
+      ]
+    },
+    {
+      "id": "12",
+      "type": "professor",
+      "firstName": "James",
+      "lastName": "O'Connell",
+      "officeHours": "MW 2pm-4pm Room 123",
+      "topics": [
+        "literature",
+        "poetry"
+      ],
+      "researches": [
+        "Modern Poetry Forms"
+      ],
+      "colleges": [
+        "College of Humanities"
+      ]
+    },
+    {
+      "id": "13",
+      "type": "professor",
+      "firstName": "Nina",
+      "lastName": "Patel",
+      "email": "n.patel@engineering.edu",
+      "topics": [
+        "mechanical engineering"
+      ],
+      "researches": [
+        "Robotics in Manufacturing"
+      ],
+      "colleges": [
+        "School of Engineering"
+      ],
+      "requestedExp": "Strong robotics background"
+    },
+    {
+      "id": "14",
+      "type": "professor",
+      "firstName": "Oliver",
+      "lastName": "Wang",
+      "email": "owang@computers.edu",
+      "officeHours": "TTh 1pm-3pm Online",
+      "topics": [
+        "AI",
+        "machine learning"
+      ],
+      "researches": [
+        "Reinforcement Learning"
+      ],
+      "colleges": [
+        "College of Computing"
+      ]
+    },
+    {
+      "id": "15",
+      "type": "professor",
+      "firstName": "Liam",
+      "lastName": "Brown",
+      "email": "liam.brown@math.edu",
+      "topics": [
+        "statistics",
+        "data science"
+      ],
+      "keywords": [
+        "Big Data",
+        "Bayesian Methods"
+      ],
+      "department": [
+        "Mathematics and Statistics"
+      ]
+    },
+    {
+      "id": "16",
+      "type": "professor",
+      "firstName": "Sophia",
+      "lastName": "Garcia",
+      "topics": [
+        "climate science"
+      ],
+      "researches": [
+        "Arctic Climate Change"
+      ],
+      "colleges": [
+        "Earth Sciences"
+      ]
+    },
+    {
+      "id": "17",
+      "type": "professor",
+      "firstName": "Henry",
+      "lastName": "Davis",
+      "email": "hdavis@chemistry.edu",
+      "officeHours": "W 10am-12pm Chem Lab 101",
+      "topics": [
+        "organic chemistry"
+      ]
+    },
+    {
+      "id": "18",
+      "type": "professor",
+      "firstName": "Ava",
+      "lastName": "Martinez",
+      "email": "ava.martinez@arts.edu",
+      "researches": [
+        "Expressionism in Modern Art"
+      ],
+      "keywords": [
+        "Art History",
+        "Expressionism"
+      ]
+    },
+    {
+      "id": "19",
+      "type": "professor",
+      "firstName": "Noah",
+      "lastName": "Wilson",
+      "officeHours": "MW 4pm-6pm Room 405",
+      "topics": [
+        "environmental studies"
+      ],
+      "colleges": [
+        "Environmental College"
+      ]
+    },
+    {
+      "id": "20",
+      "type": "professor",
+      "firstName": "Mia",
+      "lastName": "Lee",
+      "email": "mia.lee@philosophy.edu",
+      "topics": [
+        "ethics",
+        "philosophy of technology"
+      ]
+    },
+    {
+      "id": "21",
+      "type": "professor",
+      "firstName": "Emily",
+      "lastName": "Johnson",
+      "email": "emily.johnson@econ.edu",
+      "topics": [
+        "economics",
+        "macroeconomics"
+      ],
+      "researches": [
+        "Global Economic Trends"
+      ],
+      "colleges": [
+        "College of Business"
+      ]
+    },
+    {
+      "id": "22",
+      "type": "professor",
+      "firstName": "William",
+      "lastName": "Moore",
+      "topics": [
+        "astrophysics"
+      ],
+      "researches": [
+        "Black Hole Phenomena"
+      ],
+      "department": [
+        "Astrophysics Research Group"
+      ]
+    },
+    {
+      "id": "23",
+      "type": "professor",
+      "firstName": "Sophia",
+      "lastName": "Kim",
+      "email": "sophia.kim@cs.edu",
+      "topics": [
+        "software engineering"
+      ],
+      "researches": [
+        "Agile Development Techniques"
+      ]
+    },
+    {
+      "id": "24",
+      "type": "professor",
+      "firstName": "Ethan",
+      "lastName": "Clark",
+      "email": "e.clark@med.edu",
+      "officeHours": "T 3pm-5pm Med Bldg 305",
+      "topics": [
+        "neuroscience",
+        "cognitive science"
+      ],
+      "keywords": [
+        "Brain Mapping"
+      ]
+    },
+    {
+      "id": "25",
+      "type": "professor",
+      "firstName": "Olivia",
+      "lastName": "Adams",
+      "topics": [
+        "psychology"
+      ],
+      "researches": [
+        "Social Behavior Patterns"
+      ],
+      "labs": [
+        "Behavioral Studies Lab"
+      ]
+    },
+    {
+      "id": "26",
+      "type": "professor",
+      "firstName": "Benjamin",
+      "lastName": "White",
+      "email": "b.white@physics.edu",
+      "topics": [
+        "optics",
+        "laser technology"
+      ],
+      "researches": [
+        "High-Energy Laser Systems"
+      ],
+      "department": [
+        "Physics"
+      ]
+    },
+    {
+      "id": "27",
+      "type": "professor",
+      "firstName": "Emma",
+      "lastName": "Perez",
+      "email": "e.perez@edu.org",
+      "topics": [
+        "education",
+        "pedagogy"
+      ],
+      "researches": [
+        "Modern Teaching Techniques"
+      ]
+    },
+    {
+      "id": "28",
+      "type": "professor",
+      "firstName": "Alexander",
+      "lastName": "Hill",
+      "officeHours": "MW 10am-12pm Room 408",
+      "topics": [
+        "environmental engineering"
+      ],
+      "colleges": [
+        "Engineering and Environmental Sciences"
+      ]
+    },
+    {
+      "id": "29",
+      "type": "professor",
+      "firstName": "Isabella",
+      "lastName": "Harris",
+      "email": "i.harris@arts.edu",
+      "topics": [
+        "music composition"
+      ],
+      "researches": [
+        "Classical Music and Technology"
+      ]
+    },
+    {
+      "id": "30",
+      "type": "professor",
+      "firstName": "Mason",
+      "lastName": "Scott",
+      "topics": [
+        "urban planning"
+      ],
+      "colleges": [
+        "Urban Studies College"
+      ],
+      "labs": [
+        "Smart City Innovations Lab"
+      ]
+    },
+    {
+      "id": "31",
+      "type": "professor",
+      "firstName": "Lucas",
+      "lastName": "Robinson",
+      "email": "l.robinson@robotics.edu",
+      "topics": [
+        "robotics",
+        "automation"
+      ],
+      "researches": [
+        "Swarm Robotics"
+      ]
+    },
+    {
+      "id": "32",
+      "type": "professor",
+      "firstName": "Charlotte",
+      "lastName": "Thompson",
+      "officeHours": "F 2pm-4pm Room 205",
+      "topics": [
+        "linguistics"
+      ],
+      "keywords": [
+        "Language Evolution"
+      ]
+    },
+    {
+      "id": "33",
+      "type": "professor",
+      "firstName": "Harper",
+      "lastName": "Lopez",
+      "topics": [
+        "biochemistry"
+      ],
+      "colleges": [
+        "College of Life Sciences"
+      ]
+    },
+    {
+      "id": "34",
+      "type": "professor",
+      "firstName": "Jacob",
+      "lastName": "Martinez",
+      "email": "j.martinez@politics.edu",
+      "researches": [
+        "Policy Decision Models"
+      ],
+      "labs": [
+        "Political Systems Lab"
+      ]
+    },
+    {
+      "id": "35",
+      "type": "professor",
+      "firstName": "Amelia",
+      "lastName": "Anderson",
+      "topics": [
+        "artificial intelligence"
+      ],
+      "keywords": [
+        "Neural Networks",
+        "Deep Learning"
+      ]
+    },
+    {
+      "id": "36",
+      "type": "professor",
+      "firstName": "Michael",
+      "lastName": "Young",
+      "email": "m.young@earth.edu",
+      "researches": [
+        "Volcanic Activity Predictions"
+      ],
+      "department": [
+        "Geology"
+      ]
+    },
+    {
+      "id": "37",
+      "type": "professor",
+      "firstName": "Charlotte",
+      "lastName": "Torres",
+      "topics": [
+        "social psychology"
+      ],
+      "labs": [
+        "Human Behavior Lab"
+      ]
+    },
+    {
+      "id": "38",
+      "type": "professor",
+      "firstName": "Sebastian",
+      "lastName": "Baker",
+      "email": "s.baker@marine.edu",
+      "researches": [
+        "Coral Reef Ecosystems"
+      ],
+      "colleges": [
+        "Marine Sciences"
+      ]
+    },
+    {
+      "id": "39",
+      "type": "professor",
+      "firstName": "Elijah",
+      "lastName": "Reed",
+      "topics": [
+        "materials science"
+      ],
+      "researches": [
+        "Carbon Nanotubes"
+      ]
+    },
+    {
+      "id": "40",
+      "type": "professor",
+      "firstName": "Aria",
+      "lastName": "Brooks",
+      "topics": [
+        "health sciences"
+      ],
+      "researches": [
+        "Public Health Initiatives"
+      ]
+    },
+    {
+      "id": "41",
+      "type": "professor",
+      "firstName": "Victoria",
+      "lastName": "Carter",
+      "email": "v.carter@edu.net",
+      "topics": [
+        "data visualization"
+      ],
+      "researches": [
+        "Interactive Graph Design"
+      ],
+      "colleges": [
+        "Information Sciences"
+      ]
+    },
+    {
+      "id": "42",
+      "type": "professor",
+      "firstName": "Daniel",
+      "lastName": "Nguyen",
+      "topics": [
+        "civil engineering"
+      ],
+      "researches": [
+        "Sustainable Urban Infrastructure"
+      ]
+    },
+    {
+      "id": "43",
+      "type": "professor",
+      "firstName": "Avery",
+      "lastName": "Flores",
+      "email": "avery.flores@media.edu",
+      "researches": [
+        "Social Media Influence Studies"
+      ],
+      "keywords": [
+        "Digital Culture"
+      ]
+    },
+    {
+      "id": "44",
+      "type": "professor",
+      "firstName": "Grace",
+      "lastName": "Gonzalez",
+      "topics": [
+        "nutrition science"
+      ],
+      "labs": [
+        "Metabolism and Health Lab"
+      ]
+    },
+    {
+      "id": "45",
+      "type": "professor",
+      "firstName": "Matthew",
+      "lastName": "Long",
+      "email": "m.long@architecture.edu",
+      "researches": [
+        "Sustainable Building Materials"
+      ],
+      "colleges": [
+        "School of Architecture"
+      ]
+    },
+    {
+      "id": "46",
+      "type": "professor",
+      "firstName": "Chloe",
+      "lastName": "Ramirez",
+      "topics": [
+        "graphic design"
+      ],
+      "keywords": [
+        "Visual Storytelling"
+      ]
+    },
+    {
+      "id": "47",
+      "type": "professor",
+      "firstName": "Henry",
+      "lastName": "Hall",
+      "email": "henry.hall@astro.edu",
+      "researches": [
+        "Exoplanet Discovery"
+      ],
+      "department": [
+        "Astronomy"
+      ]
+    },
+    {
+      "id": "48",
+      "type": "professor",
+      "firstName": "Sofia",
+      "lastName": "Nelson",
+      "topics": [
+        "cybersecurity"
+      ],
+      "researches": [
+        "Network Security Protocols"
+      ]
+    },
+    {
+      "id": "49",
+      "type": "professor",
+      "firstName": "Lucas",
+      "lastName": "Mitchell",
+      "email": "l.mitchell@edu.ai",
+      "researches": [
+        "Generative AI Models"
+      ]
+    },
+    {
+      "id": "50",
+      "type": "professor",
+      "firstName": "Scarlett",
+      "lastName": "Perez",
+      "topics": [
+        "marine biology"
+      ],
+      "labs": [
+        "Ocean Life Lab"
+      ]
     }
   ]
 }

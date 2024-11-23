@@ -3,7 +3,7 @@ import FilterSection from "../components/FilterSection";
 import Card from "../components/Card";
 import { useState, useEffect } from "react";
 import Spinner from "../components/Spinner";
-import { FaSearch } from 'react-icons/fa'
+import SearchBar from "../components/SearchBar";
 
 const FilterPage = () => {
   const [researches, setResearches] = useState([]);
@@ -47,14 +47,7 @@ const FilterPage = () => {
         </div>
       </div>
       <div className="fixed top-[7vh] right-0 w-5/6 h-[5vh] z-10  bg-gray-300 flex justify-center items-center">
-        <div className='w-11/12 h-5/6'>
-            <div className='bg-white w-full rounded-xl px-4 py-1 h-full flex items-center shadow-sm'>
-              <FaSearch className='inline-block text-pink-800'/>
-              <input className='px-4 bg-transparent border-none h-full text-xl focus:outline-none' placeholder="Search Opportunities"
-              value={input} onChange={(e) => {handleChange(e.target.value)}}></input>
-            </div>
-            <div>Search Results</div>
-        </div>
+        <SearchBar data={researches} input={input} handleChange={handleChange} />
       </div>
       <div className="fixed top-[12vh] h-[88vh] right-0 w-5/6 bg-gray-300 -z-10" />
       <div className="absolute top-[12vh]  right-0 w-5/6  p-10 flex justify-center">
@@ -106,6 +99,7 @@ function search(keyword, data){
 }
 
 function getRelevance(value,keyword){
+  if (value == undefined) return 0;
   if (!typeof value === 'string' && !value instanceof String) return 0; // not string
 
   console.log(value);
@@ -134,3 +128,16 @@ return b.relevance - a.relevance
 }
 
 export default FilterPage;
+
+
+
+{/* <div className="fixed top-[7vh] right-0 w-5/6 h-[5vh] z-10  bg-gray-300 flex justify-center items-center">
+<div className='w-11/12 h-5/6'>
+    <div className='bg-white w-full rounded-xl px-4 py-1 h-full flex items-center shadow-sm'>
+      <FaSearch className='inline-block text-pink-800'/>
+      <input className='px-4 bg-transparent border-none h-full text-xl focus:outline-none' placeholder="Search Opportunities"
+      value={input} onChange={(e) => {handleChange(e.target.value)}}></input>
+    </div>
+    <div>Search Results</div>
+</div>
+</div> */}

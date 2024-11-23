@@ -6,13 +6,13 @@ const Card = ({ research }) => {
       <div className="flex flex-col">
         <h3 className="font-bold text-xl">{research.firstName + " " + research.lastName}</h3>
         <div>
-          <h3>Topics: {research.topics.join(" / ")}</h3>
+          <h3>Topics: {research.topics?.join(" / ")}</h3>
         </div>
         <div>
-          <h3>Departments: {research.department.join(" / ")}</h3>
+          <h3>Departments: {research.department?.join(" / ")}</h3>
         </div>
         <h3>Website: {research.website}</h3>
-        <p>Projects: {research.researches.join(" / ")}</p>
+        <p>Projects: {research.researches?.join(" / ")}</p>
       </div>
     </div>
   );
