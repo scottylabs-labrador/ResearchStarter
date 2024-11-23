@@ -3,7 +3,7 @@
     {
       "id": "1",
       "type": "professor",
-      "firstName": "Bobby",
+      "name": "Bobby",
       "lastName": "McProfess",
       "email": "bobprof@andrew.cmu.edu",
       "officeHours": "MWF 5pm Wean 8215",
@@ -25,7 +25,7 @@
         "Mellon College of Science"
       ],
       "department": [
-        "Modifications"
+        "Biomedical Engineering"
       ],
       "labs": [
         "CMutation"
@@ -40,7 +40,7 @@
     {
       "id": "2",
       "type": "professor",
-      "firstName": "Emma",
+      "name": "Emma",
       "lastName": "Johnson",
       "email": "emmaj@berkeley.edu",
       "officeHours": "TTh 3pm Dwinelle 220",
@@ -62,7 +62,7 @@
         "College of Engineering"
       ],
       "department": [
-        "Electrical Engineering and Computer Science"
+        "Electrical & Computer Engineering"
       ],
       "labs": [
         "AI Lab",
@@ -81,7 +81,7 @@
     {
       "id": "3",
       "type": "professor",
-      "firstName": "Carlos",
+      "name": "Carlos",
       "lastName": "Martinez",
       "email": "carlos.m@harvard.edu",
       "officeHours": "",
@@ -118,12 +118,12 @@
     {
       "id": "4",
       "type": "professor",
-      "firstName": "Alicia",
+      "name": "Alicia",
       "lastName": "Wong",
       "email": "alicia.wong@mit.edu",
       "officeHours": "TTh 9am, 4pm E40-440",
       "topics": [
-        "mechanical engineering",
+        "Mechanical Engineering",
         "robotics"
       ],
       "researches": [
@@ -159,7 +159,7 @@
     {
       "id": "5",
       "type": "professor",
-      "firstName": "John",
+      "name": "John",
       "lastName": "Smith",
       "email": "john.smith@stanford.edu",
       "officeHours": "MWF 11am, Gates 420",
@@ -200,7 +200,7 @@
     {
       "id": "6",
       "type": "professor",
-      "firstName": "Linda",
+      "name": "Linda",
       "lastName": "Klein",
       "email": "linda.klein@oxford.ac.uk",
       "officeHours": "Mon 1pm, Thu 9am, Mathematical Institute",
@@ -222,7 +222,7 @@
         "Oxford University"
       ],
       "department": [
-        "Mathematics"
+        "Physics"
       ],
       "labs": [
         "Cryptography Lab"
@@ -240,7 +240,7 @@
     {
       "id": "7",
       "type": "professor",
-      "firstName": "Anna",
+      "name": "Anna",
       "lastName": "Zhang",
       "email": "anna.zhang@columbia.edu",
       "officeHours": "",
@@ -278,7 +278,7 @@
     {
       "id": "8",
       "type": "professor",
-      "firstName": "David",
+      "name": "David",
       "lastName": "Lee",
       "email": "david.lee@princeton.edu",
       "officeHours": "Wed 1pm, Fri 11am, Fine Hall 101",
@@ -312,7 +312,7 @@
     {
       "id": "9",
       "type": "professor",
-      "firstName": "Sarah",
+      "name": "Sarah",
       "lastName": "Mitchell",
       "email": "sarah.mitchell@ucla.edu",
       "officeHours": "Mon 9am, Wed 10am, UCLA Engineering Bldg.",
@@ -350,7 +350,7 @@
     {
       "id": "10",
       "type": "professor",
-      "firstName": "Hippo",
+      "name": "Hippo",
       "lastName": "Rem",
       "email": "HRem@andrew.cmu.edu",
       "officeHours": "MWF 9am, GHC 8211",
@@ -384,7 +384,7 @@
     {
       "id": "11",
       "type": "professor",
-      "firstName": "Evelyn",
+      "name": "Evelyn",
       "lastName": "Taylor",
       "email": "evelyn.taylor@bio.uni.edu",
       "topics": [
@@ -401,7 +401,7 @@
     {
       "id": "12",
       "type": "professor",
-      "firstName": "James",
+      "name": "James",
       "lastName": "O'Connell",
       "officeHours": "MW 2pm-4pm Room 123",
       "topics": [
@@ -418,7 +418,7 @@
     {
       "id": "13",
       "type": "professor",
-      "firstName": "Nina",
+      "name": "Nina",
       "lastName": "Patel",
       "email": "n.patel@engineering.edu",
       "topics": [
@@ -435,7 +435,7 @@
     {
       "id": "14",
       "type": "professor",
-      "firstName": "Oliver",
+      "name": "Oliver",
       "lastName": "Wang",
       "email": "owang@computers.edu",
       "officeHours": "TTh 1pm-3pm Online",
@@ -453,7 +453,7 @@
     {
       "id": "15",
       "type": "professor",
-      "firstName": "Liam",
+      "name": "Liam",
       "lastName": "Brown",
       "email": "liam.brown@math.edu",
       "topics": [
@@ -471,7 +471,7 @@
     {
       "id": "16",
       "type": "professor",
-      "firstName": "Sophia",
+      "name": "Sophia",
       "lastName": "Garcia",
       "topics": [
         "climate science"
@@ -486,7 +486,7 @@
     {
       "id": "17",
       "type": "professor",
-      "firstName": "Henry",
+      "name": "Henry",
       "lastName": "Davis",
       "email": "hdavis@chemistry.edu",
       "officeHours": "W 10am-12pm Chem Lab 101",
@@ -497,7 +497,7 @@
     {
       "id": "18",
       "type": "professor",
-      "firstName": "Ava",
+      "name": "Ava",
       "lastName": "Martinez",
       "email": "ava.martinez@arts.edu",
       "researches": [
@@ -511,7 +511,7 @@
     {
       "id": "19",
       "type": "professor",
-      "firstName": "Noah",
+      "name": "Noah",
       "lastName": "Wilson",
       "officeHours": "MW 4pm-6pm Room 405",
       "topics": [
@@ -524,7 +524,7 @@
     {
       "id": "20",
       "type": "professor",
-      "firstName": "Mia",
+      "name": "Mia",
       "lastName": "Lee",
       "email": "mia.lee@philosophy.edu",
       "topics": [
@@ -535,7 +535,7 @@
     {
       "id": "21",
       "type": "professor",
-      "firstName": "Emily",
+      "name": "Emily",
       "lastName": "Johnson",
       "email": "emily.johnson@econ.edu",
       "topics": [
@@ -552,7 +552,7 @@
     {
       "id": "22",
       "type": "professor",
-      "firstName": "William",
+      "name": "William",
       "lastName": "Moore",
       "topics": [
         "astrophysics"
@@ -567,7 +567,7 @@
     {
       "id": "23",
       "type": "professor",
-      "firstName": "Sophia",
+      "name": "Sophia",
       "lastName": "Kim",
       "email": "sophia.kim@cs.edu",
       "topics": [
@@ -580,7 +580,7 @@
     {
       "id": "24",
       "type": "professor",
-      "firstName": "Ethan",
+      "name": "Ethan",
       "lastName": "Clark",
       "email": "e.clark@med.edu",
       "officeHours": "T 3pm-5pm Med Bldg 305",
@@ -595,7 +595,7 @@
     {
       "id": "25",
       "type": "professor",
-      "firstName": "Olivia",
+      "name": "Olivia",
       "lastName": "Adams",
       "topics": [
         "psychology"
@@ -610,7 +610,7 @@
     {
       "id": "26",
       "type": "professor",
-      "firstName": "Benjamin",
+      "name": "Benjamin",
       "lastName": "White",
       "email": "b.white@physics.edu",
       "topics": [
@@ -627,7 +627,7 @@
     {
       "id": "27",
       "type": "professor",
-      "firstName": "Emma",
+      "name": "Emma",
       "lastName": "Perez",
       "email": "e.perez@edu.org",
       "topics": [
@@ -641,7 +641,7 @@
     {
       "id": "28",
       "type": "professor",
-      "firstName": "Alexander",
+      "name": "Alexander",
       "lastName": "Hill",
       "officeHours": "MW 10am-12pm Room 408",
       "topics": [
@@ -654,7 +654,7 @@
     {
       "id": "29",
       "type": "professor",
-      "firstName": "Isabella",
+      "name": "Isabella",
       "lastName": "Harris",
       "email": "i.harris@arts.edu",
       "topics": [
@@ -667,7 +667,7 @@
     {
       "id": "30",
       "type": "professor",
-      "firstName": "Mason",
+      "name": "Mason",
       "lastName": "Scott",
       "topics": [
         "urban planning"
@@ -682,7 +682,7 @@
     {
       "id": "31",
       "type": "professor",
-      "firstName": "Lucas",
+      "name": "Lucas",
       "lastName": "Robinson",
       "email": "l.robinson@robotics.edu",
       "topics": [
@@ -696,7 +696,7 @@
     {
       "id": "32",
       "type": "professor",
-      "firstName": "Charlotte",
+      "name": "Charlotte",
       "lastName": "Thompson",
       "officeHours": "F 2pm-4pm Room 205",
       "topics": [
@@ -709,7 +709,7 @@
     {
       "id": "33",
       "type": "professor",
-      "firstName": "Harper",
+      "name": "Harper",
       "lastName": "Lopez",
       "topics": [
         "biochemistry"
@@ -721,7 +721,7 @@
     {
       "id": "34",
       "type": "professor",
-      "firstName": "Jacob",
+      "name": "Jacob",
       "lastName": "Martinez",
       "email": "j.martinez@politics.edu",
       "researches": [
@@ -734,7 +734,7 @@
     {
       "id": "35",
       "type": "professor",
-      "firstName": "Amelia",
+      "name": "Amelia",
       "lastName": "Anderson",
       "topics": [
         "artificial intelligence"
@@ -747,7 +747,7 @@
     {
       "id": "36",
       "type": "professor",
-      "firstName": "Michael",
+      "name": "Michael",
       "lastName": "Young",
       "email": "m.young@earth.edu",
       "researches": [
@@ -760,7 +760,7 @@
     {
       "id": "37",
       "type": "professor",
-      "firstName": "Charlotte",
+      "name": "Charlotte",
       "lastName": "Torres",
       "topics": [
         "social psychology"
@@ -772,7 +772,7 @@
     {
       "id": "38",
       "type": "professor",
-      "firstName": "Sebastian",
+      "name": "Sebastian",
       "lastName": "Baker",
       "email": "s.baker@marine.edu",
       "researches": [
@@ -785,7 +785,7 @@
     {
       "id": "39",
       "type": "professor",
-      "firstName": "Elijah",
+      "name": "Elijah",
       "lastName": "Reed",
       "topics": [
         "materials science"
@@ -797,7 +797,7 @@
     {
       "id": "40",
       "type": "professor",
-      "firstName": "Aria",
+      "name": "Aria",
       "lastName": "Brooks",
       "topics": [
         "health sciences"
@@ -809,7 +809,7 @@
     {
       "id": "41",
       "type": "professor",
-      "firstName": "Victoria",
+      "name": "Victoria",
       "lastName": "Carter",
       "email": "v.carter@edu.net",
       "topics": [
@@ -825,7 +825,7 @@
     {
       "id": "42",
       "type": "professor",
-      "firstName": "Daniel",
+      "name": "Daniel",
       "lastName": "Nguyen",
       "topics": [
         "civil engineering"
@@ -837,7 +837,7 @@
     {
       "id": "43",
       "type": "professor",
-      "firstName": "Avery",
+      "name": "Avery",
       "lastName": "Flores",
       "email": "avery.flores@media.edu",
       "researches": [
@@ -850,7 +850,7 @@
     {
       "id": "44",
       "type": "professor",
-      "firstName": "Grace",
+      "name": "Grace",
       "lastName": "Gonzalez",
       "topics": [
         "nutrition science"
@@ -862,7 +862,7 @@
     {
       "id": "45",
       "type": "professor",
-      "firstName": "Matthew",
+      "name": "Matthew",
       "lastName": "Long",
       "email": "m.long@architecture.edu",
       "researches": [
@@ -875,7 +875,7 @@
     {
       "id": "46",
       "type": "professor",
-      "firstName": "Chloe",
+      "name": "Chloe",
       "lastName": "Ramirez",
       "topics": [
         "graphic design"
@@ -887,20 +887,20 @@
     {
       "id": "47",
       "type": "professor",
-      "firstName": "Henry",
+      "name": "Henry",
       "lastName": "Hall",
       "email": "henry.hall@astro.edu",
       "researches": [
         "Exoplanet Discovery"
       ],
       "department": [
-        "Astronomy"
+        "Biomedical Engineering"
       ]
     },
     {
       "id": "48",
       "type": "professor",
-      "firstName": "Sofia",
+      "name": "Sofia",
       "lastName": "Nelson",
       "topics": [
         "cybersecurity"
@@ -912,7 +912,7 @@
     {
       "id": "49",
       "type": "professor",
-      "firstName": "Lucas",
+      "name": "Lucas",
       "lastName": "Mitchell",
       "email": "l.mitchell@edu.ai",
       "researches": [
@@ -922,7 +922,7 @@
     {
       "id": "50",
       "type": "professor",
-      "firstName": "Scarlett",
+      "name": "Scarlett",
       "lastName": "Perez",
       "topics": [
         "marine biology"

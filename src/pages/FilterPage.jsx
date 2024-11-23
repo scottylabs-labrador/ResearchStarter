@@ -9,9 +9,9 @@ const FilterPage = () => {
   const [researches, setResearches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [input, setInput] = useState("");
-  const [filterDep, setFilterDep] = useState([]);
-  const [filterCollege, setFilterCollege] = useState([]);
-  
+  const [filterDep, setFilterDep] = useState({ "All": true });
+  const [filterCollege, setFilterCollege] = useState({ "All": true });
+
   let filteredData = researches;
   useEffect(() => {
     const fetchResearches = async () => {
@@ -29,22 +29,32 @@ const FilterPage = () => {
     fetchResearches();
   }, []);
 
-  useEffect(()=>{},[input]) ;
+  useEffect(() => { }, [input]);
+  useEffect(() => { }, [filterCollege]);
+  useEffect(() => { }, [filterDep]);
 
-  filteredData = useMemo(()=>{return search(input, researches)},
-  [input, researches]
+  filteredData = useMemo(() => { return search(input, researches, filterDep, filterCollege) },
+    [input, researches, filterDep, filterCollege]
   )
 
   const handleChange = (value) => {
-    console.log("hi");
     setInput(value);
     // filteredData = search(value, researches);
+  }
+
+  const onChecked = (target) => {
+    console.log(target);
+    let temp = filterCollege; // Create a copy with the spread operator
+    temp[target.name] = target.checked; // Set new field
+    setFilterCollege(temp); // Save the copy to state
+    filteredData = search(input, researches, filterDep, filterCollege);
+    console.log("actualFound" + filteredData);
   }
 
   return (
     <>
       <div className="fixed bottom-0 left-0 shadow-2xl w-1/6 h-[93vh]">
-        <FilterSection />
+        <FilterSection onChecked={onChecked} />
       </div>
       <div className="fixed top-[7vh] right-0 w-5/6 h-[6vh] z-10  bg-gray-300 flex justify-center items-center">
         <SearchBar data={researches} input={input} handleChange={handleChange} />
@@ -73,60 +83,97 @@ const FilterPage = () => {
 };
 
 // reference https://stackoverflow.com/questions/45615509/search-through-json-with-keywords
-function search(keyword, data){
-  if(keyword.length<1) // skip if input is empty
-      return data;
+function search(keyword, data, filterDep, filterCollege) {
+  console.log(filterCollege);
+  console.log("Running Search");
 
   var filteredResults = [];
 
-  for(var i in data){ // iterate through dataset
-      var search_fields = Object.keys(data[i]);
-      console.log(search_fields);
-      var highRel = 0;
-      for(var u=0;u<search_fields.length;u++){ // iterate through each key in dataset
-          highRel = Math.max(getRelevance(data[i][search_fields[u]],keyword), highRel) // check if higher match
+  for (var i in data) { // iterate through dataset
+    if (!filterDep["All"]) { // dep don't match
+      let found = false;
+      const fList = data[i]["department"];
+      if (fList == undefined) continue;
+      for (var j = 0; j < fList.length; j++) {
+        const result = filterDep[fList[j]] ?? false;
+        if (result) {
+          found = true;
+        }
       }
-      if(highRel==0) // no matches...
-        continue // ...skip
-      filteredResults.push({relevance:highRel,entry:data[i]}) // matches found, add to results and store relevance
+      if (!found)
+        // console.log(data[i]);
+        continue;
+    }
+
+    if (!filterCollege["All"]) { // college don't match
+      let found = false;
+      const cList = data[i]["colleges"];
+      if (cList == undefined) continue;
+      for (var j = 0; j < cList.length; j++) {
+        const result = filterDep[cList[j]] ?? false;
+        if (result) {
+          found = true;
+        }
+      }
+      if (!found)
+        // console.log(data[i]);
+        continue;
+    }
+
+    var search_fields = Object.keys(data[i]);
+    // console.log(search_fields);
+    var highRel = 0;
+    if (keyword.length < 1) {
+      highRel = 1;
+    }
+    else {
+      for (var u = 0; u < search_fields.length; u++) { // iterate through each key in dataset
+        highRel = Math.max(getRelevance(data[i][search_fields[u]], keyword), highRel) // check if higher match
+      }
+    }
+    if (highRel == 0) // no matches...
+      continue // ...skip
+    console.log("Yay!");
+    filteredResults.push({ relevance: highRel, entry: data[i] }) // matches found, add to results and store relevance
   }
 
   filteredResults.sort(compareRelevance) // sort by relevance
 
-  for(i=0;i<filteredResults.length;i++){
-      filteredResults[i] = filteredResults[i].entry // remove relevance since it is no longer needed
+  for (i = 0; i < filteredResults.length; i++) {
+    filteredResults[i] = filteredResults[i].entry // remove relevance since it is no longer needed
   }
 
+  console.log("returned " + filteredResults);
   return filteredResults;
 }
 
-function getRelevance(value,keyword){
+function getRelevance(value, keyword) {
   if (value == undefined) return 0;
   if (!typeof value === 'string' && !value instanceof String) return 0; // not string
 
-  console.log(value);
+  // console.log(value);
 
   if (Array.isArray(value)) {
     value = value.join("");
-  } 
+  }
   value = value.toLowerCase() // lowercase to make search not case sensitive
   keyword = keyword.toLowerCase()
 
   var index = value.indexOf(keyword) // index of the keyword
-  var word_index = value.indexOf(' '+keyword) // index of the keyword if it is not on the first index, but a word
+  var word_index = value.indexOf(' ' + keyword) // index of the keyword if it is not on the first index, but a word
 
-  if(index==0) // value starts with keyword (eg. for 'Dani California' -> searched 'Dan')
-      return 3 // highest relevance
-  else if(word_index!=-1) // value doesnt start with keyword, but has the same word somewhere else (eg. 'Dani California' -> searched 'Cali')
-      return 2 // medium relevance
-  else if(index!=-1) // value contains keyword somewhere (eg. 'Dani California' -> searched 'forn')
-      return 1 // low relevance
+  if (index == 0) // value starts with keyword (eg. for 'Dani California' -> searched 'Dan')
+    return 3 // highest relevance
+  else if (word_index != -1) // value doesnt start with keyword, but has the same word somewhere else (eg. 'Dani California' -> searched 'Cali')
+    return 2 // medium relevance
+  else if (index != -1) // value contains keyword somewhere (eg. 'Dani California' -> searched 'forn')
+    return 1 // low relevance
   else
-      return 0 // no matches, no relevance
+    return 0 // no matches, no relevance
 }
 
 function compareRelevance(a, b) {
-return b.relevance - a.relevance
+  return b.relevance - a.relevance
 }
 
 export default FilterPage;

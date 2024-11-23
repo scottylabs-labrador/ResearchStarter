@@ -3,7 +3,7 @@ export const departmentOptions = [
 
     { value: 'Biomedical Engineering', label: 'Biomedical Engineering', color: '#00B8D' },
     { value: 'Information Networking Institute', label: 'Information Networking Institute', color: '#00B8D' },
-    { value: 'cChemical Engineering', label: 'Chemical Engineering' },
+    { value: 'Chemical Engineering', label: 'Chemical Engineering' },
     { value: 'Materials Science and Engineering', label: 'Materials Science and Engineering', color: '#00B8D' },
     { value: 'Civil & Environmental Engineering', label: 'Civil & Environmental Engineering', color: '#00B8D' },
     { value: 'Electrical & Computer Engineering', label: 'Electrical & Computer Engineering', color: '#00B8D' },
