@@ -4,8 +4,10 @@ import Card from "../components/Card";
 import { useState, useEffect } from "react";
 import Spinner from "../components/Spinner";
 import SearchBar from "../components/SearchBar";
+import { useParams } from "react-router-dom";
 
 const FilterPage = () => {
+  const pg = useParams();
   const [researches, setResearches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [input, setInput] = useState("");
@@ -97,7 +99,7 @@ const FilterPage = () => {
           ) : (
             <>
               {filteredData.map((research) => (
-                <Card key={research.id} research={research}></Card>
+                <Card key={research.id} research={research} params={pg}></Card>
               ))}
             </>
           )}

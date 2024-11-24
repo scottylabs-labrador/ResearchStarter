@@ -13,6 +13,7 @@ import SignInPage from "./pages/SignInPage";
 import "./styles/global.css";
 import "./styles/animation.css"
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
+import InfoPage from "./pages/InfoPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,6 +21,7 @@ const router = createBrowserRouter(
       <Route index element={<FilterPage />} />
       <Route path="/dashboard" element={<DashboardPage />} />
       <Route path="/saved" element={<SavedPage />} />
+      <Route path="/info" element={<InfoPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Route>
   )
