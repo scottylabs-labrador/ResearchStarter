@@ -7,6 +7,7 @@ import { ViewerContext } from "../Info"
 const InfoPage = (data) => {
     return (
         <>
+            <NavBar />
             <div className='p-10'>
                 <h1 className='text-5xl pb-5 text-xl'>Opportunitiy Name</h1>
                 <h2 className=''>Professor or Lab | Department | College</h2>
