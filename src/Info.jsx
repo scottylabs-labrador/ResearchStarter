@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React, { createContext, useState } from 'react'
 
-const ViewerContext = createContext()
 
-const Info = () => {
-    const [currInfo, setCurrInfo] = useState({})
-    const [currFiltered, setCurrFiltered] = useState({})
-    const [currTags, setCurrTags] = useState([])
+const ViewerContext = createContext();
+
+function Info({ props }) {
+    const [currInfo, setCurrInfo] = useState({});
+    const [currFiltered, setCurrFiltered] = useState({});
+    const [currTags, setCurrTags] = useState([]);
 
     return (
         <ViewerContext.Provider
@@ -16,10 +17,9 @@ const Info = () => {
                 setCurrFiltered,
                 currTags,
                 setCurrTags
-            }}
-        >
-        </ViewerContext.Provider>
+            }}></ViewerContext.Provider>
     )
 }
 
 export default Info
+export { ViewerContext }

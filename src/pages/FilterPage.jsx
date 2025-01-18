@@ -5,17 +5,19 @@ import { useState, useEffect } from "react";
 import Spinner from "../components/Spinner";
 import SearchBar from "../components/SearchBar";
 import { useParams } from "react-router-dom";
-import { ViewerContext } from "../Info"
+// import Info from "../Info";
+// import { ViewerContext } from "../Info"
+
 
 const FilterPage = () => {
-  const {
-    currInfo,
-    setCurrInfo,
-    currFiltered,
-    setCurrFiltered,
-    currTags,
-    setCurrTags
-  } = useContext(ViewerContext);
+  // const {
+  //   currInfo,
+  //   setCurrInfo,
+  //   currFiltered,
+  //   setCurrFiltered,
+  //   currTags,
+  //   setCurrTags
+  // } = useContext(ViewerContext);
 
   const pg = useParams();
   const [researches, setResearches] = useState([]);
