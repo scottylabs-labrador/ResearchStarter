@@ -1,5 +1,6 @@
 import React from 'react'
 import NavBar from '../components/NavBar'
+import { ViewerContext } from "../Info"
 
 
 // next goal: finish routing, add fuse.js to filter + set up info page
