@@ -16,6 +16,7 @@ const Card = ({ research }) => {
       setVarStar(star);
   }
 
+const Card = ({ research, params }) => {
   return (
     <div className="fadeIn fadeOut w-full h-64 bg-white shadow-2xl rounded-xl p-10">
       <div className="flex flex-col">

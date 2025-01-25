@@ -4,7 +4,7 @@ import Select from 'react-select'
 import { departmentOptions } from "../filterData";
 
 
-const FilterSection = ({ onChecked }) => {
+const FilterSection = ({ onChecked, onSelected }) => {
 
   return (
     <div className="flex flex-col justify-normal items-start p-6 gap-y-5">
@@ -29,6 +29,7 @@ const FilterSection = ({ onChecked }) => {
             options={departmentOptions}
             className="basic-multi-select"
             classNamePrefix="select"
+            onChange={(e) => { onSelected(e) }}
           />
         </div>
       </div>
