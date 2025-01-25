@@ -1,11 +1,25 @@
-import React, { memo, useMemo } from "react";
+import React, { memo, useContext, useMemo } from "react";
 import FilterSection from "../components/FilterSection";
 import Card from "../components/Card";
 import { useState, useEffect } from "react";
 import Spinner from "../components/Spinner";
 import SearchBar from "../components/SearchBar";
+import { useParams } from "react-router-dom";
+// import Info from "../Info";
+// import { ViewerContext } from "../Info"
+
 
 const FilterPage = () => {
+  // const {
+  //   currInfo,
+  //   setCurrInfo,
+  //   currFiltered,
+  //   setCurrFiltered,
+  //   currTags,
+  //   setCurrTags
+  // } = useContext(ViewerContext);
+
+  const pg = useParams();
   const [researches, setResearches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [input, setInput] = useState("");
@@ -97,7 +111,7 @@ const FilterPage = () => {
           ) : (
             <>
               {filteredData.map((research) => (
-                <Card key={research.id} research={research}></Card>
+                <Card key={research.id} research={research} params={pg}></Card>
               ))}
             </>
           )}

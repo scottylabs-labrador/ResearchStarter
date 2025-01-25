@@ -40,6 +40,7 @@ const NavBar = () => {
           </div>
         </div>
       </nav>
+      <div className="h-[7vh] w-full "></div>
     </>
   );
 };
