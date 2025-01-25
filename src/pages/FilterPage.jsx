@@ -5,20 +5,11 @@ import { useState, useEffect } from "react";
 import Spinner from "../components/Spinner";
 import SearchBar from "../components/SearchBar";
 import { useParams } from "react-router-dom";
-// import Info from "../Info";
+import Info from "../Info";
 // import { ViewerContext } from "../Info"
 
 
 const FilterPage = () => {
-  // const {
-  //   currInfo,
-  //   setCurrInfo,
-  //   currFiltered,
-  //   setCurrFiltered,
-  //   currTags,
-  //   setCurrTags
-  // } = useContext(ViewerContext);
-
   const pg = useParams();
   const [researches, setResearches] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -58,7 +49,6 @@ const FilterPage = () => {
 
   const onSelected = (e) => {
     let temp = {};
-    console.log(e);
     if (e.length == 0) { // nothing is selected, no filter
       temp["All"] = true;
     } else {
@@ -68,7 +58,6 @@ const FilterPage = () => {
         temp[e[i]["value"]] = true;
       }
     }
-    console.log(temp);
     setFilterDep(temp); // Save the copy to state
   }
 
@@ -123,9 +112,6 @@ const FilterPage = () => {
 
 // reference https://stackoverflow.com/questions/45615509/search-through-json-with-keywords
 function search(keyword, data, filterDep, filterCollege) {
-  console.log(filterDep);
-  console.log("Running Search");
-
   var filteredResults = [];
 
   for (var i in data) { // iterate through dataset
@@ -139,9 +125,7 @@ function search(keyword, data, filterDep, filterCollege) {
           found = true;
         }
       }
-      if (!found)
-        // console.log(data[i]);
-        continue;
+      continue;
     }
 
     if (!filterCollege["All"]) { // college don't match
@@ -155,12 +139,10 @@ function search(keyword, data, filterDep, filterCollege) {
         }
       }
       if (!found)
-        // console.log(data[i]);
         continue;
     }
 
     var search_fields = Object.keys(data[i]);
-    // console.log(search_fields);
     var highRel = 0;
     if (keyword.length < 1) {
       highRel = 1;
@@ -172,7 +154,6 @@ function search(keyword, data, filterDep, filterCollege) {
     }
     if (highRel == 0) // no matches...
       continue // ...skip
-    console.log("Yay!");
     filteredResults.push({ relevance: highRel, entry: data[i] }) // matches found, add to results and store relevance
   }
 
@@ -181,16 +162,12 @@ function search(keyword, data, filterDep, filterCollege) {
   for (i = 0; i < filteredResults.length; i++) {
     filteredResults[i] = filteredResults[i].entry // remove relevance since it is no longer needed
   }
-
-  console.log("returned " + filteredResults);
   return filteredResults;
 }
 
 function getRelevance(value, keyword) {
   if (value == undefined) return 0;
   if (!typeof value === 'string' && !value instanceof String) return 0; // not string
-
-  // console.log(value);
 
   if (Array.isArray(value)) {
     value = value.join("");
