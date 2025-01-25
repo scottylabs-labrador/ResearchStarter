@@ -1,10 +1,8 @@
 {
-    "research": 
-    [
-      {
-        "ClerkId" : "",
-        "SavedOpportunities" : []
-      }
-    ]
+  "research": {
+    "1": {
+      "ClerkId": "",
+      "SavedOpportunities": []
+    }
   }
-  
+}

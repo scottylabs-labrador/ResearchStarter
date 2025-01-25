@@ -1,22 +1,42 @@
 import React, { createContext, useState } from 'react'
+import { useUser } from '@clerk/clerk-react'
 
 
 const ViewerContext = createContext();
 
 function Info({ props }) {
-    const [currInfo, setCurrInfo] = useState({});
-    const [currFiltered, setCurrFiltered] = useState({});
-    const [currTags, setCurrTags] = useState([]);
+    const { user } = useUser();
+    const [userInfo, setUserInfo] = useState({});
+
+    useEffect(() => {
+        const fetchResearches = async () => {
+            try {
+                const res = await fetch("http://localhost:8000/users");
+                const data = await res.json();
+                if (data.research.hasOwnProperty(user.id)) {
+                    setUserInfo(data.research[user.id]);
+                } else {
+                    const new_profile = {
+                        "saved": [],
+                    }
+                    setUserInfo(new_profile)
+                }
+            } catch {
+                console.log("Error Fetching Data", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchResearches();
+    }, []);
 
     return (
         <ViewerContext.Provider
             value={{
-                currInfo,
-                setCurrInfo,
-                currFiltered,
-                setCurrFiltered,
-                currTags,
-                setCurrTags
+                userInfo,
+                setUserInfo,
+                user
             }}></ViewerContext.Provider>
     )
 }
