@@ -1,4 +1,7 @@
 # CMU Research GitHub Page
+
+To Pull from Main in Branch: git pull origin main
+
 Affiliated with ScottyLabs Labrador
 =======
 # See docs here:
