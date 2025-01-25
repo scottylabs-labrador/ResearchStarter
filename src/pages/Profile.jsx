@@ -13,16 +13,6 @@ const ProfilePage = () => {
 
   return (
     <main className="p-8 bg-gray-100 min-h-screen">
-      {/* Filler Space, temp */}
-      <div>
-        <h1 className="pt-20 ml-12 leading-loose text-6xl">
-          Welcome {user.firstName} {user.lastName}
-        </h1>
-        <p className="h-32 leading-8 bg-gray-300 ml-12 mr-12"></p>
-        <h1 className="ml-12 leading-normal text-6xl">
-          Featured Opportunities
-        </h1>
-      </div>
       {/* Profile Header */}
       <section className="bg-white shadow-lg rounded-lg p-6 mb-8">
         <div className="flex flex-col items-center">
