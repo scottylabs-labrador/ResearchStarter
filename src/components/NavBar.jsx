@@ -24,7 +24,7 @@ const NavBar = () => {
             </NavLink>
           </div>
           <div className="p-4 text-lg flex gap-x-4">
-            <NavLink to="/dashboard" className={linkClass}>
+            <NavLink to="/" className={linkClass}>
               Dashboard
             </NavLink>
             <NavLink to="/profile" className={linkClass}>
