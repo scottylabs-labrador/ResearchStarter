@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import star from "../assets/images/star.png";
 import star_filled from "../assets/images/star2.png";
+import { NavLink } from "react-router-dom";
 
 
 
@@ -31,6 +32,7 @@ const Card = ({ research, params }) => {
         <h3>Website: {research.website}</h3>
         <p>Projects: {research.researches?.join(" / ")}</p>
       </div>
+      <NavLink to={`/info/${research.id}`}>Read More</NavLink>
     </div>
   );
 };

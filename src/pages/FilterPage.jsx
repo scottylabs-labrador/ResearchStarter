@@ -5,8 +5,6 @@ import { useState, useEffect } from "react";
 import Spinner from "../components/Spinner";
 import SearchBar from "../components/SearchBar";
 import { useParams } from "react-router-dom";
-import Info from "../Info";
-// import { ViewerContext } from "../Info"
 
 
 const FilterPage = () => {
@@ -25,7 +23,7 @@ const FilterPage = () => {
         const data = await res.json();
         setResearches(data);
       } catch {
-        console.log("Error Fetching Data", error);
+        console.log("Error Fetching Data");
       } finally {
         setLoading(false);
       }
@@ -167,7 +165,7 @@ function search(keyword, data, filterDep, filterCollege) {
 
 function getRelevance(value, keyword) {
   if (value == undefined) return 0;
-  if (!typeof value === 'string' && !value instanceof String) return 0; // not string
+  if (!typeof value === 'string' && !(value instanceof String)) return 0; // not string
 
   if (Array.isArray(value)) {
     value = value.join("");

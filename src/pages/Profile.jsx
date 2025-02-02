@@ -1,7 +1,22 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
 
 const ProfilePage = () => {
   const [profileImage, setProfileImage] = useState(null); // State for storing the profile image
+
+  useEffect(() => {
+    const fetchResearches = async () => {
+      try {
+        const res = await fetch("http://localhost:8000/research");
+        const data = await res.json();
+      } catch {
+        console.log("Error Fetching Data");
+      } finally {
+      }
+    };
+
+    fetchResearches();
+  }, []);
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
