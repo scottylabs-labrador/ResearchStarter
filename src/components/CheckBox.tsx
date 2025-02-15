@@ -1,6 +1,13 @@
 import React from 'react'
 
-const CheckBox = ({ name, id, labelText, onChecked }) => {
+interface CheckBoxPropt {
+    name: string;
+    id: string;
+    labelText: string;
+    onChecked: (target: HTMLInputElement) => false;
+  }
+
+const CheckBox = ({ name, id, labelText, onChecked }: CheckBoxPropt) => {
     return (
         <div>
             <input className='collegeCheck' type="checkbox" name={name} id={id} onChange={(e) => onChecked(e.target)} defaultChecked /> <label htmlFor={id}>{labelText} </label>

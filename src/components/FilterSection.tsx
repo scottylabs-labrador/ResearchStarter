@@ -3,8 +3,12 @@ import CheckBox from "./CheckBox";
 import Select from 'react-select'
 import { departmentOptions } from "../filterData";
 
+interface FilterSectionPropt {
+  onChecked: (target: HTMLInputElement) => false;
+  onSelected: (target: HTMLInputElement) => false;
+}
 
-const FilterSection = ({ onChecked, onSelected }) => {
+const FilterSection = ({ onChecked, onSelected }: FilterSectionPropt) => {
 
   return (
     <div className="flex flex-col justify-normal items-start p-6 gap-y-5">
@@ -19,6 +23,7 @@ const FilterSection = ({ onChecked, onSelected }) => {
         <CheckBox name="School of Computer Science" id={"CollegeSCS"} labelText={"School of Computer Science"} onChecked={onChecked} />
         <CheckBox name="Tepper School of Business" id={"CollegeTep"} labelText={"Tepper School of Business"} onChecked={onChecked} />
       </div>
+
       <div>
         <h2 className="font-bold text-xl p-2 pl-0">Department</h2>
         <div className="w-[80%]">
