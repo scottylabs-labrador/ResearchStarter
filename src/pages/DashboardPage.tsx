@@ -6,7 +6,7 @@ import Spinner from "../components/Spinner";
 
 import { useUser } from "@clerk/clerk-react";
 import { UserResource, UseUserReturn } from "@clerk/types";
-import { ResearchType } from "./DataTypes";
+import { ResearchType } from "../DataTypes";
 
 const DashboardPage = () => {
   const [researches, setResearches] = useState<ResearchType[]>([]);

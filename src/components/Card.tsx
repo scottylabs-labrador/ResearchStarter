@@ -3,10 +3,11 @@ import { useState } from "react";
 import star from "../assets/images/star.png";
 import star_filled from "../assets/images/star2.png";
 import { NavLink } from "react-router-dom";
+import { ResearchType } from "~/DataTypes";
 
+type CardPropt = {research:ResearchType};
 
-
-const Card = ({ research, params }) => {
+const Card = ({ research }:CardPropt) => {
   const [varStar, setVarStar] = useState(star);
 
   function favoriteOpportunity() {

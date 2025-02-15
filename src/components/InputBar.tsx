@@ -1,7 +1,12 @@
 import React, { useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
 
-const InputBar = ({data, input,handleChange}) => {
+interface InputBarPropt {
+  input: string;
+  handleChange: (value: string) => "";
+}
+
+const InputBar = ({ input, handleChange}: InputBarPropt) => {
   return (
     <div className='bg-white w-full rounded-xl px-4 py-1 h-full flex items-center shadow-sm'>
         <FaSearch className='inline-block text-pink-800'/>
