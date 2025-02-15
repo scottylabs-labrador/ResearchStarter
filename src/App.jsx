@@ -22,7 +22,7 @@ const router = createBrowserRouter(
       <Route path="/dashboard" element={<DashboardPage />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/saved" element={<SavedPage />} />
-      <Route path="/info" element={<InfoPage />} />
+      <Route path="/info/:id" element={<InfoPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Route>
   )
