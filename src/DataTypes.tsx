@@ -21,3 +21,5 @@ export interface ResearchType {
   description: string;
   website: string;
 }
+
+export type ResearchKeysType = keyof ResearchType;
