@@ -17,7 +17,7 @@ CMU Scotty Labs Labrador Software Engineers
 ### **Pulling from Github Main Branch
 git pull origin main
 
-### **Step 2: Setup and Run the Development Server**
+### Step 2: Setup and Run the Development Server**
 Open a terminal in **VS Code** or your system terminal and execute the following commands:
 
 ```sh
