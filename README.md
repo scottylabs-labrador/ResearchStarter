@@ -15,6 +15,7 @@ CMU Scotty Labs Labrador Software Engineers
 2. Pull the latest code from the GitHub repository to your local machine.
 
 ### Pulling from Github Main Branch
+Run this command in your terminal while being in the ResearchStarter Folder
 ```sh
 git pull origin main
 ```
