@@ -1,5 +1,4 @@
 import React from "react";
-import FilterSection from "../components/FilterSection";
 import Card from "../components/Card";
 import { useState, useEffect } from "react";
 import Spinner from "../components/Spinner";
@@ -46,7 +45,7 @@ const DashboardPage = () => {
           {loading ? (
             <>
               <h2>Loading...</h2>
-              <Spinner loading={loading} />
+              <Spinner />
             </>
           ) : (
             <>
