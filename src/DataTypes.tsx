@@ -23,3 +23,4 @@ export interface ResearchType {
 }
 
 export type ResearchKeysType = keyof ResearchType;
+

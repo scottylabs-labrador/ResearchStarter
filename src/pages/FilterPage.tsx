@@ -6,6 +6,8 @@ import Spinner from "../components/Spinner";
 import SearchBar from "../components/SearchBar";
 import { useParams } from "react-router-dom";
 import { ResearchKeysType, ResearchType } from "../DataTypes";
+import { OptionType } from "~/filterData";
+import { MultiValue } from "react-select";
 
 type FilterKeysType = { [key: string]: boolean };
 
@@ -13,7 +15,7 @@ const FilterPage = () => {
   const pg = useParams();
   const [researches, setResearches] = useState<ResearchType[]>([]);
   const [loading, setLoading] = useState(true);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState<string>("");
   const [filterDep, setFilterDep] = useState<FilterKeysType>({
     All: true,
   });
@@ -53,13 +55,14 @@ const FilterPage = () => {
     return search(input, researches, filterDep, filterCollege);
   }, [input, researches, filterDep, filterCollege]);
 
-  const handleChange = (value: ) => {
+  const handleChange = (value: string) => {
     setInput(value);
     // filteredData = search(value, researches);
   };
-h
-  const onSelected = (e) => {
-    let temp = {};
+
+  const onSelected = (e: MultiValue<OptionType>): false => {
+    if (e == null) return false;
+    let temp: FilterKeysType = {};
     if (e.length == 0) {
       // nothing is selected, no filterh
       temp["All"] = true;
@@ -67,28 +70,32 @@ h
       temp["All"] = false;
 
       for (var i = 0; i < e.length; i++) {
-        temp[e[i]["value"]] = true;
+        temp[e[i]!["value"]]! = true;
       }
     }
     setFilterDep(temp); // Save the copy to state
+    return false;
   };
 
-  const onChecked = (target) => {
+  const onChecked = (target: HTMLInputElement): false => {
     let temp = JSON.parse(JSON.stringify(filterCollege));
     temp[target.name] = target.checked; // Set new field
     if (target.name == "All" && target.checked) {
-      const allC = document.getElementsByClassName("collegeCheck");
+      const allC = document.getElementsByClassName(
+        "collegeCheck"
+      ) as HTMLCollectionOf<HTMLInputElement>;
       Array.from(allC).forEach((element) => {
         element.checked = true;
         temp[element.name] = true;
       });
     }
     if (!target.checked) {
-      const allB = document.getElementById("CollegeAll");
+      const allB = document.getElementById("CollegeAll") as HTMLInputElement;
       allB.checked = false;
       temp["All"] = false;
     }
     setFilterCollege(temp); // Save the copy to state
+    return false;
   };
 
   return (
