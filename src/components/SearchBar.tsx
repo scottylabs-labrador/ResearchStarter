@@ -1,20 +1,18 @@
-import React, { useState } from 'react'
-import InputBar from './InputBar'
+import React, { useState } from "react";
+import InputBar from "./InputBar";
 import { ResearchKeysType, ResearchType } from "../DataTypes";
 
 interface searchBarPropt {
-    data: ResearchType[];
-    input: string;
-    handleChange: (value: string) => "";
+  input: string;
+  handleChange: (value: string) => void;
 }
 
-const SearchBar = ({data, input, handleChange}: searchBarPropt) => {
-    return (
-        <div className='w-11/12 h-4/6'>
-            <InputBar data={data} input={input} handleChange={handleChange}/>
-            {/* <div>Search Results</div> */}
-        </div>
-    )
-}
+const SearchBar = ({ input, handleChange }: searchBarPropt) => {
+  return (
+    <div className="w-11/12 h-4/6">
+      <InputBar input={input} handleChange={handleChange} />
+    </div>
+  );
+};
 
-export default SearchBar
+export default SearchBar;
