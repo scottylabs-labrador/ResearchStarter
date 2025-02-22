@@ -3,8 +3,12 @@ import { NavLink } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 import { UserButton } from "@clerk/clerk-react";
 
+interface linkClassPropt {
+  isActive: boolean;
+}
+
 const NavBar = () => {
-  const linkClass = ({ isActive }) =>
+  const linkClass = ( isActive : linkClassPropt) =>
     isActive
       ? "text-white bg-magenta-dark-hippo hover:bg-magenta-dark-hippo hover:text-white rounded-md px-3 py-2"
       : "text-white bg-magenta-hippo hover:bg-magenta-dark-hippo hover:text-white rounded-md px-3 py-2";

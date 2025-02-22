@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Spinner from "../components/Spinner";
 import SearchBar from "../components/SearchBar";
 import { useParams } from "react-router-dom";
-import { ResearchKeysType, ResearchType } from "./DataTypes";
+import { ResearchKeysType, ResearchType } from "../DataTypes";
 
 type FilterKeysType = { [key: string]: boolean };
 
@@ -57,11 +57,11 @@ const FilterPage = () => {
     setInput(value);
     // filteredData = search(value, researches);
   };
-
+h
   const onSelected = (e) => {
     let temp = {};
     if (e.length == 0) {
-      // nothing is selected, no filter
+      // nothing is selected, no filterh
       temp["All"] = true;
     } else {
       temp["All"] = false;
