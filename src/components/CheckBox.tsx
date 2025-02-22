@@ -4,7 +4,7 @@ interface CheckBoxPropt {
     name: string;
     id: string;
     labelText: string;
-    onChecked: (target: HTMLInputElement) => false;
+    onChecked: (target: HTMLInputElement) => void;
   }
 
 const CheckBox = ({ name, id, labelText, onChecked }: CheckBoxPropt) => {

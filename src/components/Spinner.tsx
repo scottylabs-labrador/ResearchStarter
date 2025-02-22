@@ -1,4 +1,5 @@
-const Spinner = (loading) => {
+
+const Spinner = () => {
   const override = {
     display: "block",
     margin: "100px auto",

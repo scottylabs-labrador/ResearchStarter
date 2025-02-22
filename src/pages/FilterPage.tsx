@@ -64,7 +64,7 @@ const FilterPage = () => {
     if (e == null) return false;
     let temp: FilterKeysType = {};
     if (e.length == 0) {
-      // nothing is selected, no filter
+      // nothing is selected, no filterh
       temp["All"] = true;
     } else {
       temp["All"] = false;
