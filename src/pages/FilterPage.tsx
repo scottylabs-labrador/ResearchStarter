@@ -104,11 +104,7 @@ const FilterPage = () => {
         <FilterSection onChecked={onChecked} onSelected={onSelected} />
       </div>
       <div className="fixed top-[7vh] right-0 w-5/6 h-[6vh] z-10  bg-gray-300 flex justify-center items-center">
-        <SearchBar
-          data={researches}
-          input={input}
-          handleChange={handleChange}
-        />
+        <SearchBar input={input} handleChange={handleChange} />
       </div>
       <div className="fixed top-[13vh] right-0 w-5/6 h-[3vh] z-10  bg-gradient-to-b from-gray-300/100 to-white/5"></div>
       <div className="fixed top-[12vh] h-[88vh] right-0 w-5/6 bg-gray-300 -z-10" />
@@ -117,12 +113,12 @@ const FilterPage = () => {
           {loading ? (
             <>
               <h2>Loading...</h2>
-              <Spinner loading={loading} />
+              <Spinner />
             </>
           ) : (
             <>
               {filteredData.map((research) => (
-                <Card key={research.id} research={research} params={pg}></Card>
+                <Card key={research.id} research={research}></Card>
               ))}
             </>
           )}
@@ -232,16 +228,3 @@ function compareRelevance(a: filterTupeType, b: filterTupeType) {
 }
 
 export default FilterPage;
-
-{
-  /* <div className="fixed top-[7vh] right-0 w-5/6 h-[5vh] z-10  bg-gray-300 flex justify-center items-center">
-<div className='w-11/12 h-5/6'>
-    <div className='bg-white w-full rounded-xl px-4 py-1 h-full flex items-center shadow-sm'>
-      <FaSearch className='inline-block text-pink-800'/>
-      <input className='px-4 bg-transparent border-none h-full text-xl focus:outline-none' placeholder="Search Opportunities"
-      value={input} onChange={(e) => {handleChange(e.target.value)}}></input>
-    </div>
-    <div>Search Results</div>
-</div>
-</div> */
-}
