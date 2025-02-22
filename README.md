@@ -33,9 +33,6 @@ npm install
 # Start JSON server for student data
 npx json-server src/studentdata.json --port 5000
 
-# Start JSON server for research data
-npm run server
-
 # Start development server
 npm run dev
 
