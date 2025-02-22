@@ -14,10 +14,10 @@ CMU Scotty Labs Labrador Software Engineers
 1. Consult with the Team (**Rishi, Jarret, or Jennifer**) on the status of the Git codebase.
 2. Pull the latest code from the GitHub repository to your local machine.
 
-### **Pulling from Github Main Branch
+### Pulling from Github Main Branch
 git pull origin main
 
-### Step 2: Setup and Run the Development Server**
+### **Step 2: Setup and Run the Development Server**
 Open a terminal in **VS Code** or your system terminal and execute the following commands:
 
 ```sh
