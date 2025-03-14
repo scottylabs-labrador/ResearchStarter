@@ -31,7 +31,7 @@ cd ResearchStarter
 npm install
 
 # Start JSON server for student data
-npx json-server src/studentdata.json --port 5000
+npx json-server src/studentdata.json --port 5001
 
 # Start development server
 npm run dev
