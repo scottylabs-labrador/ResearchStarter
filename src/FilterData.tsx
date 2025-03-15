@@ -1,8 +1,44 @@
 export type OptionType = { label: string; value: string; color: string };
 
-export const departmentOptions: OptionType[] = [
-  { value: "All", label: "All", color: "#000000" },
+export const collegeOptions: OptionType[] = [
+  {
+    value: "College of Engineering",
+    label: "College of Engineering",
+    color: "#000000",
+  },
+  {
+    value: "College of Fine Arts",
+    label: "College of Fine Arts",
+    color: "#000000",
+  },
+  {
+    value: "Dietrich College of Humanities & Social Sciences",
+    label: "Dietrich College of Humanities & Social Sciences",
+    color: "#000000",
+  },
+  {
+    value: "Heinz College of Information Systems and Public Policy",
+    label: "Heinz College of Information Systems and Public Policy",
+    color: "#000000",
+  },
+  {
+    value: "Mellon College of Science",
+    label: "Mellon College of Science",
+    color: "#000000",
+  },
+  {
+    value: "School of Computer Science",
+    label: "School of Computer Science",
+    color: "#000000",
+  },
+  {
+    value: "Tepper School of Business",
+    label: "Tepper School of Business",
+    color: "#000000",
+  },
+];
 
+export const departmentOptions: OptionType[] = [
   {
     value: "Biomedical Engineering",
     label: "Biomedical Engineering",

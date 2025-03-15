@@ -11,6 +11,7 @@ import ProfilePage from "./pages/Profile";
 import SavedPage from "./pages/SavedPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import SignInPage from "./pages/SignInPage";
+import MainPage from "./pages/MainPage";
 
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import InfoPage from "./pages/InfoPage";
@@ -22,6 +23,7 @@ const router = createBrowserRouter(
       <Route path="/dashboard" element={<DashboardPage />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/saved" element={<SavedPage />} />
+      <Route path="/main" element={<MainPage />} />
       <Route path="/info/:id" element={<InfoPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Route>

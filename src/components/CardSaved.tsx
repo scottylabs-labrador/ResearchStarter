@@ -11,7 +11,7 @@ interface CardPropt {
   research: ResearchType;
 }
 
-const Card = ({ research }: CardPropt) => {
+const CardSaved = ({ research }: CardPropt) => {
   const [varStar, setVarStar] = useState(false);
 
   function favoriteOpportunity() {
@@ -20,30 +20,14 @@ const Card = ({ research }: CardPropt) => {
 
   return (
     <div className="fadeIn fadeOut w-full h-72 bg-light-color rounded-xl p-10 relative flex items-start">
-      <div className="w-[73%] mr-[2%] inline-block">
+      <div className="w-full h-full">
         <h3 className="font-bold text-3xl mb-3">{research.name}</h3>{" "}
-        {research.website != "" ? (
-          <div>
-            <h3 className="text-lg">Website: {research.website}</h3>
-          </div>
-        ) : (
-          <div></div>
-        )}
-        <div>
-          <p className="text-lg">Description:</p>
-          <p className=" break-words">
-            {research.description.substring(
-              0,
-              Math.max(research.description.length, 200)
-            )}
-          </p>
-        </div>
-        <button className="px-3 py-2 bg-learn-more-color shadow-black shadow-sm text-black rounded my-2">
-          <NavLink to={`/info/${research.id}`}>Learn More</NavLink>
-        </button>
-      </div>
-      <div className="w-[25%] inline-block">
-        <div className="h-48 w-full overflow-hidden flex gap-y-2  gap-x-2 flex-wrap content-start items-start">
+        <p className="mb-5">
+          {research.name && research.colleges
+            ? research.name + " | " + research.colleges.join(", ")
+            : ""}
+        </p>
+        <div className="h-[40%] w-full overflow-hidden flex gap-y-2  gap-x-2 flex-wrap content-start items-start">
           {research.colleges ? (
             research.colleges.map((word) => (
               <div>
@@ -68,7 +52,7 @@ const Card = ({ research }: CardPropt) => {
             <div className="collapse"></div>
           )}
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-between">
           <button
             onClick={() => {
               favoriteOpportunity();
@@ -76,10 +60,13 @@ const Card = ({ research }: CardPropt) => {
           >
             {varStar ? <BookmarkIcon /> : <BookmarkIconUnfilled />}
           </button>
+          <button className="px-3 py-2 bg-learn-more-color shadow-black shadow-sm text-black rounded my-2">
+            <NavLink to={`/info/${research.id}`}>Learn More</NavLink>
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-export default Card;
+export default CardSaved;
