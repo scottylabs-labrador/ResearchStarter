@@ -5,8 +5,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Monospace"],
         roboto: ["Roboto", "sans-serif"],
+        sans: ["Monospace"],
       },
       colors: {
         "pink-hippo": "#fae0eb",
@@ -14,7 +14,7 @@ export default {
         "magenta-dark-hippo": "#4a152e",
         "transparent-white": "rgba(239, 239, 239, 0.7)",
         "transparent-white-md": "rgba(239, 239, 239, 0.9)",
-        "light-color": "#d9d9d9;",
+        "light-color": "#D9D9D9;",
         "dark-color": "#b9b9b9",
         "shadow-color": "#a8a8a8",
         "search-bar-color": "#C9C9C9",
@@ -22,6 +22,7 @@ export default {
         "tag-dark-color": "#767676",
         "bookmark-color": "##21272A",
         "grey-blue-color": "#6D758F",
+        "nav-border-color": "#DDE1E6",
       },
       backgroundImage: {
         "hippo-bg": "url(/src/assets/images/Hippo_Planet.png)",

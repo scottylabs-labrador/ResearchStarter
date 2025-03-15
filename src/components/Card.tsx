@@ -6,23 +6,31 @@ import { NavLink } from "react-router-dom";
 import { ResearchType } from "~/DataTypes";
 
 interface CardPropt {
-  research : ResearchType;
+  research: ResearchType;
 }
 
 const Card = ({ research }: CardPropt) => {
   const [varStar, setVarStar] = useState(star);
 
   function favoriteOpportunity() {
-    if (varStar == "/src/assets/images/star.png")
-      setVarStar(star_filled);
-    else
-      setVarStar(star);
+    if (varStar == "/src/assets/images/star.png") setVarStar(star_filled);
+    else setVarStar(star);
   }
 
   return (
-    <div className="fadeIn fadeOut w-full h-64 bg-white shadow-2xl rounded-xl p-10">
+    <div className="fadeIn fadeOut w-full h-64 bg-light-color rounded-xl p-10">
       <div className="flex flex-col">
-        <div className="flex justify-between"> <h3 className="font-bold text-xl">{research.name}</h3> <button onClick={() => { favoriteOpportunity() }}><img className="relative w-9 h-9" src={varStar} /></button></div>
+        <div className="flex justify-between">
+          {" "}
+          <h3 className="font-bold text-xl">{research.name}</h3>{" "}
+          <button
+            onClick={() => {
+              favoriteOpportunity();
+            }}
+          >
+            <img className="relative w-9 h-9" src={varStar} />
+          </button>
+        </div>
         <div>
           <h3>Topics: {research.topics?.join(" / ")}</h3>
         </div>

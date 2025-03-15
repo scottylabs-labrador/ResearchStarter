@@ -100,10 +100,8 @@ const FilterPage = () => {
 
   return (
     <>
-      <div className="fixed bottom-0 left-0 shadow-2xl w-1/6 h-[93vh]">
-        <FilterSection onChecked={onChecked} onSelected={onSelected} />
-      </div>
-      <div className="absolute top-[12vh]  right-0 w-5/6  px-10 pb-10 pt-7 flex justify-center">
+      <FilterSection onChecked={onChecked} onSelected={onSelected} />
+      <div className="absolute top-[10vh]  right-0 w-[80vw]  px-10 pb-10 pt-7 flex justify-center">
         <div className="w-full h-full grid grid-cols-1 items-stretch gap-5">
           <SearchBar input={input} handleChange={handleChange} />
           {loading ? (
