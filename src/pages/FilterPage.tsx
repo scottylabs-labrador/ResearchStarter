@@ -122,21 +122,27 @@ const FilterPage = () => {
         onSelectedDep={onSelectedDep}
         onSelectedCol={onSelectedCollege}
       />
-      <div className="absolute top-[10vh]  right-0 w-[80vw]  px-10 pb-10 pt-7 flex justify-center">
-        <div className="w-full h-full grid grid-cols-1 items-stretch gap-5">
+      <div className="fixed top-[10vh] bg-white  right-0 w-[80vw]  px-10 pb-10 pt-7 z-50">
+        <div className="w-full ">
           <SearchBar input={input} handleChange={handleChange} />
-          {loading ? (
-            <>
-              <h2>Loading...</h2>
-              <Spinner />
-            </>
-          ) : (
-            <>
-              {filteredData.map((research) => (
-                <Card key={research.id} research={research}></Card>
-              ))}
-            </>
-          )}
+        </div>
+      </div>
+      <div className="absolute top-[20vh]  right-0 w-[80vw]  px-10 pb-10 pt-7">
+        <div>
+          <div className="w-full h-full grid grid-cols-1 items-stretch gap-5">
+            {loading ? (
+              <>
+                <h2>Loading...</h2>
+                <Spinner />
+              </>
+            ) : (
+              <>
+                {filteredData.map((research) => (
+                  <Card key={research.id} research={research}></Card>
+                ))}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </>

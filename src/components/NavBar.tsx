@@ -22,7 +22,7 @@ const NavBar = () => {
     <>
       <nav className="bg-white block h-[10vh] w-full pl-4 fixed z-20 border-nav-border-color border-[1px]">
         <div className="flex flex-wrap justify-around items-center w-full h-full">
-          <div className="h-4/6 w-2/7 flex items-start">
+          <div className="h-5/6 w-2/7 flex items-start">
             {/* Logo */}
             <NavLink className="w-full h-full inline-block" to="/main">
               <img
@@ -55,7 +55,7 @@ const NavBar = () => {
           <UserButton />
         </div>
       </nav>
-      <div className="h-[12vh] w-full "></div>
+      <div className="h-[10vh] w-full "></div>
     </>
   );
 };

@@ -1,3 +1,5 @@
+import { Opacity } from "@mui/icons-material";
+
 /** @type {import('tailwindcss').Config} */
 export default {
   mode: "jit",
@@ -26,6 +28,15 @@ export default {
       },
       backgroundImage: {
         "hippo-bg": "url(/src/assets/images/Hippo_Planet.png)",
+      },
+      keyframes: {
+        slideIn: {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(0%)" },
+        },
+      },
+      animation: {
+        slidingIn: "slideIn 0.5s linear",
       },
     },
   },
