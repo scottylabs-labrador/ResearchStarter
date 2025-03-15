@@ -1,18 +1,40 @@
 import React from "react";
 import CheckBox from "./CheckBox";
 import Select, { MultiValue } from "react-select";
-import { departmentOptions, OptionType } from "../FilterData";
+import { departmentOptions, OptionType, collegeOptions } from "../FilterData";
 
 interface FilterSectionPropt {
   onChecked: (target: HTMLInputElement) => false;
-  onSelected: (e: MultiValue<OptionType>) => false;
+  onSelectedDep: (e: MultiValue<OptionType>) => false;
+  onSelectedCol: (e: MultiValue<OptionType>) => false;
 }
 
-const FilterSection = ({ onChecked, onSelected }: FilterSectionPropt) => {
+const FilterSection = ({
+  onChecked,
+  onSelectedDep,
+  onSelectedCol,
+}: FilterSectionPropt) => {
   return (
     <div className="fixed bottom-0 left-0 top-[10vh] w-[20vw] h-[90vh] bg-filter-section-color">
       <div className="flex flex-col justify-normal items-start p-6 gap-y-5">
         <div>
+          <h2 className="font-bold text-xl p-2 pl-0 mb-5">College</h2>
+          <div className="w-[17vw]">
+            <Select<OptionType, true>
+              defaultValue={[]}
+              name="colors"
+              options={collegeOptions}
+              className="basic-multi-select"
+              classNamePrefix="select"
+              placeholder=""
+              onChange={(e) => {
+                onSelectedCol(e);
+              }}
+              isMulti
+            />
+          </div>
+        </div>
+        {/* <div>
           <h2 className="font-bold text-xl p-2 pl-0">College</h2>
           <CheckBox
             name="All"
@@ -62,7 +84,7 @@ const FilterSection = ({ onChecked, onSelected }: FilterSectionPropt) => {
             labelText={"Tepper School of Business"}
             onChecked={onChecked}
           />
-        </div>
+        </div> */}
 
         <div>
           <h2 className="font-bold text-xl p-2 pl-0 mb-5">Department</h2>
@@ -75,7 +97,7 @@ const FilterSection = ({ onChecked, onSelected }: FilterSectionPropt) => {
               classNamePrefix="select"
               placeholder=""
               onChange={(e) => {
-                onSelected(e);
+                onSelectedDep(e);
               }}
               isMulti
             />

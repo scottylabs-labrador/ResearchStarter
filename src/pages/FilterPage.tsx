@@ -60,11 +60,11 @@ const FilterPage = () => {
     // filteredData = search(value, researches);
   };
 
-  const onSelected = (e: MultiValue<OptionType>): false => {
+  const onSelectedDep = (e: MultiValue<OptionType>): false => {
     if (e == null) return false;
     let temp: FilterKeysType = {};
     if (e.length == 0) {
-      // nothing is selected, no filterh
+      // nothing is selected, no filter
       temp["All"] = true;
     } else {
       temp["All"] = false;
@@ -74,6 +74,23 @@ const FilterPage = () => {
       }
     }
     setFilterDep(temp); // Save the copy to state
+    return false;
+  };
+
+  const onSelectedCollege = (e: MultiValue<OptionType>): false => {
+    if (e == null) return false;
+    let temp: FilterKeysType = {};
+    if (e.length == 0) {
+      // nothing is selected, no filter
+      temp["All"] = true;
+    } else {
+      temp["All"] = false;
+
+      for (var i = 0; i < e.length; i++) {
+        temp[e[i]!["value"]]! = true;
+      }
+    }
+    setFilterCollege(temp); // Save the copy to state
     return false;
   };
 
@@ -100,7 +117,11 @@ const FilterPage = () => {
 
   return (
     <>
-      <FilterSection onChecked={onChecked} onSelected={onSelected} />
+      <FilterSection
+        onChecked={onChecked}
+        onSelectedDep={onSelectedDep}
+        onSelectedCol={onSelectedCollege}
+      />
       <div className="absolute top-[10vh]  right-0 w-[80vw]  px-10 pb-10 pt-7 flex justify-center">
         <div className="w-full h-full grid grid-cols-1 items-stretch gap-5">
           <SearchBar input={input} handleChange={handleChange} />
@@ -146,7 +167,8 @@ function search(
           found = true;
         }
       }
-      continue;
+      // continue skips the loop, basically skips element bc no match
+      if (!found) continue;
     }
 
     if (!filterCollege["All"]) {
