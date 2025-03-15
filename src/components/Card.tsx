@@ -1,12 +1,11 @@
 import React from "react";
 import { useState } from "react";
-import star from "../assets/images/star.png";
-import star_filled from "../assets/images/star2.png";
 import { NavLink } from "react-router-dom";
 import { ResearchType } from "~/DataTypes";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkIconUnfilled from "@mui/icons-material/BookmarkBorderOutlined";
 import Tag from "./Tag";
+import { v4 as uuidv4 } from "uuid";
 
 interface CardPropt {
   research: ResearchType;
@@ -48,19 +47,23 @@ const Card = ({ research }: CardPropt) => {
           {research.colleges ? (
             research.colleges.map((word) => (
               <div>
-                <Tag keyword={word} />
+                <Tag key={uuidv4().concat("col")} keyword={word} />
               </div>
             ))
           ) : (
             <div className="collapse"></div>
           )}
           {research.department ? (
-            research.department.map((word) => <Tag keyword={word} />)
+            research.department.map((word) => (
+              <Tag key={uuidv4().concat("dep")} keyword={word} />
+            ))
           ) : (
             <div className="collapse"></div>
           )}
           {research.keywords ? (
-            research.keywords.map((word) => <Tag keyword={word} />)
+            research.keywords.map((word) => (
+              <Tag key={uuidv4().concat("key")} keyword={word} />
+            ))
           ) : (
             <div className="collapse"></div>
           )}
