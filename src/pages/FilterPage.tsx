@@ -6,7 +6,7 @@ import Spinner from "../components/Spinner";
 import SearchBar from "../components/SearchBar";
 import { useParams } from "react-router-dom";
 import { ResearchKeysType, ResearchType } from "../DataTypes";
-import { OptionType } from "~/filterData";
+import { OptionType } from "../FilterData";
 import { MultiValue } from "react-select";
 
 type FilterKeysType = { [key: string]: boolean };
@@ -60,11 +60,11 @@ const FilterPage = () => {
     // filteredData = search(value, researches);
   };
 
-  const onSelected = (e: MultiValue<OptionType>): false => {
+  const onSelectedDep = (e: MultiValue<OptionType>): false => {
     if (e == null) return false;
     let temp: FilterKeysType = {};
     if (e.length == 0) {
-      // nothing is selected, no filterh
+      // nothing is selected, no filter
       temp["All"] = true;
     } else {
       temp["All"] = false;
@@ -74,6 +74,23 @@ const FilterPage = () => {
       }
     }
     setFilterDep(temp); // Save the copy to state
+    return false;
+  };
+
+  const onSelectedCollege = (e: MultiValue<OptionType>): false => {
+    if (e == null) return false;
+    let temp: FilterKeysType = {};
+    if (e.length == 0) {
+      // nothing is selected, no filter
+      temp["All"] = true;
+    } else {
+      temp["All"] = false;
+
+      for (var i = 0; i < e.length; i++) {
+        temp[e[i]!["value"]]! = true;
+      }
+    }
+    setFilterCollege(temp); // Save the copy to state
     return false;
   };
 
@@ -100,28 +117,32 @@ const FilterPage = () => {
 
   return (
     <>
-      <div className="fixed bottom-0 left-0 shadow-2xl w-1/6 h-[93vh]">
-        <FilterSection onChecked={onChecked} onSelected={onSelected} />
+      <FilterSection
+        onChecked={onChecked}
+        onSelectedDep={onSelectedDep}
+        onSelectedCol={onSelectedCollege}
+      />
+      <div className="fixed top-[10vh] bg-white  right-0 w-[80vw]  px-10 pb-10 pt-7 z-50">
+        <div className="w-full ">
+          <SearchBar input={input} handleChange={handleChange} />
+        </div>
       </div>
-      <div className="fixed top-[7vh] right-0 w-5/6 h-[6vh] z-10  bg-gray-300 flex justify-center items-center">
-        <SearchBar input={input} handleChange={handleChange} />
-      </div>
-      <div className="fixed top-[13vh] right-0 w-5/6 h-[3vh] z-10  bg-gradient-to-b from-gray-300/100 to-white/5"></div>
-      <div className="fixed top-[12vh] h-[88vh] right-0 w-5/6 bg-gray-300 -z-10" />
-      <div className="absolute top-[12vh]  right-0 w-5/6  px-10 pb-10 pt-7 flex justify-center">
-        <div className="w-full h-full grid grid-cols-1 items-stretch gap-5">
-          {loading ? (
-            <>
-              <h2>Loading...</h2>
-              <Spinner />
-            </>
-          ) : (
-            <>
-              {filteredData.map((research) => (
-                <Card key={research.id} research={research}></Card>
-              ))}
-            </>
-          )}
+      <div className="absolute top-[20vh]  right-0 w-[80vw]  px-10 pb-10 pt-7">
+        <div>
+          <div className="w-full h-full grid grid-cols-1 items-stretch gap-5">
+            {loading ? (
+              <>
+                <h2>Loading...</h2>
+                <Spinner />
+              </>
+            ) : (
+              <>
+                {filteredData.map((research) => (
+                  <Card key={research.id} research={research}></Card>
+                ))}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </>
@@ -152,7 +173,8 @@ function search(
           found = true;
         }
       }
-      continue;
+      // continue skips the loop, basically skips element bc no match
+      if (!found) continue;
     }
 
     if (!filterCollege["All"]) {
