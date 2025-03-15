@@ -13,7 +13,7 @@ const SignInPage = () => {
       {/* White-centered section for the content */}
       <section className="text-center flex flex-col justify-center items-center gap-y-10 p-12 md:p-20  border-transparent-white-md rounded-lg shadow-lg w-4/5 md:w-2/5 h-1/2 bg-light-color">
         <h2 className="text-3xl md:text-3xl font-medium leading-relaxed text-black font-roboto">
-          Sign in to your CMU Account
+          <b>Sign in to your CMU Account</b>
         </h2>
         {/* CMU Mascot Image - enlarged for emphasis */}
         <img

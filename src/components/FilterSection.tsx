@@ -1,7 +1,7 @@
 import React from "react";
 import CheckBox from "./CheckBox";
 import Select, { MultiValue } from "react-select";
-import { departmentOptions, OptionType } from "../filterData";
+import { departmentOptions, OptionType } from "../FilterData";
 
 interface FilterSectionPropt {
   onChecked: (target: HTMLInputElement) => false;

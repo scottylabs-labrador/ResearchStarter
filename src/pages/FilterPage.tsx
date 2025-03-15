@@ -6,7 +6,7 @@ import Spinner from "../components/Spinner";
 import SearchBar from "../components/SearchBar";
 import { useParams } from "react-router-dom";
 import { ResearchKeysType, ResearchType } from "../DataTypes";
-import { OptionType } from "~/filterData";
+import { OptionType } from "../FilterData";
 import { MultiValue } from "react-select";
 
 type FilterKeysType = { [key: string]: boolean };
@@ -103,13 +103,9 @@ const FilterPage = () => {
       <div className="fixed bottom-0 left-0 shadow-2xl w-1/6 h-[93vh]">
         <FilterSection onChecked={onChecked} onSelected={onSelected} />
       </div>
-      <div className="fixed top-[7vh] right-0 w-5/6 h-[6vh] z-10  bg-gray-300 flex justify-center items-center">
-        <SearchBar input={input} handleChange={handleChange} />
-      </div>
-      <div className="fixed top-[13vh] right-0 w-5/6 h-[3vh] z-10  bg-gradient-to-b from-gray-300/100 to-white/5"></div>
-      <div className="fixed top-[12vh] h-[88vh] right-0 w-5/6 bg-gray-300 -z-10" />
       <div className="absolute top-[12vh]  right-0 w-5/6  px-10 pb-10 pt-7 flex justify-center">
         <div className="w-full h-full grid grid-cols-1 items-stretch gap-5">
+          <SearchBar input={input} handleChange={handleChange} />
           {loading ? (
             <>
               <h2>Loading...</h2>
