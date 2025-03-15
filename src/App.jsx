@@ -7,6 +7,7 @@ import {
 import MainLayout from "./layouts/MainLayout";
 import FilterPage from "./pages/FilterPage";
 import DashboardPage from "./pages/DashboardPage";
+import ProfilePage from "./pages/Profile";
 import SavedPage from "./pages/SavedPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import SignInPage from "./pages/SignInPage";
@@ -18,6 +19,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<MainLayout />}>
       <Route index element={<FilterPage />} />
       <Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
       <Route path="/saved" element={<SavedPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Route>

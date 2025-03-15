@@ -13,7 +13,7 @@ const NavBar = () => {
     <>
       <nav className="bg-pink-hippo block h-[7vh] w-full pl-4 fixed z-10 shadow-md">
         <div className="flex flex-wrap justify-between items-center w-full h-full">
-          <div className="h-5/6 w-1/7 flex items-start">
+          <div className="h-5/6 w-2/7 flex items-start">
             {/* Logo */}
             <NavLink className="w-full h-full inline-block" to="/">
               <img
@@ -26,6 +26,9 @@ const NavBar = () => {
           <div className="p-4 text-lg flex gap-x-4">
             <NavLink to="/dashboard" className={linkClass}>
               Dashboard
+            </NavLink>
+            <NavLink to="/profile" className={linkClass}>
+              Profile
             </NavLink>
             <NavLink to="/" className={linkClass}>
               Search
