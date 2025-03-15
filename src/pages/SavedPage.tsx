@@ -35,7 +35,7 @@ const SavedPage = () => {
     <div className="px-20 py-8">
       <h1 className="text-3xl font-bold pb-10">Saved Research</h1>
       <SearchBar input={input} handleChange={handleChange} />
-      <div className="w-full h-full grid grid-cols-1 items-stretch gap-5 mt-10">
+      <div className="w-full h-full grid grid-cols-2 items-stretch gap-10 mt-10">
         {loading ? (
           <>
             <h2>Loading...</h2>
