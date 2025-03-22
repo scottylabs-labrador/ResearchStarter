@@ -12,7 +12,7 @@ const MainPage = () => {
           </h2>
         </div>
         <div className="col-start-2 col-end-6 row-start-2 row-end-4 flex items-center">
-          <h1 className="text-9xl leading-snug tracking-wider font-bold animate-slidingIn">
+          <h1 className="text-9xl leading-tight tracking-wider font-bold animate-slidingIn">
             CMU Research
           </h1>
         </div>
