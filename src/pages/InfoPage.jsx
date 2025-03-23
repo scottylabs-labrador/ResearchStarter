@@ -63,7 +63,7 @@ const InfoPage = () => {
                         <h2 className="text-3xl font-bold mb-4 ml-10">Prior research</h2>
                         <div className="grid grid-cols-6 gap-4 ml-10">
                             {info.pastPapers?.map((paper, index) => (
-                            <div key={index} className="relative border border-gray-900 p-4 w-[200px] h-[150px] overflow-visible">
+                            <div key={index} className="relative border border-gray-900 p-4 w-50 h-[150px] overflow-visible">
                                 <div className="absolute -top-[1px] -right-[1px] w-0 h-0
                                 border-l-[15px] border-l-black
                                 border-b-[15px] border-b-black
@@ -76,7 +76,7 @@ const InfoPage = () => {
                                 border-t-[13px] border-t-transparent
                                 border-r-[13px] border-r-transparent
                                 border-solid"/>
-                                <h3 className="text font-bold leading-tigh mr-5">
+                                <h3 className="text font-bold leading-tigh mr-6">
                                 {paper}
                                 </h3>
                             </div>
