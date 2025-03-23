@@ -20,6 +20,12 @@ const InfoPage = () => {
         fetchResearch();
     }, [idReal]);
 
+    const allTags = [
+        ...(info.colleges ?? []),
+        ...(info.department ?? []),
+        ...(info.keywords ?? []),
+      ];
+
     return (
         <>{info &&
             <div>
@@ -32,6 +38,17 @@ const InfoPage = () => {
                         {` | `}
                         {`${info.colleges?.join(", ")}`}</h2>
                 </header>
+
+                <div className="flex flex-wrap gap-3 ml-10 -mt-5">
+                    {allTags.map((tag, index) => (
+                    <span
+                        key={index}
+                        className="inline-block bg-gray-300 px-4 py-2 rounded-lg text-sm font-medium">
+                        {tag}
+                    </span>
+                    ))}
+                </div>
+
 
                 <div className="p-10 grid grid-cols-2 gap-8">
                     <div>
@@ -84,6 +101,8 @@ const InfoPage = () => {
                         </div>
                     </div>
                 )}
+
+                
 
 
             </div>
