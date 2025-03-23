@@ -61,7 +61,7 @@ const InfoPage = () => {
                 {info.pastPapers && info.pastPapers.length > 0 && (
                     <div className="my-8">
                         <h2 className="text-3xl font-bold mb-4 ml-10">Prior research</h2>
-                        <div className="grid grid-cols-6 gap-4 ml-10">
+                        <div className="grid grid-cols-6 gap-6 ml-10">
                             {info.pastPapers?.map((paper, index) => (
                             <div key={index} className="relative border border-gray-900 p-4 w-50 h-[150px] overflow-visible">
                                 <div className="absolute -top-[1px] -right-[1px] w-0 h-0
