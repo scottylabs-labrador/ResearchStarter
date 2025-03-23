@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useEffect } from 'react';
 
+
 const InfoPage = () => {
     const { id } = useParams();
     const [info, setInfo] = useState([])
@@ -81,13 +82,13 @@ const InfoPage = () => {
                         <div className="grid grid-cols-6 gap-6 ml-10">
                             {info.pastPapers?.map((paper, index) => (
                             <div key={index} className="relative border border-gray-900 p-4 w-50 h-[150px] overflow-visible">
-                                <div className="absolute -top-[1px] -right-[1px] w-0 h-0
+                                <div className="absolute -top-[2px] -right-[2px] w-0 h-0
                                 border-l-[15px] border-l-black
                                 border-b-[15px] border-b-black
                                 border-t-[15px] border-t-white
                                 border-r-[15px] border-r-white
                                 border-solid"/>
-                                <div className="absolute top-[2px] right-[2px] w-0 h-0
+                                <div className="absolute top-[1px] right-[1px] w-0 h-0
                                 border-l-[13px] border-l-white
                                 border-b-[13px] border-b-white
                                 border-t-[13px] border-t-transparent
