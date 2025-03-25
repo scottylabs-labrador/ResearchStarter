@@ -113,7 +113,7 @@ const RelatedOpportunities: React.FC<RelatedOpportunitiesProps> = ({
   }
 
   return (
-    <div className="mt-16 px-10">
+    <div className="mt-16 px-10 py-8 bg-gray-100">
       <h2 className="text-3xl font-bold mb-8">Related Opportunities</h2>
       <div className="flex overflow-x-auto gap-6 pb-4 scrollbar-hide">
         {relatedOpportunities.map((research) => (
