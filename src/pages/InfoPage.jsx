@@ -51,8 +51,8 @@ const InfoPage = () => {
                 </div>
 
                 <div className="p-10 grid grid-cols-2 gap-8">
-                    <div>
-                        <div className="border bg-gray-100 p-4 mb-4 rounded">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="border bg-gray-100 p-4 rounded">
                             <h3 className="text-[15px] font-bold mb-2">Contact Information</h3>
                             <p>{`${info.name} ${info.lastName}`}
                             <br/>{info.email}
@@ -61,15 +61,39 @@ const InfoPage = () => {
                             <p>{info.officeHours || "Not publicly available"}</p>
                         </div>
 
-                        <div className="border bg-gray-100 p-4 mb-4 rounded">
+                        <div className="border bg-gray-100 p-4 rounded">
                             <h3 className="text-[15px] font-bold mb-2">Website</h3>
                             <p>{info.website || "Not found or non-existent."}</p>
                         </div>
+
+                        {(info.requestedYear || info.requestedExp || info.timeAvail) && (
+                            <div className="border bg-gray-100 p-4 rounded col-span-2">
+                                <h3 className="text-[15px] font-bold mb-2">Requirements Overview</h3>
+                                {info.requestedYear && (
+                                    <div className="mb-2">
+                                        <p className="font-semibold">Year Level</p>
+                                        <p>{info.requestedYear}</p>
+                                    </div>
+                                )}
+                                {info.requestedExp && (
+                                    <div className="mb-2">
+                                        <p className="font-semibold">Experience</p>
+                                        <p>{info.requestedExp}</p>
+                                    </div>
+                                )}
+                                {info.timeAvail && (
+                                    <div>
+                                        <p className="font-semibold">Time Commitment</p>
+                                        <p>{info.timeAvail}</p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     <div>
                         <h3 className="text-3xl mb-2">About the Research</h3>
-                        <p  className="h-60 overflow-hidden flex flex-col justify-start items-start">
+                        <p  className="h-80 overflow-hidden flex flex-col justify-start items-start">
                             {info.description || "No description found. Team is working on it :)"}
                         </p>
                     </div>
