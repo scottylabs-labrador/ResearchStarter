@@ -1,7 +1,7 @@
 import React from "react";
 import { SignInButton } from "@clerk/clerk-react";
-import Logo from "../assets/logo.png"
-import TartanLogo from "../assets/tartan_logo.png"
+import Logo from "../assets/logo.png";
+import TartanLogo from "../assets/tartan_logo.png";
 
 const SignInPage = () => {
   return (
@@ -25,10 +25,9 @@ const SignInPage = () => {
         {/* Subheader text prompting users to sign in */}
 
         {/* Sign-in button styled to match the theme */}
-        <SignInButton
-          className="py-4 px-20 bg-dark-color shadow-md shadow-shadow-color  text-black rounded-xl text-lg font-bold hover:bg-shadow-color"
-          aria-label="Sign in to your CMU account"
-        />
+        <button className="py-4 px-20 bg-dark-color shadow-md shadow-shadow-color  text-black rounded-xl text-lg font-bold hover:bg-shadow-color">
+          <SignInButton aria-label="Sign in to your CMU account" />
+        </button>
       </section>
     </main>
   );

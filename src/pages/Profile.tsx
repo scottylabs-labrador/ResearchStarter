@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 
 const ProfilePage = () => {
-  const [profileImage, setProfileImage] = useState(null); // State for storing the profile image
+  const [profileImage, setProfileImage] = useState(""); // State for storing the profile image
 
   useEffect(() => {
     const fetchResearches = async () => {
@@ -18,8 +18,8 @@ const ProfilePage = () => {
     fetchResearches();
   }, []);
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files![0];
     if (file) {
       const imageURL = URL.createObjectURL(file); // Create a preview URL for the image
       setProfileImage(imageURL);
@@ -59,7 +59,9 @@ const ProfilePage = () => {
 
           {/* Name and Headline */}
           <h1 className="text-2xl md:text-3xl font-bold mt-4">Your Name</h1>
-          <p className="text-gray-600 text-lg">Your Headline (e.g., Software Engineer)</p>
+          <p className="text-gray-600 text-lg">
+            Your Headline (e.g., Software Engineer)
+          </p>
         </div>
       </section>
 

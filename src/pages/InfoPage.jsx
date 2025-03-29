@@ -12,7 +12,7 @@ const InfoPage = () => {
             try {
                 const res = await fetch("http://localhost:8000/research");
                 const data = await res.json();
-                setInfo(data[id]);
+                setInfo(data[id - 1]);
             } catch (e) {
                 console.log("Error Fetching Data", e);
             }
@@ -23,7 +23,7 @@ const InfoPage = () => {
     return (
         <>{info &&
             <div className='p-10'>
-                <h1 className='text-5xl pb-5 text-xl'>{`${info.name} ${info.lastName}`}</h1>
+                <h1 className='text-5xl pb-5 text-xl'>{`${info.name} `}</h1>
                 <h2 className=''>Professor or Lab | Department | College</h2>
             </div>
         }
