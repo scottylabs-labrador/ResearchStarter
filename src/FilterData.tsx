@@ -1,5 +1,7 @@
 export type OptionType = { label: string; value: string; color: string };
 
+export type userDataMongo = { id: string; saved: string[] };
+
 export const collegeOptions: OptionType[] = [
   {
     value: "College of Engineering",

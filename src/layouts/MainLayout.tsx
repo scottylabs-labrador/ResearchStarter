@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import NavBar from "../components/NavBar";
-import ScrollToTop from "../effects/ScrollToTop"
+import ScrollToTop from "../effects/ScrollToTop";
 
 const MainLayout = () => {
   return (

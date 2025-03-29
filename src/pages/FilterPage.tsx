@@ -30,6 +30,7 @@ const FilterPage = () => {
     "Tepper School of Business": true,
   });
 
+
   let filteredData = researches;
   useEffect(() => {
     const fetchResearches = async () => {
