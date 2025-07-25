@@ -11,7 +11,7 @@ CMU Scotty Labs Labrador Software Engineers
 ## How to Run the Code
 
 ### **Step 1: Get the Code**
-1. Consult with the Team (**Rishi, Jarret, or Jennifer**) on the status of the Git codebase.
+1. Consult with the Team (**Rishi, Jarrett, or Jennifer**) on the status of the Git codebase.
 2. Pull the latest code from the GitHub repository to your local machine.
 
 ### Pulling from Github Main Branch
@@ -85,7 +85,9 @@ npm run server
 ## Tech Stack
 - **Frontend:** JavaScript, TypeScript, React, Tailwind CSS, HTML, CSS
 - **Backend:** Node.js (Planned API Development)
-- **Data Handling:** JSON, Web Scraping with JavaScript
+- **ORM:** Prisma
+- **Database:** MongoDB
+- **Data Handling:** JSON, Web Scraping with JavaScript/AI
 
 ## Contributors
 Developed by a team dedicated to making research opportunities more accessible and efficient at Carnegie Mellon University.
