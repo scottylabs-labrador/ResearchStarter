@@ -4,7 +4,7 @@
 CMU_Research is an advanced web-based platform designed to centralize and streamline research opportunities at Carnegie Mellon University. By leveraging automated web scraping and structured data integration, the platform dynamically aggregates research postings from CMU department websites, spreadsheets, and other faculty-curated repositories. This ensures that students have access to the most up-to-date opportunities while minimizing the manual effort required from faculty and administrators.
 
 ## Contributors
-Team Leads: Rishi Prabhu, Jarret Huang, Jennifer Zhu, Lily Qin, Bryan Huang
+Team Leads: Rishi Prabhu, Jarrett Huang, Jennifer Zhu, Lily Qin, Bryan Huang
 CMU Scotty Labs Labrador Software Engineers
 
 
