@@ -12,10 +12,10 @@ interface CardPropt {
 }
 
 const Card = ({ research }: CardPropt) => {
-  const [varStar, setVarStar] = useState(false);
+  const [bookmark, setBookmark] = useState(false);
 
-  function favoriteOpportunity() {
-    setVarStar(!varStar);
+  function bookmarkOpportunity() {
+    setBookmark(!bookmark);
   }
 
   return (
@@ -42,7 +42,8 @@ const Card = ({ research }: CardPropt) => {
           <NavLink to={`/info/${research.id}`}>Learn More</NavLink>
         </button>
       </div>
-      <div className="w-[25%] inline-block">
+
+      <div className="w-[25%] inline-block flex flex-row">
         <div className="h-48 w-full overflow-hidden flex gap-y-2  gap-x-2 flex-wrap content-start items-start">
           {research.colleges ? (
             research.colleges.map((word) => (
@@ -68,13 +69,13 @@ const Card = ({ research }: CardPropt) => {
             <div className="collapse"></div>
           )}
         </div>
-        <div className="flex justify-end">
+        <div>
           <button
             onClick={() => {
-              favoriteOpportunity();
+              bookmarkOpportunity();
             }}
           >
-            {varStar ? <BookmarkIcon /> : <BookmarkIconUnfilled />}
+            {bookmark ? <BookmarkIcon /> : <BookmarkIconUnfilled />}
           </button>
         </div>
       </div>
