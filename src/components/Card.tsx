@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { ResearchType } from "~/DataTypes";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
@@ -17,6 +17,27 @@ const Card = ({ research }: CardPropt) => {
   function bookmarkOpportunity() {
     setBookmark(!bookmark);
   }
+
+  // Currently for testing purposes:
+  const [opportunities, setOpportunities] = useState([]);
+
+  // Fetches the research opportunities from the database.
+  useEffect(() => {
+    async function getOpportunities() {
+      const response = await fetch(`http://localhost:5050/opportunities/`);
+      if (!response.ok) {
+        const message = `An error occurred: ${response.statusText}`;
+        console.error(message);
+        return;
+      }
+      const opportunities = await response.json();
+      console.log(opportunities);
+      setOpportunities(opportunities);
+    }
+    getOpportunities();
+    return;
+  }, [opportunities.length]);
+  // ----- //
 
   return (
     <div className="fadeIn fadeOut w-full h-72 bg-light-color rounded-xl p-10 relative flex items-start">
