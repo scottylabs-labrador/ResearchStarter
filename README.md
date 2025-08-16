@@ -84,8 +84,7 @@ npm run server
 
 ## Tech Stack
 - **Frontend:** JavaScript, TypeScript, React, Tailwind CSS, HTML, CSS
-- **Backend:** Node.js (Planned API Development)
-- **ORM:** Prisma
+- **Backend:** Express, NodeJS
 - **Database:** MongoDB
 - **Data Handling:** JSON, Web Scraping with JavaScript/AI
 
