@@ -18,11 +18,11 @@ const MainPage = () => {
         </div>
         <div className="col-start-2 col-end-5 row-start-4 flex items-center">
           <div>
-            <button className="px-5 py-3 text-lg bg-tag-dark-color text-white rounded mr-10">
+            <button className="px-5 py-3 text-lg bg-tag-dark-color text-white rounded-xl mr-10">
               <NavLink to="/">Start Applying</NavLink>
             </button>
-            <button className="px-5 py-3 text-lg bg-transparent text-tag-dark-color font-bold border-[2px] border-tag-dark-color rounded">
-              Start Positing
+            <button className="px-5 py-3 text-lg bg-transparent text-tag-dark-color rounded-xl font-bold border-[2px] border-tag-dark-color rounded">
+              Start Posting
             </button>
           </div>
         </div>
