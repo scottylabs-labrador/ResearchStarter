@@ -22,7 +22,7 @@ const NavBar = () => {
     <>
       <nav className="bg-white block h-[10vh] w-full pl-4 fixed z-20 border-nav-border-color border-[1px]">
         <div className="grid grid-cols-12 justify-around w-full h-full">
-          <div className="h-5/6 w-2/7 flex items-start col-start-2">
+          <div className="h-full w-48 flex items-center col-start-2">
             {/* Logo */}
             <NavLink className="w-full h-full inline-block" to="/main">
               <img

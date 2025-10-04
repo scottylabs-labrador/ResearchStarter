@@ -1,6 +1,40 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  /* Fonts */
+  --font-roboto: "Roboto", sans-serif;
+  --font-sans: "Monospace";
+
+  /* Custom Colors */
+  --color-pink-hippo: #fae0eb;
+  --color-magenta-hippo: #ac316a;
+  --color-magenta-dark-hippo: #4a152e;
+  --color-transparent-white: rgba(239, 239, 239, 0.7);
+  --color-transparent-white-md: rgba(239, 239, 239, 0.9);
+  --color-light-color: #EBDEFF;
+  --color-dark-color: #D3B7FF;
+  --color-shadow-color: #C5A2FF;
+  --color-search-bar-color: #C9C9C9;
+  --color-filter-section-color: #E2CFFF;
+  --color-tag-dark-color: #9E63FF;
+  --color-bookmark-color: #21272A;
+  --color-grey-blue-color: #6D758F;
+  --color-nav-border-color: #DDE1E6;
+  --color-learn-more-color: #c9c8c8;
+
+  /* Animations */
+  @keyframes slideIn {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(0%); }
+  }
+
+  --animate-slidingIn: slideIn 0.5s linear;
+}
+
+/* Custom background image utility */
+@utility bg-hippo-bg {
+  background-image: url(/src/assets/images/Hippo_Planet.png);
+}
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .scrollbar-hide::-webkit-scrollbar {
