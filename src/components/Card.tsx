@@ -21,7 +21,7 @@ const Card = ({ research }: CardPropt) => {
   // Currently for testing purposes:
   const [opportunities, setOpportunities] = useState([]);
 
-  // Fetches the research opportunities from the database.
+  // EXAMPLE OF HOW TO COMMUNICATE W/ MONGO FROM FRONTEND: Fetches the research opportunities from the database.
   useEffect(() => {
     async function getOpportunities() {
       const response = await fetch(`http://localhost:5050/opportunities/`);
