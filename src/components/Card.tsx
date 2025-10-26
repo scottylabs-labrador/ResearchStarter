@@ -24,6 +24,7 @@ const Card = ({ research }: CardPropt) => {
   // EXAMPLE OF HOW TO COMMUNICATE W/ MONGO FROM FRONTEND: Fetches the research opportunities from the database.
   useEffect(() => {
     async function getOpportunities() {
+      console.log("test");
       const response = await fetch(`http://localhost:5050/opportunities/`);
       if (!response.ok) {
         const message = `An error occurred: ${response.statusText}`;
@@ -36,7 +37,7 @@ const Card = ({ research }: CardPropt) => {
     }
     getOpportunities();
     return;
-  }, [opportunities.length]);
+  }, []);
   // ----- //
 
   return (

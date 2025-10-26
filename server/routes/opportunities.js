@@ -1,31 +1,39 @@
 import express from "express";
-
-// This will help us connect to the database
-import db from "../db/connection.js";
-
-// This help convert the id from string to ObjectId for the _id.
+import { getDb } from "../db/connection.js";
 import { ObjectId } from "mongodb";
 
-// router is an instance of the express router.
-// We use it to define our routes.
-// The router will be added as a middleware and will take control of requests starting with path /opportunities.
 const router = express.Router();
 
 // Retrieve a list of all research opportunities.
 router.get("/", async (req, res) => {
-  let collection = await db.collection("ResearchOpportunities");
-  let results = await collection.find({}).toArray();
-  res.send(results).status(200);
+  try {
+    let db = getDb(); // Get the db instance
+    let collection = db.collection("ResearchOpportunities");
+    let results = await collection.find({}).toArray();
+    res.status(200).send(results);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching opportunities");
+  }
 });
 
 // Get a single research opportunity by id
 router.get("/:id", async (req, res) => {
-  let collection = await db.collection("ResearchOpportunities");
-  let query = { _id: new ObjectId(req.params.id) };
-  let result = await collection.findOne(query);
+  try {
+    let db = getDb();
+    let collection = db.collection("ResearchOpportunities");
+    let query = { _id: new ObjectId(req.params.id) };
+    let result = await collection.findOne(query);
 
-  if (!result) res.send("Not found").status(404);
-  else res.send(result).status(200);
+    if (!result) {
+      res.status(404).send("Not found");
+    } else {
+      res.status(200).send(result);
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching opportunity");
+  }
 });
 
 // Create a new research opportunity.
@@ -36,9 +44,10 @@ router.post("/", async (req, res) => {
       position: req.body.position,
       level: req.body.level,
     };
-    let collection = await db.collection("ResearchOpportunities");
+    let db = getDb();
+    let collection = db.collection("ResearchOpportunities");
     let result = await collection.insertOne(newDocument);
-    res.send(result).status(204);
+    res.status(201).send(result);
   } catch (err) {
     console.error(err);
     res.status(500).send("Error adding research opportunity");
@@ -57,9 +66,10 @@ router.patch("/:id", async (req, res) => {
       },
     };
 
-    let collection = await db.collection("ResearchOpportunities");
+    let db = getDb();
+    let collection = db.collection("ResearchOpportunities");
     let result = await collection.updateOne(query, updates);
-    res.send(result).status(200);
+    res.status(200).send(result);
   } catch (err) {
     console.error(err);
     res.status(500).send("Error updating research opportunity");
@@ -70,11 +80,10 @@ router.patch("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const query = { _id: new ObjectId(req.params.id) };
-
-    const collection = db.collection("ResearchOpportunities");
+    let db = getDb();
+    let collection = db.collection("ResearchOpportunities");
     let result = await collection.deleteOne(query);
-
-    res.send(result).status(200);
+    res.status(200).send(result);
   } catch (err) {
     console.error(err);
     res.status(500).send("Error deleting research opportunity");
