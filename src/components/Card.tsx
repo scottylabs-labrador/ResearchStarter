@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { ResearchType } from "~/DataTypes";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkIconUnfilled from "@mui/icons-material/BookmarkBorderOutlined";
+import { Row, Col } from "react-bootstrap";
 import Tag from "./Tag";
 import { v4 as uuidv4 } from "uuid";
 

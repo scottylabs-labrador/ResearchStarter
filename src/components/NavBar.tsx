@@ -36,7 +36,7 @@ const NavBar = () => {
             <NavButton
               name="Dashboard"
               Icon={HomeOutlinedIcon}
-              links="/profile"
+              links="/dashboard"
               linkClass={linkClass}
             />
             <NavButton
