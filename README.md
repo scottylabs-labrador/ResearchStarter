@@ -11,7 +11,7 @@ CMU Scotty Labs Labrador Software Engineers
 ## How to Run the Code
 
 ### **Step 1: Get the Code**
-1. Consult with the Team (**Rishi, Jarrett, or Jennifer**) on the status of the Git codebase.
+1. Consult with the Team (**Jarrett or Jennifer**) on the status of the Git codebase.
 2. Pull the latest code from the GitHub repository to your local machine.
 
 ### Pulling from Github Main Branch
@@ -24,14 +24,12 @@ git pull origin main
 Open a terminal in **VS Code** or your system terminal and execute the following commands:
 
 ```sh
-# Navigate to the project directory
+# Navigate to the project directory if not already in it
 cd ResearchStarter
 
+# Your terminal should now show that you are in the ResearchStarter directory (Ex: C:\Users\jarre\GithubRepos\ResearchStarter> )
 # Install dependencies
 npm install
-
-# Start JSON server for student data
-npx json-server src/studentdata.json --port 5001
 
 # Start development server
 npm run dev
