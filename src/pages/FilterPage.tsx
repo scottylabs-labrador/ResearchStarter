@@ -37,10 +37,10 @@ const FilterPage = () => {
       try {
         const res = await fetch("http://localhost:5050/opportunities/");
         if (!res.ok) {
-        const message = `An error occurred: ${res.statusText}`;
-        console.error(message);
-        return;
-      }
+          const message = `An error occurred: ${res.statusText}`;
+          console.error(message);
+          return;
+        }
         const data: any[] = await res.json();
 
         const transformedData = data.map(item => ({
