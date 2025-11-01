@@ -3,24 +3,26 @@ export interface ResearchAllTypes {
 }
 
 export interface ResearchType {
-  id: string;
-  type: string;
-  name: string;
-  email: string;
-  officeHours: string;
-  topics: string[];
-  researches: string[];
-  keywords: string[];
-  colleges: string[];
-  department: string[];
-  labs: string[];
-  requestedYear: string;
-  requestedExp: string;
-  timeAvail: string;
-  pastPapers: string[];
+  _id: string;
+  contact: string;
+  department: string;
   description: string;
-  website: string;
+  desiredSkillLevel?: string;
+  paidUnpaid?: string;
+  position?: string;
+  prereqs?: string;
+  projectTitle: string;
+  relevantLinks?: string;
+  source?: string;
+  timeAdded?: string;
+  timeCommitment?: string;
+  anticipatedEndDate?: string;
+  // Optional fields from the old structure that might still be in use
+  id?: string;
+  keywords?: string[];
+  colleges?: string[];
+  name?: string;
+  website?: string;
 }
 
 export type ResearchKeysType = keyof ResearchType;
-

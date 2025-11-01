@@ -35,9 +35,33 @@ const FilterPage = () => {
   useEffect(() => {
     const fetchResearches = async () => {
       try {
-        const res = await fetch("http://localhost:8000/research");
-        const data = await res.json();
-        setResearches(data);
+        const res = await fetch("http://localhost:5050/opportunities/");
+        if (!res.ok) {
+        const message = `An error occurred: ${res.statusText}`;
+        console.error(message);
+        return;
+      }
+        const data: any[] = await res.json();
+
+        const transformedData = data.map(item => ({
+          _id: item._id,
+          projectTitle: item["Project Title"],
+          contact: item.Contact,
+          department: item.Department,
+          description: item.Description,
+          desiredSkillLevel: item["Desired Skill Level"],
+          paidUnpaid: item["Paid/Unpaid"],
+          position: item.Position,
+          prereqs: item.Prereqs,
+          relevantLinks: item["Relevant Links"],
+          source: item.Source,
+          timeAdded: item["Time Added"],
+          timeCommitment: item["Time Commitment"],
+          anticipatedEndDate: item["Anticipated End Date"],
+          keywords: item.Keywords,
+          colleges: item.Colleges,
+        }));
+        setResearches(transformedData);
       } catch {
         console.log("Error Fetching Data");
       } finally {
@@ -139,7 +163,7 @@ const FilterPage = () => {
             ) : (
               <>
                 {filteredData.map((research) => (
-                  <Card key={research.id} research={research}></Card>
+                  <Card key={research._id} research={research}></Card>
                 ))}
               </>
             )}
