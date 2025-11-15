@@ -13,16 +13,16 @@ interface linkClassPropt {
 }
 
 const NavBar = () => {
-  const linkClass = (isActive: linkClassPropt) =>
+  const linkClass = ({ isActive }: { isActive: boolean }) =>
     isActive
-      ? "text-black bg-transparent hover:bg-light-color hover:text-black rounded-md px-2 py-2"
-      : "text-black bg-transparent hover:bg-light-color hover:text-black rounded-md px-2 py-2";
+      ? "text-black bg-transparent hover:bg-light-color hover:text-black rounded-xl px-2 py-2"
+      : "text-black bg-transparent hover:bg-light-color hover:text-black rounded-xl px-2 py-2";
 
   return (
     <>
       <nav className="bg-white block h-[10vh] w-full pl-4 fixed z-20 border-nav-border-color border-[1px]">
         <div className="grid grid-cols-12 justify-around w-full h-full">
-          <div className="h-5/6 w-2/7 flex items-start col-start-2">
+          <div className="h-full flex items-start col-start-2">
             {/* Logo */}
             <NavLink className="w-full h-full inline-block" to="/main">
               <img
@@ -32,7 +32,7 @@ const NavBar = () => {
               />
             </NavLink>
           </div>
-          <div className="p-4 text-lg flex gap-x-4 col-start-5 col-span-4">
+          <div className="p-4 text-xl flex gap-x-4 col-start-5 col-span-4">
             <NavButton
               name="Dashboard"
               Icon={HomeOutlinedIcon}
@@ -53,7 +53,16 @@ const NavBar = () => {
             />
           </div>
           <div className="col-start-11 m-auto">
-            <UserButton />
+            <UserButton
+              appearance={{
+                elements: {
+                  userButtonAvatarBox: {
+                    width: "3rem",
+                    height: "3rem",
+                  },
+                },
+              }}
+            />
           </div>
         </div>
       </nav>
