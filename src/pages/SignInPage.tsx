@@ -23,7 +23,7 @@ const SignInPage = () => {
         />
 
         {/* Sign-in button styled to match the theme */} 
-        <button className="py-4 px-20 bg-dark-color shadow-md shadow-shadow-color text-white rounded-xl text-lg font-bold hover:bg-shadow-color">
+        <button className="py-4 px-20 bg-dark-color shadow-md shadow-shadow-color text-white rounded-xl text-lg font-bold hover:bg-violet-600">
           <SignInButton aria-label="Sign in to your CMU account" />
         </button>
       </section>

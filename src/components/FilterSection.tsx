@@ -15,7 +15,7 @@ const FilterSection = ({
   onSelectedCol,
 }: FilterSectionPropt) => {
   return (
-    <div className="fixed bottom-0 left-0 top-[10vh] w-[20vw] h-[90vh] bg-filter-section-color">
+    <div className="fixed bottom-0 left-0 top-[10vh] w-[20vw] h-[90vh] bg-violet-300">
       <div className="flex flex-col justify-normal items-start p-6 gap-y-5">
         <div>
           <h2 className="font-bold text-xl p-2 pl-0 mb-5">College</h2>

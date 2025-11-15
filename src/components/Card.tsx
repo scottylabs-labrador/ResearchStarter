@@ -47,15 +47,19 @@ const Card = ({ research }: CardPropt) => {
 
   return (
     <div className="fadeIn fadeOut w-full h-72 bg-light-color rounded-xl p-10 relative flex items-start">
+
       <div className="w-[73%] mr-[2%] inline-block">
+
         <h3 className="font-bold text-3xl mb-3">{research.projectTitle}</h3>{" "}
+
         {research.department != "" ? (
           <div>
             <h3 className="text-lg">Website: {research.source}</h3>
           </div>
         ) : (
           <div></div>
-        )} 
+        )}
+
         <div>
           <p className="text-lg">Description:</p>
           <p className=" break-words">
@@ -65,12 +69,15 @@ const Card = ({ research }: CardPropt) => {
             )}
           </p>
         </div>
+
         <button className="px-3 py-2 bg-learn-more-color shadow-black shadow-sm text-black rounded my-2">
           <NavLink to={`/info/${research._id}`}>Learn More</NavLink>
         </button>
+
       </div>
 
       <div className="w-[25%] inline-block flex flex-row">
+
         <div className="h-48 w-full overflow-hidden flex gap-y-2  gap-x-2 flex-wrap content-start items-start">
           {/*}{research.colleges ? (
             research.colleges.map((word) => (
@@ -97,6 +104,7 @@ const Card = ({ research }: CardPropt) => {
             <div className="collapse"></div>
           )} {*/}
         </div>
+
         <div>
           <button
             onClick={() => {
@@ -106,6 +114,7 @@ const Card = ({ research }: CardPropt) => {
             {bookmark ? <BookmarkIcon /> : <BookmarkIconUnfilled />}
           </button>
         </div>
+        
       </div>
     </div>
   );
