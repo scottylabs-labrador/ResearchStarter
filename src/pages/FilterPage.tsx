@@ -147,27 +147,28 @@ const FilterPage = () => {
         onSelectedDep={onSelectedDep}
         onSelectedCol={onSelectedCollege}
       />
-      <div className="fixed top-[10vh] bg-white  right-0 w-[80vw]  px-10 pb-10 pt-7 z-50">
-        <div className="w-full ">
+      <div className="fixed top-[10vh] right-0 w-[80vw] bg-white px-14 pt-7 z-10">
+        <div className="text-5xl font-extrabold pb-5">Search</div>
+        <div className="w-full">
           <SearchBar input={input} handleChange={handleChange} />
         </div>
+        <div>{/*}add in filters (tag, year, time, etc){*/}</div>
       </div>
-      <div className="absolute top-[20vh]  right-0 w-[80vw]  px-10 pb-10 pt-7">
-        <div>
-          <div className="w-full h-full grid grid-cols-1 items-stretch gap-5">
-            {loading ? (
-              <>
-                <h2>Loading...</h2>
-                <Spinner />
-              </>
-            ) : (
-              <>
-                {filteredData.map((research) => (
-                  <Card key={research._id} research={research}></Card>
-                ))}
-              </>
-            )}
-          </div>
+  
+      <div className="fixed top-[30vh] right-0 w-[80vw] h-[70vh] overflow-y-auto px-14">
+        <div className="w-full h-full grid grid-cols-1 items-stretch gap-5">
+          {loading ? (
+            <>
+              <h2>Loading...</h2>
+              <Spinner />
+            </>
+          ) : (
+            <>
+              {filteredData.map((research) => (
+                <Card key={research._id} research={research}></Card>
+              ))}
+            </>
+          )}
         </div>
       </div>
     </>
