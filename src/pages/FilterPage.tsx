@@ -12,7 +12,6 @@ import { MultiValue } from "react-select";
 type FilterKeysType = { [key: string]: boolean };
 
 const FilterPage = () => {
-  const CARD_DISPLAY_LIMIT = 10;
   const pg = useParams();
   const [researches, setResearches] = useState<ResearchType[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,9 +29,20 @@ const FilterPage = () => {
     "School of Computer Science": true,
     "Tepper School of Business": true,
   });
-
-
   let filteredData = researches;
+  
+  // Used for infinite scroll logic
+  const CARD_BATCH_LIMIT = 10; // Amount of research opportunities loaded when user scrolls to bottom
+  const [loadedBatches, setLoadedBatches] = useState(0);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
+    if (scrollHeight - scrollTop <= clientHeight + 50) {
+      setLoadedBatches((prev) => prev + 1);
+    }
+  };
+
+  // Fetches research opportunities from database
   useEffect(() => {
     const fetchResearches = async () => {
       try {
@@ -156,7 +166,7 @@ const FilterPage = () => {
         <div>{/*}add in filters (tag, year, time, etc){*/}</div>
       </div>
   
-      <div className="fixed top-[30vh] right-0 w-[80vw] h-[70vh] overflow-y-auto px-14 pt-2.5">
+      <div className="fixed top-[30vh] right-0 w-[80vw] h-[70vh] overflow-y-auto px-14 pt-2.5" onScroll={handleScroll}>
         <div className="w-full h-full grid grid-cols-1 items-stretch gap-5">
           {loading ? (
             <>
@@ -165,7 +175,7 @@ const FilterPage = () => {
             </>
           ) : (
             <>
-              {filteredData.slice(0, CARD_DISPLAY_LIMIT).map((research) => (
+              {filteredData.slice(0, (loadedBatches + 1) * CARD_BATCH_LIMIT).map((research) => (
                 <Card key={research._id} research={research}></Card>
               ))}
             </>
