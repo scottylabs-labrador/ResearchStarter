@@ -23,11 +23,17 @@ export default {
         "dark-color": "#D3B7FF", //violet-500
         "violet-600": "#C0A7E8",
         "violet-700": "#9682B5",
+        "card-highlight": "#7E55B2",
         "tag-dark-color": "#9E63FF",
         "bookmark-color": "#21272A",
         "grey-blue-color": "#6D758F",
         "nav-border-color": "#DDE1E6",
         "learn-more-color": "#c9c8c8",
+        "brand-50": "#f5efff",
+        "brand-300": "#be96ff",
+        "brand-400": "#b182ff",
+        "brand-500": "#9e63ff",
+        "brand-600": "#905ae8",
       },
       backgroundImage: {
         "hippo-bg": "url(/src/assets/images/Hippo_Planet.png)",
