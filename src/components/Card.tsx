@@ -4,6 +4,10 @@ import { NavLink } from "react-router-dom";
 import { ResearchType } from "~/DataTypes";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkIconUnfilled from "@mui/icons-material/BookmarkBorderOutlined";
+import { BsEyeglasses } from "react-icons/bs";
+import { FaBook, FaHouse } from "react-icons/fa6";
+import { CiCalendar } from "react-icons/ci";
+import { TbCoin } from "react-icons/tb";
 import { Row, Col } from "react-bootstrap";
 import Tag from "./Tag";
 import { v4 as uuidv4 } from "uuid";
@@ -12,10 +16,22 @@ interface CardPropt {
   research: ResearchType;
 }
 
-// colleges, department, keywords, description, name, website, id
+/* _id 6922390cf86661d05041f3e0
+Project Title "Subversive AI"
+Contact "{'Sauvik Das': 'sauvik'}"
+Description "The subversive AI project is fundamentally about employing human-cente…"
+Prereqs "Web/mobile application development and/or machine learning engineering…"
+Time Commitment ""
+Anticipated End Date "May 2024"
+Relevant Links "subversive.ai"
+College "['School of Computer Science']"
+Department "['Human-Computer Interaction Institute']"
+Position "Independent Study"
+Paid/Unpaid "Paid"
+Desired Skill Level "Undergraduate Students, Masters Students, PhD Students"
+*/
 
 const Card = ({ research }: CardPropt) => {
-
 
   // Currently for testing purposes:
   const [opportunities, setOpportunities] = useState([]);
@@ -45,78 +61,75 @@ const Card = ({ research }: CardPropt) => {
     setBookmark(!bookmark);
   }
 
+  let professorName = research.contact.substring(research.contact.indexOf("{'") + 2, research.contact.indexOf("': '"));
+  let department = research.department.substring(research.department.indexOf("['") + 2, research.department.indexOf("']"));
+
   return (
-    <div className="fadeIn fadeOut w-full h-72 bg-light-color rounded-xl p-10 relative flex items-start">
+    // Entire card wrapped in a navlink to the opportunity's page
+    <NavLink to={`/info/${research._id}`} className="no-underline text-black">
+      <div className="w-full h-72 bg-light-color rounded-xl p-10 relative flex items-start border border-card-highlight overflow-hidden cursor-pointer 
+                      transition-all duration-300 ease-in-out hover:shadow-[0_4px_20px_#E2CFFF]">
+        {/* First column */}
+        <div className="w-[73%] mr-[2%] inline-block overflow-hidden">
 
-      <div className="w-[73%] mr-[2%] inline-block">
+          {/* Opportunity name */}
+          <h3 className="font-bold text-3xl mb-3 overflow-hidden text-ellipsis whitespace-nowrap">{research.projectTitle}</h3>
 
-        <h3 className="font-bold text-3xl mb-3">{research.projectTitle}</h3>{" "}
+          <div className="mb-3 ">
+            {/* Professor + Department + Position*/}
+            <div className="flex flex-row items-center gap-2">
+              <BsEyeglasses/>
+              <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{professorName} | </h3>
+              <FaHouse/>
+              <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{department} | </h3>
+              <FaBook/>
+              <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{research.position}</h3>
+            </div>
 
-        {research.department != "" ? (
-          <div>
-            <h3 className="text-lg">Website: {research.source}</h3>
-          </div>
-        ) : (
-          <div></div>
-        )}
+            {/* Date */}
+            <div className="flex flex-row items-center gap-2">
+              <CiCalendar/>
+              <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{research.anticipatedEndDate}</h3>
+            </div>
 
-        <div>
-          <p className="text-lg">Description:</p>
-          <p className=" break-words">
-            {research.description.substring(
-              0,
-              Math.max(research.description.length, 200)
-            )}
-          </p>
-        </div>
-
-        <button className="px-3 py-2 bg-learn-more-color shadow-black shadow-sm text-black rounded my-2">
-          <NavLink to={`/info/${research._id}`}>Learn More</NavLink>
-        </button>
-
-      </div>
-
-      <div className="w-[25%] inline-block flex flex-row">
-
-        <div className="h-48 w-full overflow-hidden flex gap-y-2  gap-x-2 flex-wrap content-start items-start">
-          {/*}{research.colleges ? (
-            research.colleges.map((word) => (
-              <div>
-                <Tag key={uuidv4().concat("col")} keyword={word} />
+            {/* Paid */}
+            {research.paidUnpaid !== "" && (
+              <div className="flex flex-row items-center gap-2">
+                <TbCoin/>
+                <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{research.paidUnpaid}</h3>
               </div>
-            ))
-          ) : (
-            <div className="collapse"></div>
-          )}{*/}
-          {/*}
-          {research.department ? (
-            research.department.map((word) => (
-              <Tag key={uuidv4().concat("dep")} keyword={word} />
-            ))
-          ) : (
-            <div className="collapse"></div>
-          )} {*/}
-          {/*}{research.keywords ? (
-            research.keywords.map((word) => (
-              <Tag key={uuidv4().concat("key")} keyword={word} />
-            ))
-          ) : (
-            <div className="collapse"></div>
-          )} {*/}
+            )}
+          </div>
+
+          {/* Description */}
+          <div className="overflow-hidden">
+            <p className="text-lg flex-grow overflow-hidden text-ellipsis line-clamp-3">
+              {research.description?.substring(0, 300)}
+              {research.description?.length > 200 && "..."}
+            </p>
+          </div>
+
         </div>
 
-        <div>
-          <button
-            onClick={() => {
-              bookmarkOpportunity();
-            }}
-          >
-            {bookmark ? <BookmarkIcon /> : <BookmarkIconUnfilled />}
-          </button>
+        {/* Second column */}
+        <div className="w-[25%] flex flex-col">
+          {/* Bookmark */}
+          <div className="flex justify-end">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                bookmarkOpportunity();
+              }}
+            >
+              {bookmark ? <BookmarkIcon fontSize="large" /> : <BookmarkIconUnfilled fontSize="large" />}
+            </button>
+          </div>
+
+          {/* Tags... */}
+          
         </div>
-        
       </div>
-    </div>
+    </NavLink>
   );
 };
 
