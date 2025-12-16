@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Jersey+25&family=Jersey+20&display=swap');
 @import "tailwindcss";
 
 @theme {
   /* Fonts */
   --font-roboto: "Roboto", sans-serif;
   --font-sans: "Monospace";
+  --font-jersey: "Jersey 25", sans-serif;
+  --font-jersey-20: "Jersey 20", sans-serif;
 
   /* Custom Colors */
   --color-pink-hippo: #fae0eb;
