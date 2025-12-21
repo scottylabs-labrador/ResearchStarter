@@ -167,7 +167,7 @@ const FilterPage = () => {
       </div>
   
       <div className="fixed top-[30vh] right-0 w-[80vw] h-[70vh] overflow-y-auto px-14 pt-2.5" onScroll={handleScroll}>
-        <div className="w-full h-full grid grid-cols-1 items-stretch gap-5">
+        <div className="w-full h-full grid grid-cols-1 items-stretch gap-8">
           {loading ? (
             <>
               <h2>Loading...</h2>
