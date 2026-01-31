@@ -3,7 +3,7 @@ import cors from "cors";
 import opportunities from "./routes/opportunities.js";
 import { connectToDatabase } from "./db/connection.js";
 
-const PORT = process.env.PORT || 5050;
+const PORT = process.env.PORT || 8000;
 const app = express();
 
 app.use(cors());

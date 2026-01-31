@@ -1,8 +1,57 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import ProfileHeader from "../components/profile/ProfileHeader";
+import InterestsSkillsSection from "../components/profile/InterestsSkillsSection";
+import BioBlurbSection from "../components/profile/BioBlurbSection";
+import PreviousExperiencesSection from "../components/profile/PreviousExperiencesSection";
+import { Experience } from "../types/Experience";
 
-const ProfilePage = () => {
-  const [profileImage, setProfileImage] = useState(""); // State for storing the profile image
+interface ProfilePageProps {
+  profileImage?: string;
+  name?: string;
+  major?: string;
+  class?: string;
+  email?: string;
+  initialInterestsSkills?: string[];
+  initialBio?: string;
+  initialPreviousExperiences?: Experience[];
+}
+
+const ProfilePage = ({
+  profileImage,
+  name,
+  major,
+  class: userClass,
+  email,
+  initialInterestsSkills = [],
+  initialBio = "",
+  initialPreviousExperiences = [],
+}: ProfilePageProps) => {
+  const navigate = useNavigate(); // Initialize navigation hook
+  
+  const [items, setItems] = useState<string[]>(initialInterestsSkills);
+  const [bio, setBio] = useState(initialBio);
+  const [previousExperiences, setPreviousExperiences] = useState<Experience[]>(initialPreviousExperiences);
+  const [showPreviousExperiencesEditView, setShowPreviousExperiencesEditView] = useState(false);
+  const [showAddExperienceView, setShowAddExperienceView] = useState(false);
+
+  const handleAddItem = (newItem: string) => {
+    setItems((prevItems) => [...prevItems, newItem]);
+  };
+
+  const handleRemoveItem = (itemToRemove: string) => {
+    setItems((prevItems) => prevItems.filter((item) => item !== itemToRemove));
+  };
+
+  const handleSaveBio = (newBio: string) => {
+    setBio(newBio);
+    console.log("Bio saved:", newBio);
+  };
+
+  const handleSavePreviousExperiences = (newExperiences: Experience[]) => {
+    setPreviousExperiences(newExperiences);
+    console.log("Previous experiences saved:", newExperiences);
+  };
 
   useEffect(() => {
     const fetchResearches = async () => {
@@ -11,104 +60,76 @@ const ProfilePage = () => {
         const data = await res.json();
       } catch {
         console.log("Error Fetching Data");
-      } finally {
       }
     };
 
     fetchResearches();
   }, []);
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files![0];
-    if (file) {
-      const imageURL = URL.createObjectURL(file); // Create a preview URL for the image
-      setProfileImage(imageURL);
-    }
-  };
-
   return (
-    <main className="p-8 bg-gray-100 min-h-screen">
-      {/* Profile Header */}
-      <section className="bg-white shadow-lg rounded-lg p-6 mb-8">
-        <div className="flex flex-col items-center">
-          {/* Profile Image */}
-          <div className="relative">
-            <img
-              src={
-                profileImage ||
-                "https://via.placeholder.com/150?text=Upload+Image"
-              }
-              alt="Profile"
-              className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-gray-300"
+    <main className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Back Button Section */}
+      <div className="pt-6">
+        <button
+          onClick={() => navigate(-1)} // Navigates back one step in history
+          className="flex items-center text-gray-600 hover:text-blue-600 transition-colors"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 mr-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
             />
-            {/* Upload Button */}
-            <label
-              htmlFor="imageUpload"
-              className="absolute bottom-0 right-0 bg-blue-500 text-white p-2 rounded-full cursor-pointer"
-            >
-              📷
-            </label>
-            <input
-              id="imageUpload"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleImageUpload}
+          </svg>
+          Back
+        </button>
+      </div>
+
+      <ProfileHeader
+        profileImage={profileImage}
+        name={name}
+        major={major}
+        class={userClass}
+        email={email}
+        className="mt-10 mb-20" // Adjusted margin-top to account for the button
+      />
+      <hr className="border-gray-300" />
+      <div className="p-8">
+        {!showPreviousExperiencesEditView && !showAddExperienceView && (
+          <>
+            <BioBlurbSection initialBio={bio} onSave={handleSaveBio} />
+            <InterestsSkillsSection
+              items={items}
+              onAddItem={handleAddItem}
+              onRemoveItem={handleRemoveItem}
             />
-          </div>
+          </>
+        )}
 
-          {/* Name and Headline */}
-          <h1 className="text-2xl md:text-3xl font-bold mt-4">Your Name</h1>
-          <p className="text-gray-600 text-lg">
-            Your Headline (e.g., Software Engineer)
-          </p>
-        </div>
-      </section>
-
-      {/* Interests Section */}
-      <section className="bg-white shadow-lg rounded-lg p-6 mb-8">
-        <h2 className="text-xl font-bold mb-4">Interests</h2>
-        <textarea
-          placeholder="Share your interests..."
-          className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
-        ></textarea>
-      </section>
-
-      {/* Education Section */}
-      <section className="bg-white shadow-lg rounded-lg p-6 mb-8">
-        <h2 className="text-xl font-bold mb-4">Education</h2>
-        <textarea
-          placeholder="Add your education details..."
-          className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
-        ></textarea>
-      </section>
-
-      {/* Work Experience Section */}
-      <section className="bg-white shadow-lg rounded-lg p-6 mb-8">
-        <h2 className="text-xl font-bold mb-4">Work Experience</h2>
-        <textarea
-          placeholder="Add your work experience..."
-          className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
-        ></textarea>
-      </section>
-
-      {/* Skills Section */}
-      <section className="bg-white shadow-lg rounded-lg p-6 mb-8">
-        <h2 className="text-xl font-bold mb-4">Skills</h2>
-        <textarea
-          placeholder="List your skills..."
-          className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
-        ></textarea>
-      </section>
-
-      {/* Additional Information Section */}
-      <section className="bg-white shadow-lg rounded-lg p-6 mb-8">
-        <h2 className="text-xl font-bold mb-4">Additional Information</h2>
-        <textarea
-          placeholder="Add any other relevant details..."
-          className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
-        ></textarea>
-      </section>
+        <PreviousExperiencesSection
+          initialExperiences={previousExperiences}
+          onSave={handleSavePreviousExperiences}
+          onEditExperiencesClick={() => {
+            setShowPreviousExperiencesEditView(true);
+            setShowAddExperienceView(false);
+          }}
+          onBackToProfileClick={() => setShowPreviousExperiencesEditView(false)}
+          onAddExperienceClick={() => {
+            setShowAddExperienceView(true);
+            setShowPreviousExperiencesEditView(false);
+          }}
+          onCancelAddExperienceClick={() => setShowAddExperienceView(false)}
+          isEditingAllExperiences={showPreviousExperiencesEditView}
+          isAddingNewExperience={showAddExperienceView}
+        />
+      </div>
     </main>
   );
 };

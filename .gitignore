@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 .env
 server/config.env
+
+*storybook.log
+storybook-static
