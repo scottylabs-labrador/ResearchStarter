@@ -61,8 +61,11 @@ const Card = ({ research }: CardPropt) => {
     setBookmark(!bookmark);
   }
 
-  let professorName = research.contact.substring(research.contact.indexOf("{'") + 2, research.contact.indexOf("': '"));
-  let department = research.department.substring(research.department.indexOf("['") + 2, research.department.indexOf("']"));
+  let contactKeys = Object.keys(research.contact) as string[];
+  if (contactKeys.length == 0) return;
+
+  let professorName: string = contactKeys[0]!;
+  let department = research.department!;
 
   return (
     // Entire card wrapped in a navlink to the opportunity's page
