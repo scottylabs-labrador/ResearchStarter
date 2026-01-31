@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 const ProfilePage = () => {
   const [profileImage, setProfileImage] = useState(""); // State for storing the profile image

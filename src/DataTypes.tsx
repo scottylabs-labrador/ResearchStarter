@@ -4,15 +4,15 @@ export interface ResearchAllTypes {
 
 export interface ResearchType {
   _id: string;
-  contact: string;
-  department: string;
+  contact: Record<string, string>;
+  department: string[];
   description: string;
   desiredSkillLevel?: string;
   paidUnpaid?: string;
   position?: string;
   prereqs?: string;
   projectTitle: string;
-  relevantLinks?: string;
+  relevantLinks?: string[];
   source?: string;
   timeAdded?: string;
   timeCommitment?: string;
