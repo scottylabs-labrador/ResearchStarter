@@ -177,7 +177,7 @@ const ProfileHeader = ({
           ) : (
             // --- VIEW MODE ---
             <div className="relative group">
-              <h1 className="text-3xl md:text-4xl font-bold mb-1">
+              <h1 className="font-jersey text-5xl md:text-5xl font-bold mb-1">
                 {profileData.name || "Your Name"}
               </h1>
               <p className="text-gray-600 text-lg">

@@ -4,25 +4,22 @@ export interface ResearchAllTypes {
 
 export interface ResearchType {
   _id: string;
-  contact: string;
-  department: string;
+  contact: Record<string, string>; // e.g. { "Lauren Herckis": "lrhercki" }
+  department: string[];
   description: string;
   desiredSkillLevel?: string;
   paidUnpaid?: string;
   position?: string;
   prereqs?: string;
   projectTitle: string;
-  relevantLinks?: string;
+  relevantLinks?: string[];
   source?: string;
   timeAdded?: string;
   timeCommitment?: string;
   anticipatedEndDate?: string;
-  // Optional fields from the old structure that might still be in use
-  id?: string;
+  college?: string[];
   keywords?: string[];
-  colleges?: string[];
-  name?: string;
-  website?: string;
+  pfp?: string;
 }
 
 export type ResearchKeysType = keyof ResearchType;

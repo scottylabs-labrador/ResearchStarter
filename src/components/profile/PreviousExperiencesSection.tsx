@@ -88,14 +88,14 @@ const PreviousExperiencesSection = ({
     <section className="mb-8">
       {!isEditingAllExperiences && !isAddingNewExperience ? (
         <>
-          <h2 className="text-xl font-bold mb-4">Previous Experiences</h2>
-          <div className="space-y-4 bg-pink-hippo p-4 rounded-md">
+          <h2 className="font-jersey text-3xl font-bold mb-4">Previous Experiences</h2>
+          <div className="space-y-4 bg-magenta-100 p-4 rounded-md">
             {experiences.length === 0 ? (
               <p className="text-gray-700">No previous experiences added yet.</p>
             ) : (
               experiences.map((experience) => (
-                <div key={experience.id} className="rounded-md p-4 relative bg-pink-hippo mb-4">
-                  <h3 className="text-lg font-bold">{experience.title}</h3>
+                <div key={experience.id} className="rounded-md p-4 relative bg-magenta-100 mb-4">
+                  <h3 className="font-jersey text-2xl font-bold">{experience.title}</h3>
                   <p className="text-gray-700">
                     <span className="font-semibold">Professor/Company:</span> {experience.professorOrCompany}
                   </p>
@@ -215,7 +215,7 @@ const PreviousExperiencesSection = ({
       ) : (
         // New Add Experience Form Section
         <div className="mt-8">
-          <h3 className="text-2xl font-bold mb-4">Create New Opportunity</h3>
+          <h3 className="font-jersey text-3xl font-bold mb-4">Create New Opportunity</h3>
           {/* Input fields for new experience */}
           <>
             <ExperienceForm

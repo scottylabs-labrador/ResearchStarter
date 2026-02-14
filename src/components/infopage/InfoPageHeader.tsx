@@ -1,6 +1,7 @@
 import React from 'react';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkIconUnfilled from '@mui/icons-material/BookmarkBorderOutlined';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Tag from '../Tag'; // Assuming Tag component is in '../Tag'
 import { v4 as uuidv4 } from 'uuid'; // For unique keys for tags
 
@@ -31,7 +32,7 @@ const InfoPageHeader: React.FC<InfoPageHeaderProps> = ({
       <div className="flex justify-between items-start mb-4">
         <div>
           {/* Title */}
-          <h1 className="text-5xl font-bold text-gray-900 mb-2">{title}</h1>
+          <h1 className="font-jersey text-7xl font-bold text-gray-900 mb-2">{title}</h1>
 
           {/* Subtitle: Professor/Lab Name and Department, College */}
           <p className="text-gray-600 text-lg mb-2">
@@ -53,22 +54,23 @@ const InfoPageHeader: React.FC<InfoPageHeaderProps> = ({
           {/* Bookmark Button */}
           <button
             onClick={onBookmarkToggle}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            aria-label={isBookmarked ? 'Unbookmark' : 'Bookmark'}
+            className="bg-white border-2 border-dark-color hover:bg-gray-50 py-2 px-6 rounded-lg shadow-md transition-colors flex items-center gap-2"
           >
             {isBookmarked ? (
-              <BookmarkIcon className="text-blue-600 text-3xl" />
+              <BookmarkIcon className="text-dark-color" />
             ) : (
-              <BookmarkIconUnfilled className="text-gray-400 text-3xl" />
+              <BookmarkIconUnfilled className="text-dark-color" />
             )}
+            {isBookmarked ? 'Saved' : 'Save'}
           </button>
 
           {/* Apply Button */}
           <button
             onClick={onApplyClick}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-colors"
+            className="bg-dark-color hover:card-highlight font-bold py-2 px-6 rounded-lg shadow-md transition-colors flex items-center gap-2"
           >
-            Apply Now
+            <ArrowForwardIcon />
+            Apply
           </button>
         </div>
       </div>

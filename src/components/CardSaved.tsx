@@ -21,24 +21,25 @@ const CardSaved = ({ research }: CardPropt) => {
   return (
     <div className="fadeIn fadeOut w-full h-72 bg-light-color rounded-xl p-10 relative flex items-start">
       <div className="w-full h-full">
-        <h3 className="font-bold text-3xl mb-3">{research.name}</h3>{" "}
+        <h3 className="font-bold text-3xl mb-3">{research.projectTitle}</h3>{" "}
         <p className="mb-5">
-          {research.name && research.colleges
-            ? research.name + " | " + research.colleges.join(", ")
+          {Object.keys(research.contact ?? {}).join(", ")}
+          {research.college && research.college.length > 0
+            ? " | " + research.college.join(", ")
             : ""}
         </p>
         <div className="h-[40%] w-full overflow-hidden flex gap-y-2  gap-x-2 flex-wrap content-start items-start">
-          {research.colleges ? (
-            research.colleges.map((word) => (
-              <div>
-                <Tag key={uuidv4().concat("col")} keyword={word} />
+          {research.college ? (
+            research.college.map((word: string) => (
+              <div key={uuidv4().concat("col")}>
+                <Tag keyword={word} />
               </div>
             ))
           ) : (
             <div className="collapse"></div>
           )}
           {research.department ? (
-            research.department.map((word) => (
+            research.department.map((word: string) => (
               <Tag key={uuidv4().concat("dep")} keyword={word} />
             ))
           ) : (
@@ -61,7 +62,7 @@ const CardSaved = ({ research }: CardPropt) => {
             {varStar ? <BookmarkIcon /> : <BookmarkIconUnfilled />}
           </button>
           <button className="px-3 py-2 bg-learn-more-color shadow-black shadow-sm text-black rounded my-2">
-            <NavLink to={`/info/${research.id}`}>Learn More</NavLink>
+            <NavLink to={`/info/${research._id}`}>Learn More</NavLink>
           </button>
         </div>
       </div>

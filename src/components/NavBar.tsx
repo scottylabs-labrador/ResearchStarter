@@ -32,7 +32,7 @@ const NavBar = () => {
               />
             </NavLink>
           </div>
-          <div className="p-4 text-xl flex gap-x-4 col-start-5 col-span-4">
+          <div className="p-4 text-base flex gap-x-4 col-start-5 col-span-4">
             <NavButton
               name="Dashboard"
               Icon={HomeOutlinedIcon}

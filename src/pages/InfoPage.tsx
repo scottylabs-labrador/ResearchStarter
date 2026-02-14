@@ -1,18 +1,17 @@
     import React, { useState, useEffect } from 'react'
-    import { useParams, useNavigate } from 'react-router-dom'
-    import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-    import { ResearchType } from '../DataTypes'
-    import RelatedOpportunities from '../components/RelatedOpportunities'
-    import ResumeUploadPopup from '../components/infopage/ResumeUploadPopup'
-    import InfoPageHeader from '../components/infopage/InfoPageHeader'
-    import ContactsSection from '../components/infopage/ContactsSection'
-    import RelatedOpportunitiesSection from '../components/infopage/RelatedOpportunitiesSection'
+import { useParams, useNavigate } from 'react-router-dom'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import MailIcon from '@mui/icons-material/Mail'
+import LinkIcon from '@mui/icons-material/Link'
+import InfoIcon from '@mui/icons-material/Info'
+import { ResearchType } from '../DataTypes'
+import RelatedOpportunities from '../components/RelatedOpportunities'
+import ResumeUploadPopup from '../components/infopage/ResumeUploadPopup'
+import InfoPageHeader from '../components/infopage/InfoPageHeader'
+import ContactsSection from '../components/infopage/ContactsSection'
+import RelatedOpportunitiesSection from '../components/infopage/RelatedOpportunitiesSection'
 
-    // IMPORT YOUR JSON DATA HERE
-    // Ensure the path matches where you saved research.json
-    import researchData from '../research.json' 
-
-    const InfoPage: React.FC = () => {
+const InfoPage: React.FC = () => {
         const { id } = useParams<{ id: string }>()
         const [info, setInfo] = useState<ResearchType | null>(null)
         const [allResearch, setAllResearch] = useState<ResearchType[]>([])
@@ -28,25 +27,35 @@
                 return
             }
 
-            // Simulating a data fetch with local JSON
-            const loadLocalData = () => {
+            const fetchData = async () => {
                 try {
-                    // We cast to 'any' here so TypeScript stops complaining that 
-                    // 'lastName' doesn't exist on ResearchType.
-                    const allData: any[] = researchData.research;
+                    const res = await fetch("http://localhost:5050/opportunities/");
+                    if (!res.ok) {
+                        throw new Error(`An error occurred: ${res.statusText}`);
+                    }
+                    const data: any[] = await res.json();
 
-                    // We map over the raw data and combine First + Last name
-                    // into the single 'name' property that ResearchType expects.
-                    const normalizedData = allData.map((item) => ({
-                        ...item,
-                        id: item.id.toString(),
-                        // COMBINE NAME HERE:
-                        name: item.lastName ? `${item.name} ${item.lastName}` : item.name,
-                        // Ensure description has a fallback
-                        description: item.description || "No description provided."
+                    const normalizedData = data.map((item) => ({
+                        _id: item._id,
+                        projectTitle: item["Project Title"],
+                        contact: item.Contact ?? {},
+                        department: item.Department ?? [],
+                        description: item.Description || "No description provided.",
+                        desiredSkillLevel: item["Desired Skill Level"],
+                        paidUnpaid: item["Paid/Unpaid"],
+                        position: item.Position,
+                        prereqs: item.Prereqs,
+                        relevantLinks: item["Relevant Links"] ?? [],
+                        source: item.Source,
+                        timeAdded: item["Time Added"],
+                        timeCommitment: item["Time Commitment"],
+                        anticipatedEndDate: item["Anticipated End Date"],
+                        keywords: item.Keywords,
+                        college: item.College ?? [],
+                        pfp: item.pfp,
                     })) as ResearchType[];
 
-                    const foundResearch = normalizedData.find((item) => item.id === id);
+                    const foundResearch = normalizedData.find((item) => item._id === id);
 
                     if (foundResearch) {
                         setInfo(foundResearch);
@@ -56,40 +65,40 @@
                     }
 
                 } catch (err) {
-                    console.error("Error loading local data", err);
+                    console.error("Error fetching data", err);
                     setError("Failed to load research data");
                 } finally {
                     setLoading(false);
                 }
             };
 
-            loadLocalData();
+            fetchData();
         }, [id])
 
         const handleSave = async (research: ResearchType) => {
             try {
-                setSavedStates(prev => ({ ...prev, [research.id]: true }))
-                console.log('Research saved (Local State):', research.id)
+                setSavedStates(prev => ({ ...prev, [research._id]: true }))
+                console.log('Research saved (Local State):', research._id)
             } catch (error) {
                 console.error('Error saving research:', error)
-                setSavedStates(prev => ({ ...prev, [research.id]: false }))
+                setSavedStates(prev => ({ ...prev, [research._id]: false }))
             }
         }
 
         const handleUnsave = async (research: ResearchType) => {
             try {
-                setSavedStates(prev => ({ ...prev, [research.id]: false }))
-                console.log('Research unsaved (Local State):', research.id)
+                setSavedStates(prev => ({ ...prev, [research._id]: false }))
+                console.log('Research unsaved (Local State):', research._id)
             } catch (error) {
                 console.error('Error unsaving research:', error)
-                setSavedStates(prev => ({ ...prev, [research.id]: true }))
+                setSavedStates(prev => ({ ...prev, [research._id]: true }))
             }
         }
 
         const handleBookmarkToggle = () => {
             if (!info) return
-            
-            if (savedStates[info.id]) {
+
+            if (savedStates[info._id]) {
                 handleUnsave(info)
             } else {
                 handleSave(info)
@@ -185,17 +194,13 @@
                     </button>
                 </div>
                 
-                {/* Note: Based on the JSON, 'info.name' is the First Name. 
-                You might want to change this to `${info.name} ${info.lastName}` 
-                if your types allow it, otherwise 'info.name' works.
-                */}
                 <InfoPageHeader
-                    title={`${info.name}`} 
-                    professorOrLabName={info.labs?.join(', ')}
+                    title={info.projectTitle}
+                    professorOrLabName={Object.keys(info.contact).join(', ')}
                     department={info.department || []}
-                    college={info.colleges || []}
-                    tags={[...(info.keywords || []), ...(info.colleges || []), ...(info.department || [])]}
-                    isBookmarked={savedStates[info.id] || false}
+                    college={info.college || []}
+                    tags={[...(info.keywords || []), ...(info.college || []), ...(info.department || [])]}
+                    isBookmarked={savedStates[info._id] || false}
                     onBookmarkToggle={handleBookmarkToggle}
                     onApplyClick={handleApply}
                 />
@@ -204,65 +209,91 @@
                         {/* Left Column */}
                         <div className="lg:col-span-1 space-y-6">
                             {/* Contact Info Card */}
-                            <div className="bg-gray-100 rounded-lg p-6 border border-gray-200">
-                                <h2 className="text-xl font-semibold mb-4">Contact Information</h2>
+                            <div className="bg-light-color rounded-lg p-6 border border-gray-200">
+                                <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                                    <MailIcon className="text-gray-500" />
+                                    Contact Information
+                                </h2>
                                 <div className="space-y-2">
-                                    {info.email && (
-                                        <p>
-                                            <span className="font-medium">Email:</span>{" "}
+                                    {Object.entries(info.contact).map(([name, andrewId]) => (
+                                        <p key={andrewId}>
+                                            <span className="font-medium">{name}</span>{" — "}
                                             <a
-                                                href={`mailto:${info.email}`}
+                                                href={`mailto:${andrewId}@andrew.cmu.edu`}
                                                 className="text-blue-600 hover:text-blue-800"
                                             >
-                                                {info.email}
+                                                {andrewId}@andrew.cmu.edu
                                             </a>
                                         </p>
-                                    )}
-                                    {info.officeHours && (
-                                        <p>
-                                            <span className="font-medium">Office Hours:</span>{" "}
-                                            {info.officeHours}
-                                        </p>
-                                    )}
+                                    ))}
                                 </div>
                             </div>
 
-                            {/* Website Card */}
-                            {info.website && (
-                                <div className="bg-gray-100 rounded-lg p-6 border border-gray-200">
-                                    <h2 className="text-xl font-semibold mb-4">Website</h2>
-                                    <a
-                                        href={info.website}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-blue-600 hover:text-blue-800 break-words"
-                                    >
-                                        {info.website}
-                                    </a>
+                            {/* Relevant Links Card */}
+                            {info.relevantLinks && info.relevantLinks.length > 0 && (
+                                <div className="bg-light-color rounded-lg p-6 border border-gray-200">
+                                    <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                                        <LinkIcon className="text-gray-500" />
+                                        Relevant Links
+                                    </h2>
+                                    <div className="space-y-2">
+                                        {info.relevantLinks.map((link, i) => (
+                                            <a
+                                                key={i}
+                                                href={link.startsWith('http') ? link : `https://${link}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-blue-600 hover:text-blue-800 break-words block"
+                                            >
+                                                {link}
+                                            </a>
+                                        ))}
+                                    </div>
                                 </div>
                             )}
 
-                            {/* Requirements Overview Card */}
-                            {(info.requestedYear || info.requestedExp || info.timeAvail) && (
-                                <div className="bg-gray-100 rounded-lg p-6 border border-gray-200">
-                                    <h2 className="text-xl font-semibold mb-4">Requirements Overview</h2>
+                            {/* Details Card */}
+                            {(info.position || info.paidUnpaid || info.timeCommitment || info.anticipatedEndDate || info.desiredSkillLevel || info.prereqs) && (
+                                <div className="bg-light-color rounded-lg p-6 border border-gray-200">
+                                    <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                                        <InfoIcon className="text-gray-500" />
+                                        Details
+                                    </h2>
                                     <div className="space-y-4">
-                                        {info.requestedYear && (
+                                        {info.position && (
                                             <div>
-                                                <p className="font-medium">Year Level:</p>
-                                                <p>{info.requestedYear}</p>
+                                                <p className="font-medium">Position:</p>
+                                                <p>{info.position}</p>
                                             </div>
                                         )}
-                                        {info.requestedExp && (
+                                        {info.paidUnpaid && (
                                             <div>
-                                                <p className="font-medium">Experience:</p>
-                                                <p>{info.requestedExp}</p>
+                                                <p className="font-medium">Compensation:</p>
+                                                <p>{info.paidUnpaid}</p>
                                             </div>
                                         )}
-                                        {info.timeAvail && (
+                                        {info.desiredSkillLevel && (
+                                            <div>
+                                                <p className="font-medium">Desired Skill Level:</p>
+                                                <p>{info.desiredSkillLevel}</p>
+                                            </div>
+                                        )}
+                                        {info.timeCommitment && (
                                             <div>
                                                 <p className="font-medium">Time Commitment:</p>
-                                                <p>{info.timeAvail}</p>
+                                                <p>{info.timeCommitment}</p>
+                                            </div>
+                                        )}
+                                        {info.anticipatedEndDate && (
+                                            <div>
+                                                <p className="font-medium">Anticipated End Date:</p>
+                                                <p>{info.anticipatedEndDate}</p>
+                                            </div>
+                                        )}
+                                        {info.prereqs && (
+                                            <div>
+                                                <p className="font-medium">Prerequisites:</p>
+                                                <p>{info.prereqs}</p>
                                             </div>
                                         )}
                                     </div>
@@ -284,37 +315,14 @@
                         </div>
                     </div>
                 </div>
-                {/* Contacts Section - Hardcoded as per original file */}
-                <ContactsSection contacts={[
-                    {
-                        headshotUrl: "https://randomuser.me/api/portraits/men/1.jpg",
-                        title: "Dr. John Doe",
-                        department: "Computer Science",
-                        officeLocation: "SCI 201",
-                        email: "john.doe@example.com",
-                    },
-                    {
-                        headshotUrl: "https://randomuser.me/api/portraits/women/2.jpg",
-                        title: "Dr. Jane Smith",
-                        department: "Electrical Engineering",
-                        officeLocation: "ENG 305",
-                        email: "jane.smith@example.com",
-                    },
-                    {
-                        headshotUrl: "https://randomuser.me/api/portraits/men/3.jpg",
-                        title: "Dr. Peter Jones",
-                        department: "Physics",
-                        officeLocation: "PHY 110",
-                        email: "peter.jones@example.com",
-                    },
-                    {
-                        headshotUrl: "https://randomuser.me/api/portraits/women/4.jpg",
-                        title: "Dr. Sarah Lee",
-                        department: "Mathematics",
-                        officeLocation: "MATH 400",
-                        email: "sarah.lee@example.com",
-                    },
-                ]} />
+                {/* Contacts Section */}
+                <ContactsSection contacts={Object.entries(info.contact).map(([name, andrewId]) => ({
+                    headshotUrl: info.pfp || "",
+                    title: name,
+                    department: info.department.join(', '),
+                    officeLocation: "",
+                    email: `${andrewId}@andrew.cmu.edu`,
+                }))} />
                 {/* Related Opportunities Section (Static Data) */}
                 <RelatedOpportunitiesSection opportunities={[
                     {

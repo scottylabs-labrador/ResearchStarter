@@ -18,8 +18,8 @@ interface RelatedOpportunitiesSectionProps {
 const RelatedOpportunitiesSection: React.FC<RelatedOpportunitiesSectionProps> = ({ opportunities }) => {
   return (
     <div className="w-screen ml-[calc(50%-50vw)] mb-8">
-      <div className="bg-blue-50 p-6 rounded-lg px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Related Opportunities</h2>
+      <div className="bg-violet-400 p-6 rounded-lg px-4 sm:px-6 lg:px-8">
+        <h2 className="font-jersey text-6xl font-bold text-gray-900 mb-4">Related opportunities</h2>
         <div className="flex overflow-x-auto space-x-4 pb-4">
           {opportunities.map((opportunity, index) => (
             <OpportunityCard

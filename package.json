@@ -8,14 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-<<<<<<< Updated upstream
     "test_server": "json-server --watch src/research.json --port 8000",
     "server": "cd server && node --env-file=config.env server"
-=======
-    "server": "json-server --watch src/research.json --port 8000",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
->>>>>>> Stashed changes
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.47.0",

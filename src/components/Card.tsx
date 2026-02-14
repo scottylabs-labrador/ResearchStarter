@@ -8,7 +8,6 @@ import { BsEyeglasses } from "react-icons/bs";
 import { FaBook, FaHouse } from "react-icons/fa6";
 import { CiCalendar } from "react-icons/ci";
 import { TbCoin } from "react-icons/tb";
-import { Row, Col } from "react-bootstrap";
 import Tag from "./Tag";
 import { v4 as uuidv4 } from "uuid";
 
@@ -61,8 +60,8 @@ const Card = ({ research }: CardPropt) => {
     setBookmark(!bookmark);
   }
 
-  let professorName = research.contact.substring(research.contact.indexOf("{'") + 2, research.contact.indexOf("': '"));
-  let department = research.department.substring(research.department.indexOf("['") + 2, research.department.indexOf("']"));
+  let professorName = Object.keys(research.contact ?? {}).join(', ');
+  let department = Array.isArray(research.department) ? research.department.join(', ') : String(research.department ?? '');
 
   return (
     // Entire card wrapped in a navlink to the opportunity's page

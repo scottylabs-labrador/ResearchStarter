@@ -62,8 +62,8 @@ const BioBlurbSection: React.FC<BioBlurbSectionProps> = ({
 
   return (
     <section className="mb-6">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-4">Bio</h2>
-      <div className="flex justify-between items-start bg-pink-hippo p-4 rounded-md">
+      <h2 className="font-jersey text-3xl font-semibold text-gray-800 mb-4">Bio</h2>
+      <div className="flex justify-between items-start bg-magenta-100 p-4 rounded-md">
         <p className="text-gray-700 leading-relaxed whitespace-pre-wrap flex-grow">
           {initialBio || "No bio yet. Click edit to add one."}
         </p>
@@ -79,7 +79,7 @@ const BioBlurbSection: React.FC<BioBlurbSectionProps> = ({
         {!uploadedResumeFile ? (
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+            className="px-4 py-2 bg-violet-400 rounded-md hover:violet-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
           >
             Upload Resume
           </button>

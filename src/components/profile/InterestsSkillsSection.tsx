@@ -25,9 +25,9 @@ const InterestsSkillsSection = ({
 
   return (
     <section className="mb-8 relative">
-      <h2 className="text-xl font-bold mb-4">Interests & Skills</h2>
+      <h2 className="font-jersey text-3xl font-bold mb-4">Interests & Skills</h2>
 
-      <div className="grid grid-cols-5 gap-2 mb-4 max-h-72 overflow-y-auto bg-pink-hippo p-4 rounded-md">
+      <div className="grid grid-cols-5 gap-2 mb-4 max-h-72 overflow-y-auto bg-magenta-100 p-4 rounded-md">
         {items.map((item) => (
           <Tag key={item} keyword={item} className="w-64 h-16 flex items-center justify-center overflow-hidden whitespace-nowrap text-ellipsis" />
         ))}
