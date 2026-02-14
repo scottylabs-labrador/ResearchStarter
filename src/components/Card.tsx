@@ -8,7 +8,6 @@ import { BsEyeglasses } from "react-icons/bs";
 import { FaBook, FaHouse } from "react-icons/fa6";
 import { CiCalendar } from "react-icons/ci";
 import { TbCoin } from "react-icons/tb";
-import { Row, Col } from "react-bootstrap";
 import Tag from "./Tag";
 import { v4 as uuidv4 } from "uuid";
 
@@ -39,7 +38,7 @@ const Card = ({ research }: CardPropt) => {
   // EXAMPLE OF HOW TO COMMUNICATE W/ MONGO FROM FRONTEND: Fetches the research opportunities from the database.
   useEffect(() => {
     async function getOpportunities() {
-      const response = await fetch(`http://localhost:5050/opportunities/`);
+      const response = await fetch(`/api/opportunities`);
       if (!response.ok) {
         const message = `An error occurred: ${response.statusText}`;
         console.error(message);
@@ -61,11 +60,8 @@ const Card = ({ research }: CardPropt) => {
     setBookmark(!bookmark);
   }
 
-  let contactKeys = Object.keys(research.contact) as string[];
-  if (contactKeys.length == 0) return;
-
-  let professorName: string = contactKeys[0]!;
-  let department = research.department!;
+  let professorName = Object.keys(research.contact ?? {}).join(', ');
+  let department = Array.isArray(research.department) ? research.department.join(', ') : String(research.department ?? '');
 
   return (
     // Entire card wrapped in a navlink to the opportunity's page

@@ -22,42 +22,26 @@ const RelatedOpportunities: React.FC<RelatedOpportunitiesProps> = ({
 
     // Department match (3 points)
     if (current.department && other.department) {
-      const commonDepartments = current.department.filter(dept => 
+      const commonDepartments = current.department.filter(dept =>
         other.department?.includes(dept)
       );
       score += commonDepartments.length * 3;
     }
 
     // College match (2 points)
-    if (current.colleges && other.colleges) {
-      const commonColleges = current.colleges.filter(college => 
-        other.colleges?.includes(college)
+    if (current.college && other.college) {
+      const commonColleges = current.college.filter(c =>
+        other.college?.includes(c)
       );
       score += commonColleges.length * 2;
     }
 
     // Keyword match (1 point)
     if (current.keywords && other.keywords) {
-      const commonKeywords = current.keywords.filter(keyword => 
+      const commonKeywords = current.keywords.filter(keyword =>
         other.keywords?.includes(keyword)
       );
       score += commonKeywords.length;
-    }
-
-    // Topic match (1 point)
-    if (current.topics && other.topics) {
-      const commonTopics = current.topics.filter(topic => 
-        other.topics?.includes(topic)
-      );
-      score += commonTopics.length;
-    }
-
-    // Research area match (1 point)
-    if (current.researches && other.researches) {
-      const commonResearch = current.researches.filter(research => 
-        other.researches?.includes(research)
-      );
-      score += commonResearch.length;
     }
 
     return score;
@@ -70,31 +54,30 @@ const RelatedOpportunities: React.FC<RelatedOpportunitiesProps> = ({
   };
 
   const relatedOpportunities = useMemo(() => {
-    // Calculate similarity scores for all research items
     const scoredResearch = allResearch
-      .filter(research => research.id !== currentResearch.id)
+      .filter(research => research._id !== currentResearch._id)
       .map(research => ({
         ...research,
         similarityScore: calculateSimilarity(currentResearch, research)
       }))
       .sort((a, b) => b.similarityScore - a.similarityScore)
-      .slice(0, 5); // Changed from 4 to 5 related opportunities
+      .slice(0, 5);
 
     return scoredResearch;
   }, [currentResearch, allResearch]);
 
   const handleSave = (research: ResearchType) => {
     const savedResearch = JSON.parse(localStorage.getItem("savedResearch") || "[]");
-    const isAlreadySaved = savedResearch.some((saved: ResearchType) => saved.id === research.id);
-    
+    const isAlreadySaved = savedResearch.some((saved: ResearchType) => saved._id === research._id);
+
     if (!isAlreadySaved) {
       savedResearch.push(research);
       localStorage.setItem("savedResearch", JSON.stringify(savedResearch));
-      setSavedStates(prev => ({ ...prev, [research.id]: true }));
+      setSavedStates(prev => ({ ...prev, [research._id]: true }));
     } else {
-      const filteredResearch = savedResearch.filter((saved: ResearchType) => saved.id !== research.id);
+      const filteredResearch = savedResearch.filter((saved: ResearchType) => saved._id !== research._id);
       localStorage.setItem("savedResearch", JSON.stringify(filteredResearch));
-      setSavedStates(prev => ({ ...prev, [research.id]: false }));
+      setSavedStates(prev => ({ ...prev, [research._id]: false }));
     }
   };
 
@@ -102,7 +85,7 @@ const RelatedOpportunities: React.FC<RelatedOpportunitiesProps> = ({
   useEffect(() => {
     const savedResearch = JSON.parse(localStorage.getItem("savedResearch") || "[]");
     const initialSavedStates = relatedOpportunities.reduce((acc, research) => {
-      acc[research.id] = savedResearch.some((saved: ResearchType) => saved.id === research.id);
+      acc[research._id] = savedResearch.some((saved: ResearchType) => saved._id === research._id);
       return acc;
     }, {} as { [key: string]: boolean });
     setSavedStates(initialSavedStates);
@@ -117,11 +100,11 @@ const RelatedOpportunities: React.FC<RelatedOpportunitiesProps> = ({
       <h2 className="text-3xl font-bold mb-8">Related Opportunities</h2>
       <div className="flex overflow-x-auto gap-6 pb-4 scrollbar-hide">
         {relatedOpportunities.map((research) => (
-          <div key={research.id} className="flex-none w-[400px]">
+          <div key={research._id} className="flex-none w-[400px]">
             <div className="fadeIn fadeOut w-full h-[300px] bg-light-color rounded-xl p-6 flex flex-col">
-              <h3 className="font-bold text-2xl mb-2">{research.name}</h3>
+              <h3 className="font-bold text-2xl mb-2">{research.projectTitle}</h3>
               <div className="flex gap-2 flex-wrap mb-3">
-                {research.colleges?.map((word) => (
+                {research.college?.map((word) => (
                   <Tag key={uuidv4().concat("col")} keyword={word} />
                 ))}
                 {research.department?.map((word) => (
@@ -135,8 +118,8 @@ const RelatedOpportunities: React.FC<RelatedOpportunitiesProps> = ({
                 {truncateDescription(research.description, 120)}
               </p>
               <div className="mt-auto flex justify-between items-center">
-                <NavLink 
-                  to={`/info/${research.id}`}
+                <NavLink
+                  to={`/info/${research._id}`}
                   className="inline-block px-3 py-2 bg-learn-more-color shadow-black shadow-sm text-black rounded hover:bg-opacity-90"
                 >
                   Learn More
@@ -145,7 +128,7 @@ const RelatedOpportunities: React.FC<RelatedOpportunitiesProps> = ({
                   onClick={() => handleSave(research)}
                   className="text-bookmark-color hover:opacity-80"
                 >
-                  {savedStates[research.id] ? <BookmarkIcon /> : <BookmarkIconUnfilled />}
+                  {savedStates[research._id] ? <BookmarkIcon /> : <BookmarkIconUnfilled />}
                 </button>
               </div>
             </div>
@@ -156,4 +139,4 @@ const RelatedOpportunities: React.FC<RelatedOpportunitiesProps> = ({
   );
 };
 
-export default RelatedOpportunities; 
+export default RelatedOpportunities;

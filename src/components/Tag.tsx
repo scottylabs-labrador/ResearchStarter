@@ -3,6 +3,7 @@ import React from "react";
 
 interface TagProps {
   keyword: string;
+  className?: string; // Add className prop
 }
 
 const collegeAbr: { [id: string]: string } = {
@@ -17,10 +18,10 @@ const collegeAbr: { [id: string]: string } = {
   "Artificial Intelligence": "AI",
 };
 
-const Tag = ({ keyword }: TagProps) => {
+const Tag = ({ keyword, className }: TagProps) => {
   return (
     <div>
-      <button className="px-4 py-2 bg-tag-dark-color rounded-md text-white">
+      <button className={`w-full h-12 px-4 py-2 bg-brand-50 rounded-md flex items-center justify-center text-sm truncate ${className || ''}`}>
         {keyword in collegeAbr ? collegeAbr[keyword] : keyword}
       </button>
     </div>

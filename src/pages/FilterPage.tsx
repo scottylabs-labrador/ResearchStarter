@@ -70,7 +70,7 @@ const FilterPage = () => {
           timeCommitment: item["Time Commitment"],
           anticipatedEndDate: item["Anticipated End Date"],
           keywords: item.Keywords,
-          colleges: item.Colleges,
+          college: item.College,
         }));
         setResearches(transformedData);
       } catch {
@@ -217,7 +217,7 @@ function search(
     if (!filterCollege["All"]) {
       // college don't match
       let found = false;
-      const cList = data[i]!["colleges"];
+      const cList = data[i]!["college"];
       if (cList == undefined) continue;
       for (var j = 0; j < cList.length; j++) {
         const result = filterCollege[cList[j]!] ?? false;
@@ -228,7 +228,7 @@ function search(
       if (!found) continue;
     }
 
-    var search_fields = Object.keys(data[i]!) as ResearchKeysType[];
+    var search_fields = Object.keys(data[i]!);
     var highRel = 0;
     if (keyword.length < 1) {
       highRel = 1;
@@ -236,7 +236,7 @@ function search(
       for (var u = 0; u < search_fields.length; u++) {
         // iterate through each key in dataset
         highRel = Math.max(
-          getRelevance(data[i]![search_fields[u]!], keyword),
+          getRelevance((data[i] as any)[search_fields[u]!], keyword),
           highRel
         ); // check if higher match
       }
@@ -257,13 +257,20 @@ function search(
   return filteredFinal;
 }
 
-function getRelevance(value: string | string[], keyword: string) {
-  if (value == undefined) return 0;
-  if (!(typeof value === "string") && !(value instanceof String)) return 0; // not string
+function getRelevance(rawValue: unknown, keyword: string) {
+  if (rawValue == undefined) return 0;
 
-  if (Array.isArray(value)) {
-    value = value.join("");
+  let value: string;
+
+  // Handle arrays by joining into a single string
+  if (Array.isArray(rawValue)) {
+    value = rawValue.join(" ");
+  } else if (typeof rawValue === "string") {
+    value = rawValue;
+  } else {
+    return 0; // not a searchable type
   }
+
   value = value.toLowerCase(); // lowercase to make search not case sensitive
   keyword = keyword.toLowerCase();
 
