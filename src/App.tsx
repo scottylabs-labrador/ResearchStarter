@@ -12,6 +12,7 @@ import SavedPage from "./pages/SavedPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import SignInPage from "./pages/SignInPage";
 import MainPage from "./pages/MainPage";
+import ProfessorDashboard from "./pages/ProfessorDashboard";
 
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import InfoPage from "./pages/InfoPage";
@@ -22,6 +23,7 @@ const router = createBrowserRouter(
       <Route index element={<FilterPage />} />
       <Route path="/profile" element={<StudentDashboard />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/professor-dashboard" element={<ProfessorDashboard />} />
       <Route path="/saved" element={<SavedPage />} />
       <Route path="/main" element={<MainPage />} />
       <Route path="/info/:id" element={<InfoPage />} />
