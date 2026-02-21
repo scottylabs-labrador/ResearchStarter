@@ -19,7 +19,21 @@ export interface ResearchType {
   anticipatedEndDate?: string;
   college?: string[];
   keywords?: string[];
-  pfp?: string;
+  profilePicture?: string;
 }
 
 export type ResearchKeysType = keyof ResearchType;
+
+export interface ProfessorType {
+  _id: string;
+  name: string;
+  department: string[];
+  college: string[];
+  email: string;
+  phoneNumber?: string;
+  bio?: Record<string, string>;
+  media?: string[];
+  positions?: { institution: string; position: string; startDate: string }[];
+  tags?: string[];
+  profilePicture?: string;
+}

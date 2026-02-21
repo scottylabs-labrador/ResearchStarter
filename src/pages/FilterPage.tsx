@@ -6,6 +6,7 @@ import Spinner from "../components/Spinner";
 import SearchBar from "../components/SearchBar";
 import { useParams } from "react-router-dom";
 import { ResearchKeysType, ResearchType } from "../DataTypes";
+import { parseContact, toArray } from "../utils";
 import { OptionType } from "../FilterData";
 import { MultiValue } from "react-select";
 
@@ -54,24 +55,26 @@ const FilterPage = () => {
         }
         const data: any[] = await res.json();
 
-        const transformedData = data.map(item => ({
-          _id: item._id,
-          projectTitle: item["Project Title"],
-          contact: item.Contact,
-          department: item.Department,
-          description: item.Description,
-          desiredSkillLevel: item["Desired Skill Level"],
-          paidUnpaid: item["Paid/Unpaid"],
-          position: item.Position,
-          prereqs: item.Prereqs,
-          relevantLinks: item["Relevant Links"],
-          source: item.Source,
-          timeAdded: item["Time Added"],
-          timeCommitment: item["Time Commitment"],
-          anticipatedEndDate: item["Anticipated End Date"],
-          keywords: item.Keywords,
-          college: item.College,
-        }));
+        const transformedData = data
+          .filter(item => item["Project Title"])
+          .map(item => ({
+            _id: item._id,
+            projectTitle: item["Project Title"],
+            contact: parseContact(item.Contact),
+            department: toArray(item.Department),
+            description: item.Description,
+            desiredSkillLevel: item["Desired Skill Level"],
+            paidUnpaid: item["Paid/Unpaid"],
+            position: item.Position,
+            prereqs: item.Prereqs,
+            relevantLinks: toArray(item["Relevant Links"]),
+            source: item.Source,
+            timeAdded: item["Time Added"],
+            timeCommitment: item["Time Commitment"],
+            anticipatedEndDate: item["Anticipated End Date"],
+            keywords: toArray(item.Keywords),
+            college: toArray(item.College),
+          }));
         setResearches(transformedData);
       } catch {
         console.log("Error Fetching Data");

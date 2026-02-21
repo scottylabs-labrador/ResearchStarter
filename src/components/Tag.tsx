@@ -20,8 +20,10 @@ const collegeAbr: { [id: string]: string } = {
 
 const Tag = ({ keyword, className }: TagProps) => {
   return (
-    <div>
-      <button className={`w-full h-12 px-4 py-2 bg-brand-50 rounded-md flex items-center justify-center text-sm truncate ${className || ''}`}>
+    <div className="max-w-full">
+      <button
+        className={`max-w-full px-4 py-2 bg-brand-50 rounded-md inline-flex items-center justify-center text-sm whitespace-normal break-words text-center leading-tight ${className || ""}`}
+      >
         {keyword in collegeAbr ? collegeAbr[keyword] : keyword}
       </button>
     </div>

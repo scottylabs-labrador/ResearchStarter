@@ -5,6 +5,7 @@ import MailIcon from '@mui/icons-material/Mail'
 import LinkIcon from '@mui/icons-material/Link'
 import InfoIcon from '@mui/icons-material/Info'
 import { ResearchType } from '../DataTypes'
+import { parseContact, toArray } from '../utils'
 import RelatedOpportunities from '../components/RelatedOpportunities'
 import ResumeUploadPopup from '../components/infopage/ResumeUploadPopup'
 import InfoPageHeader from '../components/infopage/InfoPageHeader'
@@ -35,25 +36,27 @@ const InfoPage: React.FC = () => {
                     }
                     const data: any[] = await res.json();
 
-                    const normalizedData = data.map((item) => ({
-                        _id: item._id,
-                        projectTitle: item["Project Title"],
-                        contact: item.Contact ?? {},
-                        department: item.Department ?? [],
-                        description: item.Description || "No description provided.",
-                        desiredSkillLevel: item["Desired Skill Level"],
-                        paidUnpaid: item["Paid/Unpaid"],
-                        position: item.Position,
-                        prereqs: item.Prereqs,
-                        relevantLinks: item["Relevant Links"] ?? [],
-                        source: item.Source,
-                        timeAdded: item["Time Added"],
-                        timeCommitment: item["Time Commitment"],
-                        anticipatedEndDate: item["Anticipated End Date"],
-                        keywords: item.Keywords,
-                        college: item.College ?? [],
-                        pfp: item.pfp,
-                    })) as ResearchType[];
+                    const normalizedData = data
+                        .filter((item) => item["Project Title"])
+                        .map((item) => ({
+                            _id: item._id,
+                            projectTitle: item["Project Title"],
+                            contact: parseContact(item.Contact),
+                            department: toArray(item.Department),
+                            description: item.Description || "No description provided.",
+                            desiredSkillLevel: item["Desired Skill Level"],
+                            paidUnpaid: item["Paid/Unpaid"],
+                            position: item.Position,
+                            prereqs: item.Prereqs,
+                            relevantLinks: toArray(item["Relevant Links"]),
+                            source: item.Source,
+                            timeAdded: item["Time Added"],
+                            timeCommitment: item["Time Commitment"],
+                            anticipatedEndDate: item["Anticipated End Date"],
+                            keywords: toArray(item.Keywords),
+                            college: toArray(item.College),
+                            profilePicture: item["Profile Picture"],
+                        })) as ResearchType[];
 
                     const foundResearch = normalizedData.find((item) => item._id === id);
 
@@ -317,7 +320,7 @@ const InfoPage: React.FC = () => {
                 </div>
                 {/* Contacts Section */}
                 <ContactsSection contacts={Object.entries(info.contact).map(([name, andrewId]) => ({
-                    headshotUrl: info.pfp || "",
+                    headshotUrl: info.profilePicture || "",
                     title: name,
                     department: info.department.join(', '),
                     officeLocation: "",
