@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import opportunities from "./routes/opportunities.js";
+import professors from "./routes/professors.js";
 import { connectToDatabase } from "./db/connection.js";
 
 const PORT = process.env.PORT || 8000;
@@ -9,6 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/opportunities", opportunities);
+app.use("/professors", professors);
 
 // Connect to database first, then start the server
 async function startServer() {
