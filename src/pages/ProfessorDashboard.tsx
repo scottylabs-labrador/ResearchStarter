@@ -1,7 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import ProfessorPlaceholderImg from "../assets/professor_dashboard_placeholder.png";
 
 const ProfessorDashboard = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="flex justify-center min-h-screen bg-white pt-32 px-8">
       <div className="flex flex-row items-start gap-24 max-w-4xl w-full">
@@ -33,6 +36,15 @@ const ProfessorDashboard = () => {
           </div>
         </div>
 
+      </div>
+
+      <div className="max-w-4xl w-full mt-8">
+        <button
+          onClick={() => navigate("/professor-dashboard/create-opportunity")}
+          className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+        >
+          + Add Research Opportunity
+        </button>
       </div>
     </div>
   );

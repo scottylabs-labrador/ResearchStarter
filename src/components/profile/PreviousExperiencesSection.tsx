@@ -215,7 +215,7 @@ const PreviousExperiencesSection = ({
       ) : (
         // New Add Experience Form Section
         <div className="mt-8">
-          <h3 className="font-jersey text-3xl font-bold mb-4">Create New Opportunity</h3>
+          <h3 className="font-jersey text-3xl font-bold mb-4">Create New Experience</h3>
           {/* Input fields for new experience */}
           <>
             <ExperienceForm
