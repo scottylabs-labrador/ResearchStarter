@@ -44,7 +44,7 @@ const SavedPage = () => {
         ) : (
           <>
             {filteredData.map((research) => (
-              <SavedCard key={research.id} research={research}></SavedCard>
+              <SavedCard key={research._id} research={research}></SavedCard>
             ))}
           </>
         )}

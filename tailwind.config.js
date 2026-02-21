@@ -8,7 +8,8 @@ export default {
     extend: {
       fontFamily: {
         roboto: ["Roboto", "sans-serif"],
-        sans: ["Monospace"],
+        sans: ['Inter', 'sans-serif'],
+        jersey: ['"Jersey 25"', 'sans-serif'],
       },
       colors: {
         "pink-hippo": "#fae0eb",
@@ -17,6 +18,7 @@ export default {
         "transparent-white": "rgba(239, 239, 239, 0.7)",
         "transparent-white-md": "rgba(239, 239, 239, 0.9)", 
         "violet-100": "#F1E9FF;",
+        "magenta-100": "#EADDFF;",
         "light-color": "#EBDEFF;", //violent-200
         "violet-300": "#E2CFFF",
         "violet-400": "#DCC5FF",
