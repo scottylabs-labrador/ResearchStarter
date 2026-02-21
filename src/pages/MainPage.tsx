@@ -136,10 +136,6 @@ const MainPage = () => {
 
   const selectedProfessors = professors.slice(0, profVisibleCount);
 
-  const aboutText =
-    "viverra sed cursus lorem. elit nibh placerat odio nibh ex dolor hendrerit ipsum elit lobortis, libero, enim. Nunc non quam consectetur ex non nibh quis tincidunt leo. Sed lacus, risus elit quam lacus, volutpat laoreet eget lacus nulla, Ut tincidunt nec risus venenatis ipsum at, ipsum ipsum nulla, sit amet, elit. viverra sed cursus lorem. elit nibh placerat odio nibh ex dolor hendrerit ipsum elit lobortis, libero, enim. Nunc non quam consectetur ex non nibh quis tincidunt leo. Sed lacus, risus elit quam lacus, volutpat laoreet eget lacus nulla, Ut tincidunt nec risus venenatis ipsum at, ipsum ipsum nulla, sit amet, elit. viverra sed cursus lorem. elit nibh placerat odio nibh ex dolor hendrerit ipsum elit lobortis, libero, enim. Nunc non quam consectetur ex non nibh quis tincidunt leo. Sed lacus, risus elit quam lacus, volutpat laoreet eget lacus nulla, Ut tincidunt nec risus venenatis ipsum at, ipsum ipsum nulla, sit amet, elit.";
-  const [showFullAbout, setShowFullAbout] = useState(false);
-
   return (
     <div>
       <div className="w-[100vw] h-[60vh] bg-gradient-to-r from-dark-color from-30% to-light-color to-90% grid grid-cols-10 grid-rows-4">
@@ -305,24 +301,6 @@ const MainPage = () => {
             </div>
           ))}
         </div>
-      </div>
-
-      {/* About Section */}
-      <div className="w-[100vw] bg-light-color px-14 py-16">
-        <h1 className="font-jersey font-bold text-4xl mb-6">About CMU Research...</h1>
-        <p className="text-sm leading-relaxed">
-          {showFullAbout
-            ? aboutText
-            : truncateDescription(aboutText, 500)}{" "}
-          {aboutText.length > 500 && (
-            <button
-              onClick={() => setShowFullAbout(!showFullAbout)}
-              className="font-semibold hover:underline"
-            >
-              {showFullAbout ? "Show Less" : "Read More..."}
-            </button>
-          )}
-        </p>
       </div>
 
     </div>
