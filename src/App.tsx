@@ -13,8 +13,8 @@ import NotFoundPage from "./pages/NotFoundPage";
 import SignInPage from "./pages/SignInPage";
 import MainPage from "./pages/MainPage";
 
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import InfoPage from "./pages/InfoPage";
+import { useSession } from "./lib/authClient";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,16 +31,11 @@ const router = createBrowserRouter(
 );
 
 const App = () => {
-  return (
-    <>
-      <SignedIn>
-        <RouterProvider router={router} />
-      </SignedIn>
-      <SignedOut>
-        <SignInPage />
-      </SignedOut>
-    </>
-  );
+  const { data: session, isPending } = useSession();
+
+  if (isPending) return null;
+
+  return session ? <RouterProvider router={router} /> : <SignInPage />;
 };
 
 export default App;

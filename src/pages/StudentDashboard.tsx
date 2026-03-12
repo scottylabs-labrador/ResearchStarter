@@ -3,14 +3,13 @@ import Card from "../components/Card";
 import { useState, useEffect } from "react";
 import Spinner from "../components/Spinner";
 
-import { useUser } from "@clerk/clerk-react";
-import { UserResource, UseUserReturn } from "@clerk/types";
+import { useSession } from "../lib/authClient";
 import { ResearchType } from "../DataTypes";
 
 const DashboardPage = () => {
   const [researches, setResearches] = useState<ResearchType[]>([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useUser();
+  const { data: session } = useSession();
 
   useEffect(() => {
     const fetchResearches = async () => {
@@ -32,7 +31,7 @@ const DashboardPage = () => {
     <>
       <div>
         <h1 className="pt-20 ml-12 leading-loose text-6xl">
-          Welcome {user?.firstName} {user?.lastName}
+          Welcome {session?.user?.name}
         </h1>
         <p className="h-32 leading-8 bg-gray-300 ml-12 mr-12"></p>
         <h1 className="ml-12 leading-normal text-6xl">

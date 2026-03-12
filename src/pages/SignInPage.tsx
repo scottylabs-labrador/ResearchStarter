@@ -1,10 +1,14 @@
 import React from "react";
-import { SignInButton } from "@clerk/clerk-react";
+import { signIn } from "../lib/authClient";
 import Logo from "../assets/logo.png";
 import TartanLogo from "../assets/tartan_logo.png";
 import BackgroundImage from "../assets/login_background.png";
 
 const SignInPage = () => {
+  const handleSignIn = () => {
+    signIn.oauth2({ providerId: "keycloak", callbackURL: `${window.location.origin}/` });
+  };
+
   return (
     // Main container covering the full screen
     <main
@@ -25,10 +29,14 @@ const SignInPage = () => {
           className="w-40 h-40 md:w-52 md:h-52 mb-3"
         />
 
-        {/* Sign-in button styled to match the theme */} 
-        <button className="w-1/2 py-4 px-20 bg-brand-300 shadow-md shadow-shadow-color text-black rounded-xl text-lg font-bold 
-                         transition-all duration-300 ease-in-out hover:bg-brand-400 hover:scale-[1.05]">
-          <SignInButton aria-label="Sign in to your CMU account" />
+        {/* Sign-in button styled to match the theme */}
+        <button
+          onClick={handleSignIn}
+          aria-label="Sign in to your CMU account"
+          className="w-1/2 py-4 px-20 bg-brand-300 shadow-md shadow-shadow-color text-black rounded-xl text-lg font-bold
+                         transition-all duration-300 ease-in-out hover:bg-brand-400 hover:scale-[1.05]"
+        >
+          Sign in
         </button>
       </section>
     </main>
