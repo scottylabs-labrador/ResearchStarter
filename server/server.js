@@ -3,6 +3,7 @@ import cors from "cors";
 import { toNodeHandler } from "better-auth/node";
 import opportunities from "./routes/opportunities.js";
 import professors from "./routes/professors.js";
+import users from "./routes/users.js";
 import { connectToDatabase } from "./db/connection.js";
 import { initAuth } from "./auth.js";
 
@@ -29,6 +30,7 @@ async function startServer() {
     app.use(express.json());
     app.use("/opportunities", opportunities);
     app.use("/professors", professors);
+    app.use("/users", users);
 
     app.listen(PORT, () => {
       console.log(`Server listening on port ${PORT}`);
