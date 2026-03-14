@@ -96,12 +96,12 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({ initialData, onChange }
         />
       </div>
       <div>
-        <label htmlFor="endTime" className="block text-lg font-medium text-gray-700">End Time</label>
+        <label htmlFor="endDate" className="block text-lg font-medium text-gray-700">End Time</label>
         <input
           type="date"
-          id="endTime"
+          id="endDate"
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          value={formData.date}
+          value={formData.endDate}
           onChange={handleChange}
         />
       </div>
