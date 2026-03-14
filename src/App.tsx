@@ -6,8 +6,7 @@ import {
 } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import FilterPage from "./pages/FilterPage";
-import StudentDashboard from "./pages/StudentDashboard";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/StudentDashboard";
 import SavedPage from "./pages/SavedPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import SignInPage from "./pages/SignInPage";
@@ -22,7 +21,6 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />}>
       <Route index element={<FilterPage />} />
-      <Route path="/profile" element={<StudentDashboard />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/professor-dashboard" element={<ProfessorDashboard />} />
       <Route path="/professor-dashboard/create-opportunity" element={<CreateOpportunityPage />} />
