@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { Experience } from "../../types/Experience";
 import ExperienceForm from "./ExperienceForm";
+import { FaPencil } from "react-icons/fa6";
+import { BsEyeglasses } from "react-icons/bs";
+import { FaHouse, FaBook } from "react-icons/fa6";
+import { CiCalendar } from "react-icons/ci";
 
 interface PreviousExperiencesSectionProps {
   initialExperiences?: Experience[];
@@ -31,6 +35,7 @@ const PreviousExperiencesSection = ({
     professorOrCompany: "",
     topic: "",
     date: "",
+    endDate: "",
     level: "",
     associatedTags: [],
     description: "",
@@ -88,49 +93,60 @@ const PreviousExperiencesSection = ({
     <section className="mb-8">
       {!isEditingAllExperiences && !isAddingNewExperience ? (
         <>
-          <h2 className="font-jersey text-3xl font-bold mb-4">Previous Experiences</h2>
-          <div className="space-y-4 bg-magenta-100 p-4 rounded-md">
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="font-jersey text-3xl font-bold">Previous Experiences</h2>
+            <button
+              onClick={onEditExperiencesClick}
+              className="text-black hover:text-gray-600 transition-colors"
+              aria-label="Edit experiences"
+            >
+              <FaPencil size={18} />
+            </button>
+          </div>
+          <div className="space-y-4">
             {experiences.length === 0 ? (
               <p className="text-gray-700">No previous experiences added yet.</p>
             ) : (
               experiences.map((experience) => (
-                <div key={experience.id} className="rounded-md p-4 relative bg-magenta-100 mb-4">
-                  <h3 className="font-jersey text-2xl font-bold">{experience.title}</h3>
-                  <p className="text-gray-700">
-                    <span className="font-semibold">Professor/Company:</span> {experience.professorOrCompany}
-                  </p>
-                  <p className="text-gray-700">
-                    <span className="font-semibold">Topic:</span> {experience.topic}
-                  </p>
-                  <p className="text-gray-700">
-                    <span className="font-semibold">Date:</span> {experience.date}
-                  </p>
-                  <p className="text-gray-700">
-                    <span className="font-semibold">Level:</span> {experience.level}
-                  </p>
-                  <div className="flex flex-wrap mt-2">
-                    {experience.associatedTags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="bg-blue-200 text-blue-800 text-sm font-medium mr-2 mb-2 px-2.5 py-0.5 rounded"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                <div key={experience.id} className="w-full bg-light-color rounded-xl p-10 relative flex items-start border border-card-highlight overflow-hidden
+                            transition-all duration-300 ease-in-out hover:shadow-[0_4px_20px_#E2CFFF]">
+                  <div className="w-full overflow-hidden">
+                    <h3 className="font-bold text-3xl mb-3 overflow-hidden text-ellipsis whitespace-nowrap">{experience.title}</h3>
+                    <div className="mb-3">
+                      <div className="flex flex-row items-center gap-2">
+                        <BsEyeglasses/>
+                        <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{experience.professorOrCompany} | </h3>
+                        <FaHouse/>
+                        <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{experience.topic} | </h3>
+                        <FaBook/>
+                        <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{experience.level}</h3>
+                      </div>
+                      <div className="flex flex-row items-center gap-2">
+                        <CiCalendar/>
+                        <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{experience.date}{experience.endDate ? ` - ${experience.endDate}` : ""}</h3>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap mb-3">
+                      {experience.associatedTags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="bg-blue-200 text-blue-800 text-sm font-medium mr-2 mb-2 px-2.5 py-0.5 rounded"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="overflow-hidden">
+                      <p className="text-lg flex-grow overflow-hidden text-ellipsis line-clamp-3">
+                        {experience.description?.substring(0, 300)}
+                        {experience.description?.length > 200 && "..."}
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-gray-700 leading-relaxed mt-2">
-                    {experience.description}
-                  </p>
                 </div>
               ))
             )}
           </div>
-          <button
-            onClick={onEditExperiencesClick}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-          >
-            Edit Experiences
-          </button>
         </>
       ) : isEditingAllExperiences ? (
         <div>
