@@ -37,7 +37,12 @@ const router = createBrowserRouter(
 const App = () => {
   return (
     <>
-      <RouterProvider router={router} />
+      <SignedIn>
+        <RouterProvider router={router} />
+      </SignedIn>
+      <SignedOut>
+        <SignInPage />
+      </SignedOut>
     </>
   );
 };
