@@ -4,6 +4,7 @@ export interface Experience {
   professorOrCompany: string;
   topic: string;
   date: string;
+  endDate: string;
   level: string;
   associatedTags: string[];
   description: string;
