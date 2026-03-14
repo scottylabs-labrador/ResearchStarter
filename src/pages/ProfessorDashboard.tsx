@@ -19,7 +19,7 @@ const ProfessorDashboard = () => {
         </div>
 
         {/* Professor info */}
-        <div className="flex flex-col pt-2">
+        <div className="flex flex-col pt-2 pb-16">
           <h1 className="text-5xl font-extrabold text-black mb-8 tracking-tight">
             Professor John Doe
           </h1>
@@ -35,9 +35,12 @@ const ProfessorDashboard = () => {
             <span className="text-gray-700">jdoe23@andrew.cmu.edu</span>
           </div>
         </div>
-
       </div>
 
+      <hr className="border-gray-300 w-full" />
+
+
+      {/* Create new research opportunity button */}
       <div className="max-w-4xl w-full mt-8 flex justify-center">
         <button
           onClick={() => navigate("/professor-dashboard/create-opportunity")}
