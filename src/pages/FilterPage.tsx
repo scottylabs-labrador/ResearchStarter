@@ -9,11 +9,13 @@ import { ResearchKeysType, ResearchType } from "../DataTypes";
 import { parseContact, toArray } from "../utils";
 import { OptionType } from "../FilterData";
 import { MultiValue } from "react-select";
+import { useNavBarHidden } from "../contexts/NavBarContext";
 
 type FilterKeysType = { [key: string]: boolean };
 
 const FilterPage = () => {
   const pg = useParams();
+  const navHidden = useNavBarHidden();
   const [researches, setResearches] = useState<ResearchType[]>([]);
   const [loading, setLoading] = useState(true);
   const [input, setInput] = useState<string>("");
@@ -156,20 +158,27 @@ const FilterPage = () => {
 
   return (
     <>
-      <FilterSection
+      <FilterSection navHidden={navHidden}
         onChecked={onChecked}
         onSelectedDep={onSelectedDep}
         onSelectedCol={onSelectedCollege}
       />
-      <div className="fixed top-[10vh] right-0 w-[80vw] bg-white px-14 pt-7 z-10">
+      <div
+        className="fixed right-0 w-[80vw] bg-white px-14 pt-7 z-10 transition-all duration-300"
+        style={{ top: navHidden ? 0 : "10vh" }}
+      >
         <div className="text-5xl font-extrabold pb-5">Search</div>
         <div className="w-full">
           <SearchBar input={input} handleChange={handleChange} />
         </div>
         <div>{/*}add in filters (tag, year, time, etc){*/}</div>
       </div>
-  
-      <div className="fixed top-[30vh] right-0 w-[80vw] h-[70vh] overflow-y-auto px-14 pt-2.5" onScroll={handleScroll}>
+
+      <div
+        className="fixed right-0 w-[80vw] overflow-y-auto px-14 pt-2.5 transition-all duration-300"
+        style={{ top: navHidden ? "20vh" : "30vh", height: navHidden ? "80vh" : "70vh" }}
+        onScroll={handleScroll}
+      >
         <div className="w-full h-full grid grid-cols-1 items-stretch gap-8">
           {loading ? (
             <>

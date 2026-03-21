@@ -42,8 +42,8 @@ export default {
       },
       keyframes: {
         slideIn: {
-          "0%": { transform: "translateX(-100%)" },
-          "100%": { transform: "translateX(0%)" },
+          "0%": { transform: "translateX(-100%) scaleY(1.25) scaleX(1.20)" },
+          "100%": { transform: "translateX(0%) scaleY(1.25) scaleX(1.20)" },
         },
       },
       animation: {

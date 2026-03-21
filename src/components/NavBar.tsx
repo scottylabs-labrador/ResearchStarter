@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { useSession, signOut } from "../lib/authClient";
 import NavButton from "./NavButton";
+import { useNavBarHidden } from "../contexts/NavBarContext";
 
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
@@ -17,6 +18,7 @@ const NavBar = () => {
   const initial = name[0]?.toUpperCase() ?? "?";
 
   const [open, setOpen] = useState(false);
+  const hidden = useNavBarHidden();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
@@ -37,7 +39,7 @@ const NavBar = () => {
 
   return (
     <>
-      <nav className="bg-white block h-[10vh] w-full pl-4 fixed z-20 border-nav-border-color border-[1px]">
+      <nav className={`bg-white block h-[10vh] w-full pl-4 fixed z-20 border-nav-border-color border-[1px] transition-transform duration-300 ${hidden ? "-translate-y-full" : "translate-y-0"}`}>
         <div className="grid grid-cols-12 justify-around w-full h-full">
           <div className="col-start-2 h-full flex items-start">
             {/* Logo */}

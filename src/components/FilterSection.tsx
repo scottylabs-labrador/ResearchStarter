@@ -4,18 +4,23 @@ import Select, { MultiValue } from "react-select";
 import { departmentOptions, OptionType, collegeOptions } from "../FilterData";
 
 interface FilterSectionPropt {
+  navHidden?: boolean;
   onChecked: (target: HTMLInputElement) => false;
   onSelectedDep: (e: MultiValue<OptionType>) => false;
   onSelectedCol: (e: MultiValue<OptionType>) => false;
 }
 
 const FilterSection = ({
+  navHidden,
   onChecked,
   onSelectedDep,
   onSelectedCol,
 }: FilterSectionPropt) => {
   return (
-    <div className="fixed bottom-0 left-0 top-[10vh] w-[20vw] h-[90vh] bg-violet-300">
+    <div
+      className="fixed bottom-0 left-0 w-[20vw] bg-violet-300 transition-all duration-300"
+      style={{ top: navHidden ? 0 : "10vh", height: navHidden ? "100vh" : "90vh" }}
+    >
       <div className="flex flex-col justify-normal items-start p-6 gap-y-5">
         <div>
           <h2 className="font-bold text-xl p-2 pl-0 mb-5">College</h2>
