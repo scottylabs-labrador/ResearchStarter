@@ -12,7 +12,7 @@ type NavButtonProps = {
 
 const NavButton = ({ name, links, Icon, linkClass }: NavButtonProps) => {
   return (
-    <div className="m-auto px-3">
+    <div className="my-auto mx-8">
       <Icon fontSize="large" />
       <NavLink to={links} className={linkClass}>
         {name}

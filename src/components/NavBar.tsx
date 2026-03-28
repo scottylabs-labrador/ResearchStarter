@@ -40,8 +40,8 @@ const NavBar = () => {
   return (
     <>
       <nav className={`bg-white block h-[10vh] w-full pl-4 fixed z-20 border-nav-border-color border-[1px] transition-transform duration-300 ${hidden ? "-translate-y-full" : "translate-y-0"}`}>
-        <div className="grid grid-cols-12 justify-around w-full h-full">
-          <div className="col-start-2 h-full flex items-start">
+        <div className="grid grid-cols-12 justify-around w-full h-full items-center">
+          <div className="col-start-2 h-full flex items-center">
             {/* Logo */}
             <NavLink className="w-full h-full inline-block" to="/main">
               <img
@@ -51,7 +51,7 @@ const NavBar = () => {
               />
             </NavLink>
           </div>
-          <div className="p-4 text-base flex gap-x-4 col-start-5 col-span-4">
+          <div className="p-4 text-base flex justify-center items-center gap-x-2 col-start-5 col-span-4 w-full">
             <NavButton
               name="Dashboard"
               Icon={HomeOutlinedIcon}
@@ -64,16 +64,10 @@ const NavBar = () => {
               links="/"
               linkClass={linkClass}
             />
-            <NavButton
-              name="Saved"
-              Icon={BookmarkBorderOutlinedIcon}
-              links="/saved"
-              linkClass={linkClass}
-            />
           </div>
 
           {/* User avatar + dropdown */}
-          <div className="col-start-11 m-auto relative" ref={dropdownRef}>
+          <div className="col-start-11 h-full flex items-center justify-end pr-4 relative" ref={dropdownRef}>
             <button
               onClick={() => setOpen((prev) => !prev)}
               className="w-12 h-12 rounded-full bg-brand-300 hover:bg-brand-400 text-sm font-bold transition-colors"

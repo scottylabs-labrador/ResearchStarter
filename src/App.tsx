@@ -7,7 +7,6 @@ import {
 import MainLayout from "./layouts/MainLayout";
 import FilterPage from "./pages/FilterPage";
 import Dashboard from "./pages/StudentDashboard";
-import SavedPage from "./pages/SavedPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import SignInPage from "./pages/SignInPage";
 import MainPage from "./pages/MainPage";
@@ -24,7 +23,6 @@ const router = createBrowserRouter(
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/professor-dashboard" element={<ProfessorDashboard />} />
       <Route path="/professor-dashboard/create-opportunity" element={<CreateOpportunityPage />} />
-      <Route path="/saved" element={<SavedPage />} />
       <Route path="/main" element={<MainPage />} />
       <Route path="/info/:id" element={<InfoPage />} />
       <Route path="*" element={<NotFoundPage />} />
