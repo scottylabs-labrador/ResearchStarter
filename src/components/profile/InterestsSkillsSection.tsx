@@ -1,3 +1,5 @@
+// Currently an unused feature for the student dashboard.
+
 import React, { useState } from "react";
 import Tag from "../Tag";
 
