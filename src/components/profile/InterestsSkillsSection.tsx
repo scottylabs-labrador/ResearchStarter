@@ -33,7 +33,7 @@ const InterestsSkillsSection = ({
         ))}
         <button
           onClick={() => setShowPopup(true)}
-          className="px-4 py-2 bg-blue-100 text-blue-800 rounded-md hover:bg-blue-200 flex items-center justify-center w-48 h-16 overflow-hidden whitespace-nowrap text-ellipsis"
+          className="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 flex items-center justify-center w-48 h-16 overflow-hidden whitespace-nowrap text-ellipsis"
         >
           + Add Item
         </button>
