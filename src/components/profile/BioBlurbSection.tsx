@@ -1,3 +1,4 @@
+// Currently an unused feature for the student dashboard.
 
 import React, { useState, useEffect } from 'react';
 import { FaPencil } from "react-icons/fa6";

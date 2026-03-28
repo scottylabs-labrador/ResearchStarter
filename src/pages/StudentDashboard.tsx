@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import ProfileHeader from "../components/profile/ProfileHeader";
 import InterestsSkillsSection from "../components/profile/InterestsSkillsSection";
-import BioBlurbSection from "../components/profile/BioBlurbSection";
-import PreviousExperiencesSection from "../components/profile/PreviousExperiencesSection";
-import { Experience } from "../types/Experience";
+// import BioBlurbSection from "../components/profile/BioBlurbSection";
+// import PreviousExperiencesSection from "../components/profile/PreviousExperiencesSection";
+// import { Experience } from "../types/Experience";
 
 interface ProfilePageProps {
   profileImage?: string;
@@ -12,8 +12,8 @@ interface ProfilePageProps {
   class?: string;
   email?: string;
   initialInterestsSkills?: string[];
-  initialBio?: string;
-  initialPreviousExperiences?: Experience[];
+  // initialBio?: string;
+  // initialPreviousExperiences?: Experience[];
 }
 
 const ProfilePage = ({
@@ -23,14 +23,14 @@ const ProfilePage = ({
   class: userClass,
   email,
   initialInterestsSkills = [],
-  initialBio = "",
-  initialPreviousExperiences = [],
+  // initialBio = "",
+  // initialPreviousExperiences = [],
 }: ProfilePageProps) => {
   const [items, setItems] = useState<string[]>(initialInterestsSkills);
-  const [bio, setBio] = useState(initialBio);
-  const [previousExperiences, setPreviousExperiences] = useState<Experience[]>(initialPreviousExperiences);
-  const [showPreviousExperiencesEditView, setShowPreviousExperiencesEditView] = useState(false);
-  const [showAddExperienceView, setShowAddExperienceView] = useState(false);
+  // const [bio, setBio] = useState(initialBio);
+  // const [previousExperiences, setPreviousExperiences] = useState<Experience[]>(initialPreviousExperiences);
+  // const [showPreviousExperiencesEditView, setShowPreviousExperiencesEditView] = useState(false);
+  // const [showAddExperienceView, setShowAddExperienceView] = useState(false);
 
   const handleAddItem = (newItem: string) => {
     setItems((prevItems) => [...prevItems, newItem]);
@@ -40,15 +40,15 @@ const ProfilePage = ({
     setItems((prevItems) => prevItems.filter((item) => item !== itemToRemove));
   };
 
-  const handleSaveBio = (newBio: string) => {
-    setBio(newBio);
-    console.log("Bio saved:", newBio);
-  };
+  // const handleSaveBio = (newBio: string) => {
+  //   setBio(newBio);
+  //   console.log("Bio saved:", newBio);
+  // };
 
-  const handleSavePreviousExperiences = (newExperiences: Experience[]) => {
-    setPreviousExperiences(newExperiences);
-    console.log("Previous experiences saved:", newExperiences);
-  };
+  // const handleSavePreviousExperiences = (newExperiences: Experience[]) => {
+  //   setPreviousExperiences(newExperiences);
+  //   console.log("Previous experiences saved:", newExperiences);
+  // };
 
   useEffect(() => {
     const fetchResearches = async () => {
@@ -75,18 +75,16 @@ const ProfilePage = ({
       />
       <hr className="border-gray-300" />
       <div className="p-8">
-        {!showPreviousExperiencesEditView && !showAddExperienceView && (
-          <>
-            <BioBlurbSection initialBio={bio} onSave={handleSaveBio} />
-            <InterestsSkillsSection
-              items={items}
-              onAddItem={handleAddItem}
-              onRemoveItem={handleRemoveItem}
-            />
-          </>
-        )}
+        <>
+          {/* <BioBlurbSection initialBio={bio} onSave={handleSaveBio} /> */}
+          <InterestsSkillsSection
+            items={items}
+            onAddItem={handleAddItem}
+            onRemoveItem={handleRemoveItem}
+          />
+        </>
 
-        <PreviousExperiencesSection
+        {/* <PreviousExperiencesSection
           initialExperiences={previousExperiences}
           onSave={handleSavePreviousExperiences}
           onEditExperiencesClick={() => {
@@ -101,7 +99,7 @@ const ProfilePage = ({
           onCancelAddExperienceClick={() => setShowAddExperienceView(false)}
           isEditingAllExperiences={showPreviousExperiencesEditView}
           isAddingNewExperience={showAddExperienceView}
-        />
+        /> */}
       </div>
     </main>
   );
