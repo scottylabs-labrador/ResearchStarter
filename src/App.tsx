@@ -15,11 +15,13 @@ import MainPage from "./pages/MainPage";
 
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import InfoPage from "./pages/InfoPage";
+import AboutPage from "./pages/AboutPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />}>
       <Route index element={<FilterPage />} />
+      <Route path="/about" element={<AboutPage/>} />
       <Route path="/profile" element={<StudentDashboard />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/saved" element={<SavedPage />} />
