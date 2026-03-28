@@ -68,7 +68,7 @@ const FilterPage = () => {
             desiredSkillLevel: item["Desired Skill Level"],
             paidUnpaid: item["Paid/Unpaid"],
             position: item.Position,
-            prereqs: item.Prereqs,
+            prereqs: toArray(item.Prereqs),
             relevantLinks: toArray(item["Relevant Links"]),
             source: item.Source,
             timeAdded: item["Time Added"],

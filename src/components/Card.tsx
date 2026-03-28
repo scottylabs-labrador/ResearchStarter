@@ -77,19 +77,25 @@ const Card = ({ research }: CardPropt) => {
           <div className="mb-3 ">
             {/* Professor + Department + Position*/}
             <div className="flex flex-row items-center gap-2">
-              <BsEyeglasses/>
-              <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{professorName} | </h3>
+              { professorName != "" && (<>
+                <BsEyeglasses/>
+                <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{professorName} | </h3>
+              </>)}
               <FaHouse/>
-              <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{department} | </h3>
-              <FaBook/>
-              <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{research.position}</h3>
+              <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{department}</h3>
+              {research.position != "" && (<>
+                <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap"> | </h3>
+                <FaBook/>
+                <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{research.position}</h3>
+              </>)}
             </div>
 
             {/* Date */}
-            <div className="flex flex-row items-center gap-2">
+            {research.anticipatedEndDate !== "" && (<div className="flex flex-row items-center gap-2">
               <CiCalendar/>
               <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{research.anticipatedEndDate}</h3>
             </div>
+            )}
 
             {/* Paid */}
             {research.paidUnpaid !== "" && (
@@ -101,12 +107,16 @@ const Card = ({ research }: CardPropt) => {
           </div>
 
           {/* Description */}
-          <div className="overflow-hidden">
-            <p className="text-lg flex-grow overflow-hidden text-ellipsis line-clamp-3">
-              {research.description?.substring(0, 300)}
-              {research.description?.length > 200 && "..."}
-            </p>
-          </div>
+          {research.description != "" ? (
+            <div className="overflow-hidden">
+              <p className="text-lg flex-grow overflow-hidden text-ellipsis line-clamp-3">
+                {research.description?.substring(0, 300)}
+                {research.description?.length > 200 && "..."}
+              </p>
+            </div>
+          ) : (
+            <p className="text-lg italic">No Description.</p>
+          )}
 
         </div>
 

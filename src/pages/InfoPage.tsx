@@ -47,7 +47,7 @@ const InfoPage: React.FC = () => {
                             desiredSkillLevel: item["Desired Skill Level"],
                             paidUnpaid: item["Paid/Unpaid"],
                             position: item.Position,
-                            prereqs: item.Prereqs,
+                            prereqs: toArray(item.Prereqs),
                             relevantLinks: toArray(item["Relevant Links"]),
                             source: item.Source,
                             timeAdded: item["Time Added"],
@@ -256,7 +256,7 @@ const InfoPage: React.FC = () => {
                             )}
 
                             {/* Details Card */}
-                            {(info.position || info.paidUnpaid || info.timeCommitment || info.anticipatedEndDate || info.desiredSkillLevel || info.prereqs) && (
+                            {(info.position || info.paidUnpaid || info.timeCommitment || info.anticipatedEndDate || info.desiredSkillLevel || (info.prereqs && info.prereqs.length != 0)) && (
                                 <div className="bg-light-color rounded-lg p-6 border border-gray-200">
                                     <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
                                         <InfoIcon className="text-gray-500" />
@@ -293,10 +293,14 @@ const InfoPage: React.FC = () => {
                                                 <p>{info.anticipatedEndDate}</p>
                                             </div>
                                         )}
-                                        {info.prereqs && (
+                                        {info.prereqs && info.prereqs.length != 0 && (
                                             <div>
                                                 <p className="font-medium">Prerequisites:</p>
-                                                <p>{info.prereqs}</p>
+                                                <ul>
+                                                    {info.prereqs.map((prereq) => 
+                                                        <li>{prereq}</li>
+                                                    )}
+                                                </ul>
                                             </div>
                                         )}
                                     </div>

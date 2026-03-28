@@ -10,7 +10,7 @@ export interface ResearchType {
   desiredSkillLevel?: string;
   paidUnpaid?: string;
   position?: string;
-  prereqs?: string;
+  prereqs?: string[];
   projectTitle: string;
   relevantLinks?: string[];
   source?: string;

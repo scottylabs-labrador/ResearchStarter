@@ -8,7 +8,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     let db = getDb(); // Get the db instance
-    let collection = db.collection("ResearchOpportunities");
+    let collection = db.collection("ResearchProjects");
     let results = await collection.find({}).toArray();
     res.status(200).send(results);
   } catch (err) {
@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     let db = getDb();
-    let collection = db.collection("ResearchOpportunities");
+    let collection = db.collection("ResearchProjects");
     let query = { _id: new ObjectId(req.params.id) };
     let result = await collection.findOne(query);
 
@@ -45,7 +45,7 @@ router.post("/", async (req, res) => {
       level: req.body.level,
     };
     let db = getDb();
-    let collection = db.collection("ResearchOpportunities");
+    let collection = db.collection("ResearchProjects");
     let result = await collection.insertOne(newDocument);
     res.status(201).send(result);
   } catch (err) {
@@ -67,7 +67,7 @@ router.patch("/:id", async (req, res) => {
     };
 
     let db = getDb();
-    let collection = db.collection("ResearchOpportunities");
+    let collection = db.collection("ResearchProjects");
     let result = await collection.updateOne(query, updates);
     res.status(200).send(result);
   } catch (err) {
@@ -81,7 +81,7 @@ router.delete("/:id", async (req, res) => {
   try {
     const query = { _id: new ObjectId(req.params.id) };
     let db = getDb();
-    let collection = db.collection("ResearchOpportunities");
+    let collection = db.collection("ResearchProjects");
     let result = await collection.deleteOne(query);
     res.status(200).send(result);
   } catch (err) {
