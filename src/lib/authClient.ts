@@ -9,3 +9,13 @@ export const authClient = createAuthClient({
 });
 
 export const { signIn, signOut, useSession } = authClient;
+
+// Augment the session user type with the additional fields from the server
+declare module "better-auth/react" {
+  interface User {
+    andrewId: string;
+    isProfessor: boolean;
+    firstName: string;
+    lastName: string;
+  }
+}

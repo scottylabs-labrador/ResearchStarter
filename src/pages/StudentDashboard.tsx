@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ProfileHeader from "../components/profile/ProfileHeader";
+import { useSession } from "../lib/authClient";
 import InterestsSkillsSection from "../components/profile/InterestsSkillsSection";
 // import BioBlurbSection from "../components/profile/BioBlurbSection";
 // import PreviousExperiencesSection from "../components/profile/PreviousExperiencesSection";
@@ -16,39 +17,11 @@ interface ProfilePageProps {
   // initialPreviousExperiences?: Experience[];
 }
 
-const ProfilePage = ({
-  profileImage,
-  name,
-  major,
-  class: userClass,
-  email,
-  initialInterestsSkills = [],
-  // initialBio = "",
-  // initialPreviousExperiences = [],
-}: ProfilePageProps) => {
-  const [items, setItems] = useState<string[]>(initialInterestsSkills);
-  // const [bio, setBio] = useState(initialBio);
-  // const [previousExperiences, setPreviousExperiences] = useState<Experience[]>(initialPreviousExperiences);
-  // const [showPreviousExperiencesEditView, setShowPreviousExperiencesEditView] = useState(false);
-  // const [showAddExperienceView, setShowAddExperienceView] = useState(false);
-
-  const handleAddItem = (newItem: string) => {
-    setItems((prevItems) => [...prevItems, newItem]);
-  };
-
-  const handleRemoveItem = (itemToRemove: string) => {
-    setItems((prevItems) => prevItems.filter((item) => item !== itemToRemove));
-  };
-
-  // const handleSaveBio = (newBio: string) => {
-  //   setBio(newBio);
-  //   console.log("Bio saved:", newBio);
-  // };
-
-  // const handleSavePreviousExperiences = (newExperiences: Experience[]) => {
-  //   setPreviousExperiences(newExperiences);
-  //   console.log("Previous experiences saved:", newExperiences);
-  // };
+const ProfilePage = () => {
+  // Current logged in user's information
+  const { data: session } = useSession();
+  const name = session?.user?.name ?? undefined;
+  const email = session?.user?.email ?? undefined;
 
   useEffect(() => {
     const fetchResearches = async () => {
@@ -66,10 +39,10 @@ const ProfilePage = ({
   return (
     <main className="min-h-screen max-w-7xl mx-auto pt-32 px-4 sm:px-6 lg:px-8">
       <ProfileHeader
-        profileImage={profileImage}
+        profileImage={undefined}
         name={name}
-        major={major}
-        class={userClass}
+        major={undefined}
+        class={undefined}
         email={email}
         className="mb-20"
       />
