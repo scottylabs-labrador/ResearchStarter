@@ -15,6 +15,7 @@ const NavBar = () => {
   const { data: session } = useSession();
   const name = session?.user?.name ?? "";
   const email = session?.user?.email ?? "";
+  const dashboardLink = session?.user?.isProfessor ? "/professor-dashboard" : "/dashboard";
   const initial = name[0]?.toUpperCase() ?? "?";
 
   const [open, setOpen] = useState(false);
@@ -55,7 +56,7 @@ const NavBar = () => {
             <NavButton
               name="Dashboard"
               Icon={HomeOutlinedIcon}
-              links="/dashboard"
+              links={dashboardLink}
               linkClass={linkClass}
             />
             <NavButton
