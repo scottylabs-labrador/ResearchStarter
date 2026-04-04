@@ -15,7 +15,8 @@ const NavBar = () => {
   const { data: session } = useSession();
   const name = session?.user?.name ?? "";
   const email = session?.user?.email ?? "";
-  const dashboardLink = session?.user?.isProfessor ? "/professor-dashboard" : "/dashboard";
+  const isProfessor = session?.user?.isProfessor ?? false;
+  const dashboardLink = isProfessor ? "/professor-dashboard" : "/dashboard";
   const initial = name[0]?.toUpperCase() ?? "?";
 
   const [open, setOpen] = useState(false);
@@ -53,12 +54,14 @@ const NavBar = () => {
             </NavLink>
           </div>
           <div className="p-4 text-base flex justify-center items-center gap-x-2 col-start-5 col-span-4 w-full">
-            <NavButton
-              name="Dashboard"
-              Icon={HomeOutlinedIcon}
-              links={dashboardLink}
-              linkClass={linkClass}
-            />
+            {isProfessor && (
+              <NavButton
+                name="Dashboard"
+                Icon={HomeOutlinedIcon}
+                links={dashboardLink}
+                linkClass={linkClass}
+              />
+            )}
             <NavButton
               name="Search"
               Icon={SearchOutlinedIcon}

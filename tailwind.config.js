@@ -17,9 +17,9 @@ export default {
         "magenta-dark-hippo": "#4a152e",
         "transparent-white": "rgba(239, 239, 239, 0.7)",
         "transparent-white-md": "rgba(239, 239, 239, 0.9)", 
-        "violet-100": "#F1E9FF;",
-        "magenta-100": "#EADDFF;",
-        "light-color": "#EBDEFF;", //violent-200
+        "violet-100": "#F1E9FF",
+        "magenta-100": "#EADDFF",
+        "light-color": "#EBDEFF", //violent-200
         "violet-300": "#E2CFFF",
         "violet-400": "#DCC5FF",
         "dark-color": "#D3B7FF", //violet-500

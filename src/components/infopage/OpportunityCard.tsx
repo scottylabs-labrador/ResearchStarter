@@ -46,8 +46,18 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({
         </button>
       </div>
       <p className="text-gray-600 text-base mt-1 flex items-center gap-1">
-        <BsEyeglasses />
-        <span className="font-semibold">{professorName}</span> | <FaBook /> {department}
+        {professorName && (
+          <>
+            <BsEyeglasses />
+            <span className="font-semibold">{professorName}</span>
+          </>
+        )}
+        {professorName && department && <span className="mx-1">|</span>}
+        {department && (
+          <>
+            <FaBook /> {department}
+          </>
+        )}
       </p>
       <p className="text-gray-600 text-base mt-1 flex items-center gap-1">
         <CalendarTodayIcon />

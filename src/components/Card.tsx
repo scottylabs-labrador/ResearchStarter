@@ -34,18 +34,14 @@ const Card = ({ research }: CardPropt) => {
   const id = session?.user?.id ?? undefined;
 
   async function saveUserBookmark(bookmark: boolean, id: string) {
-    const response = await fetch(`/api/users/saved/${id}`,
-      {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          opportunityId: research._id,
-          action: bookmark ? 'add' : 'remove'
-        })
-      }
-    );
+    const response = await fetch(`/api/users/${id}`);
+    // {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     opportunityId: research._id,
+    //     action: bookmark ? 'add' : 'remove'
+    //   })
+    // }
     if (!response.ok) {
       const message = `An error occurred: ${response.statusText}`;
       console.error(message);
@@ -101,8 +97,15 @@ const Card = ({ research }: CardPropt) => {
     }
   }
 
-  let professorName = Object.keys(research.contact ?? {}).join(', ');
-  let department = Array.isArray(research.department) ? research.department.join(', ') : String(research.department ?? '');
+  const professorName = Object.keys(research.contact ?? {}).join(", ");
+  const college = Array.isArray(research.college)
+    ? research.college.join(", ")
+    : "";
+
+  const allKeywords = [
+    ...(Array.isArray(research.keywords) ? research.keywords : []),
+    ...(Array.isArray(research.department) ? research.department : []),
+  ];
 
   return (
     // Entire card wrapped in a navlink to the opportunity's page

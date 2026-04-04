@@ -11,6 +11,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import SignInPage from "./pages/SignInPage";
 import MainPage from "./pages/MainPage";
 import ProfessorDashboard from "./pages/ProfessorDashboard";
+import ProfessorProfile from "./pages/ProfessorProfile";
 import CreateOpportunityPage from "./pages/CreateOpportunityPage";
 
 import InfoPage from "./pages/InfoPage";
@@ -21,8 +22,10 @@ const router = createBrowserRouter(
     <Route path="/" element={<MainLayout />}>
       <Route index element={<FilterPage />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/profile" element={<Dashboard />} />
       <Route path="/professor-dashboard" element={<ProfessorDashboard />} />
       <Route path="/professor-dashboard/create-opportunity" element={<CreateOpportunityPage />} />
+      <Route path="/professor/:andrewId" element={<ProfessorProfile />} />
       <Route path="/main" element={<MainPage />} />
       <Route path="/info/:id" element={<InfoPage />} />
       <Route path="*" element={<NotFoundPage />} />

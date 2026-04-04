@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { ResearchType, ProfessorType } from "../DataTypes";
 import Tag from "../components/Tag";
 import { v4 as uuidv4 } from "uuid";
@@ -7,6 +7,16 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkIconUnfilled from "@mui/icons-material/BookmarkBorderOutlined";
 import PersonIcon from "@mui/icons-material/Person";
 import { parseContact, toArray } from "../utils";
+
+function professorPublicProfilePath(p: ProfessorType): string {
+  const rawId = p._id != null ? String(p._id).trim() : "";
+  if (rawId) return `/professor/${encodeURIComponent(rawId)}`;
+  const email = (p.email ?? "").trim();
+  if (!email) return "/";
+  const at = email.indexOf("@");
+  const local = at > 0 ? email.slice(0, at).trim() : email;
+  return `/professor/${encodeURIComponent(local || email)}`;
+}
 
 const MainPage = () => {
   const [researches, setResearches] = useState<ResearchType[]>([]);
@@ -260,33 +270,44 @@ const MainPage = () => {
         <div className="flex overflow-x-auto gap-6 pb-4 scrollbar-hide" onScroll={handleProfScroll}>
           {selectedProfessors.map((professor) => (
             <div key={professor._id} className="flex-none w-[300px]">
-              <div className="w-full h-[350px] bg-light-color rounded-xl p-6 flex flex-col items-center text-center">
-                <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center mb-4 overflow-hidden">
-                  {professor.profilePicture ? (
-                    <img
-                      src={professor.profilePicture}
-                      alt={professor.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <PersonIcon className="text-gray-400" style={{ fontSize: '3rem' }} />
+              <div className="w-full h-[350px] bg-light-color rounded-xl p-6 flex flex-col items-center text-center justify-between">
+                <Link
+                  to={professorPublicProfilePath(professor)}
+                  className="flex flex-col items-center text-center w-full min-h-0 flex-1 overflow-y-auto text-inherit no-underline rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2"
+                >
+                  <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center mb-4 overflow-hidden">
+                    {professor.profilePicture ? (
+                      <img
+                        src={professor.profilePicture}
+                        alt={professor.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <PersonIcon className="text-gray-400" style={{ fontSize: '3rem' }} />
+                    )}
+                  </div>
+                  <h3 className="font-bold text-xl mb-1 hover:text-purple-700">
+                    {professor.name}
+                  </h3>
+                  {professor.department.length > 0 && (
+                    <p className="text-sm text-gray-600 mb-2">
+                      {professor.department.join(", ")}
+                    </p>
                   )}
-                </div>
-                <h3 className="font-bold text-xl mb-1">{professor.name}</h3>
-                {professor.department.length > 0 && (
-                  <p className="text-sm text-gray-600 mb-2">{professor.department.join(', ')}</p>
-                )}
-                <div className="w-full flex gap-2 flex-wrap justify-center mb-3 max-h-24 overflow-y-auto pr-1">
-                  {professor.tags?.slice(0, 3).map((tag) => (
-                    <Tag
-                      key={uuidv4().concat("tag")}
-                      keyword={tag}
-                    />
-                  ))}
-                </div>
-                <div className="mt-auto space-y-1">
+                  <div className="w-full flex gap-2 flex-wrap justify-center mb-3 max-h-24 overflow-y-auto pr-1">
+                    {professor.tags?.slice(0, 3).map((tag) => (
+                      <Tag
+                        key={uuidv4().concat("tag")}
+                        keyword={tag}
+                      />
+                    ))}
+                  </div>
+                </Link>
+                <div className="space-y-1 w-full shrink-0 pt-2">
                   {professor.positions && professor.positions.length > 0 && (
-                    <p className="text-xs text-gray-500">{professor.positions[0].position}</p>
+                    <p className="text-xs text-gray-500">
+                      {professor.positions[0]?.position}
+                    </p>
                   )}
                   {professor.email && (
                     <a
