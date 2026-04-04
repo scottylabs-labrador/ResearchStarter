@@ -21,6 +21,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<MainLayout />}>
       <Route index element={<FilterPage />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/profile" element={<Dashboard />} />
       <Route path="/professor-dashboard" element={<ProfessorDashboard />} />
       <Route path="/professor-dashboard/create-opportunity" element={<CreateOpportunityPage />} />
       <Route path="/main" element={<MainPage />} />

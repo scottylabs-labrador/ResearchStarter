@@ -39,6 +39,7 @@ export function initAuth(db) {
         isProfessor: { type: "boolean", required: false, defaultValue: false, input: false },
         firstName:   { type: "string",  required: false, defaultValue: "",    input: false },
         lastName:    { type: "string",  required: false, defaultValue: "",    input: false },
+        class:       { type: "string",  required: false, defaultValue: "",    input: false },
       },
     },
 

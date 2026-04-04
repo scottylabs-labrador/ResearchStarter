@@ -34,12 +34,15 @@ const InfoPageHeader: React.FC<InfoPageHeaderProps> = ({
           {/* Title */}
           <h1 className="font-jersey text-7xl font-bold text-gray-900 mb-2">{title}</h1>
 
-          {/* Subtitle: Professor/Lab Name and Department, College */}
+          {/* Subtitle: Professor/Lab Name | Department, College */}
           <p className="text-gray-600 text-lg mb-2">
-            <span className="font-semibold">{professorOrLabName}</span>
-            {department.length > 0 && ` | ${department.join(', ')}`}
-            {college.length > 0 && department.length > 0 && ', '}
-            {college.length > 0 && college.join(', ')}
+            {[
+              professorOrLabName,
+              department.length > 0 ? department.join(', ') : '',
+              college.length > 0 ? college.join(', ') : '',
+            ]
+              .filter(Boolean)
+              .join(' | ')}
           </p>
 
           {/* Tags */}

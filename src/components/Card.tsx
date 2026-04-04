@@ -1,11 +1,10 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { ResearchType } from "~/DataTypes";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkIconUnfilled from "@mui/icons-material/BookmarkBorderOutlined";
 import { BsEyeglasses } from "react-icons/bs";
-import { FaBook, FaHouse } from "react-icons/fa6";
+import { FaHouse, FaBook } from "react-icons/fa6";
 import { CiCalendar } from "react-icons/ci";
 import { TbCoin } from "react-icons/tb";
 import Tag from "./Tag";
@@ -15,127 +14,108 @@ interface CardPropt {
   research: ResearchType;
 }
 
-/* _id 6922390cf86661d05041f3e0
-Project Title "Subversive AI"
-Contact "{'Sauvik Das': 'sauvik'}"
-Description "The subversive AI project is fundamentally about employing human-cente…"
-Prereqs "Web/mobile application development and/or machine learning engineering…"
-Time Commitment ""
-Anticipated End Date "May 2024"
-Relevant Links "subversive.ai"
-College "['School of Computer Science']"
-Department "['Human-Computer Interaction Institute']"
-Position "Independent Study"
-Paid/Unpaid "Paid"
-Desired Skill Level "Undergraduate Students, Masters Students, PhD Students"
-*/
-
 const Card = ({ research }: CardPropt) => {
-
-  // Currently for testing purposes:
-  const [opportunities, setOpportunities] = useState([]);
-
-  // EXAMPLE OF HOW TO COMMUNICATE W/ MONGO FROM FRONTEND: Fetches the research opportunities from the database.
-  useEffect(() => {
-    async function getOpportunities() {
-      const response = await fetch(`/api/opportunities`);
-      if (!response.ok) {
-        const message = `An error occurred: ${response.statusText}`;
-        console.error(message);
-        return;
-      }
-      const opportunities = await response.json();
-      //console.log(opportunities);
-      setOpportunities(opportunities);
-    }
-    getOpportunities();
-    return;
-  }, []);
-  // ----- //
-
-
   const [bookmark, setBookmark] = useState(false);
 
   function bookmarkOpportunity() {
     setBookmark(!bookmark);
   }
 
-  let professorName = Object.keys(research.contact ?? {}).join(', ');
-  let department = Array.isArray(research.department) ? research.department.join(', ') : String(research.department ?? '');
+  const professorName = Object.keys(research.contact ?? {}).join(", ");
+  const college = Array.isArray(research.college)
+    ? research.college.join(", ")
+    : "";
+
+  const allKeywords = [
+    ...(Array.isArray(research.keywords) ? research.keywords : []),
+    ...(Array.isArray(research.department) ? research.department : []),
+  ];
 
   return (
-    // Entire card wrapped in a navlink to the opportunity's page
     <NavLink to={`/info/${research._id}`} className="no-underline text-black">
-      <div className="w-full h-72 bg-light-color rounded-xl p-10 relative flex items-start border border-card-highlight overflow-hidden cursor-pointer 
-                      transition-all duration-300 ease-in-out hover:shadow-[0_4px_20px_#E2CFFF]">
-        {/* First column */}
-        <div className="w-[73%] mr-[2%] inline-block overflow-hidden">
-
-          {/* Opportunity name */}
-          <h3 className="font-bold text-3xl mb-3 overflow-hidden text-ellipsis whitespace-nowrap">{research.projectTitle}</h3>
-
-          <div className="mb-3 ">
-            {/* Professor + Department + Position*/}
-            <div className="flex flex-row items-center gap-2">
-              { professorName != "" && (<>
-                <BsEyeglasses/>
-                <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{professorName} | </h3>
-              </>)}
-              <FaHouse/>
-              <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{department}</h3>
-              {research.position != "" && (<>
-                <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap"> | </h3>
-                <FaBook/>
-                <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{research.position}</h3>
-              </>)}
-            </div>
-
-            {/* Date */}
-            {research.anticipatedEndDate !== "" && (<div className="flex flex-row items-center gap-2">
-              <CiCalendar/>
-              <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{research.anticipatedEndDate}</h3>
-            </div>
+      <div className="w-full bg-white rounded-xl p-6 border border-violet-300 hover:shadow-[0_4px_20px_#E2CFFF] transition-all duration-300">
+        {/* Header row: title + posted date + bookmark */}
+        <div className="flex items-start justify-between mb-2">
+          <h3 className="font-bold text-xl hover:text-purple-700">{research.projectTitle}</h3>
+          <div className="flex items-center gap-2 flex-shrink-0 ml-4">
+            {research.timeAdded && (
+              <span className="text-sm text-gray-500">Posted: {research.timeAdded}</span>
             )}
-
-            {/* Paid */}
-            {research.paidUnpaid !== "" && (
-              <div className="flex flex-row items-center gap-2">
-                <TbCoin/>
-                <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{research.paidUnpaid}</h3>
-              </div>
-            )}
-          </div>
-
-          {/* Description */}
-          {research.description != "" ? (
-            <div className="overflow-hidden">
-              <p className="text-lg flex-grow overflow-hidden text-ellipsis line-clamp-3">
-                {research.description?.substring(0, 300)}
-                {research.description?.length > 200 && "..."}
-              </p>
-            </div>
-          ) : (
-            <p className="text-lg italic">No Description.</p>
-          )}
-
-        </div>
-
-        {/* Second column */}
-        <div className="w-[25%] flex flex-col">
-          {/* Bookmark */}
-          <div className="flex justify-end">
             <button
               onClick={(e) => {
                 e.preventDefault();
                 bookmarkOpportunity();
               }}
+              className="text-gray-600 hover:text-gray-900"
             >
-              {bookmark ? <BookmarkIcon fontSize="large" /> : <BookmarkIconUnfilled fontSize="large" />}
+              {bookmark ? <BookmarkIcon /> : <BookmarkIconUnfilled />}
             </button>
           </div>
+        </div>
 
-          {/* Tags... */}
-          
+        {/* Info line: professor | college | position */}
+        <div className="flex flex-wrap items-center gap-x-1 text-sm text-gray-600 mb-1">
+          {(() => {
+            const items: React.ReactNode[] = [];
+            if (professorName) {
+              items.push(
+                <span key="prof" className="flex items-center gap-1">
+                  <BsEyeglasses className="text-base" />
+                  {professorName}
+                </span>
+              );
+            }
+            if (college) {
+              items.push(
+                <span key="col" className="flex items-center gap-1">
+                  <FaHouse className="text-base" />
+                  {college}
+                </span>
+              );
+            }
+            if (research.position) {
+              items.push(
+                <span key="pos" className="flex items-center gap-1">
+                  <FaBook className="text-base" />
+                  {research.position}
+                </span>
+              );
+            }
+            return items.map((item, i) => (
+              <React.Fragment key={i}>
+                {i > 0 && <span className="mx-1">|</span>}
+                {item}
+              </React.Fragment>
+            ));
+          })()}
+        </div>
+
+        {/* Date */}
+        {research.anticipatedEndDate && (
+          <div className="flex items-center gap-1 text-sm text-gray-600 mb-1">
+            <CiCalendar className="text-base" />
+            <span>{research.anticipatedEndDate}</span>
+          </div>
+        )}
+
+        {/* Compensation */}
+        {research.paidUnpaid && (
+          <div className="flex items-center gap-1 text-sm text-gray-600 mb-3">
+            <TbCoin className="text-base" />
+            <span>{research.paidUnpaid}</span>
+          </div>
+        )}
+
+        {/* Description */}
+        <p className="text-sm text-gray-700 mb-4 line-clamp-3 leading-relaxed">
+          {research.description}
+        </p>
+
+        {/* Tags */}
+        <div className="flex gap-2 flex-wrap">
+          {allKeywords.slice(0, 3).map((keyword) => (
+            <Tag key={uuidv4()} keyword={keyword} />
+          ))}
         </div>
       </div>
     </NavLink>
