@@ -2,14 +2,12 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { ResearchType } from "~/DataTypes";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
-import BookmarkIconUnfilled from "@mui/icons-material/BookmarkBorderOutlined";
 import { BsEyeglasses } from "react-icons/bs";
 import { FaBook, FaHouse } from "react-icons/fa6";
 import { CiCalendar } from "react-icons/ci";
 import { TbCoin } from "react-icons/tb";
-import Tag from "./Tag";
-import { v4 as uuidv4 } from "uuid";
+import SaveButton from "../components/SaveButton";
+import { useSession } from "../lib/authClient";
 
 interface CardPropt {
   research: ResearchType;
@@ -31,6 +29,30 @@ Desired Skill Level "Undergraduate Students, Masters Students, PhD Students"
 */
 
 const Card = ({ research }: CardPropt) => {
+
+  const { data: session } = useSession();
+  const id = session?.user?.id ?? undefined;
+
+  async function saveUserBookmark(bookmark: boolean, id: string) {
+    const response = await fetch(`/api/users/saved/${id}`,
+      {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          opportunityId: research._id,
+          action: bookmark ? 'add' : 'remove'
+        })
+      }
+    );
+    if (!response.ok) {
+      const message = `An error occurred: ${response.statusText}`;
+      console.error(message);
+      return;
+    } 
+    console.log(response);
+  }
 
   // Currently for testing purposes:
   const [opportunities, setOpportunities] = useState([]);
@@ -56,8 +78,27 @@ const Card = ({ research }: CardPropt) => {
 
   const [bookmark, setBookmark] = useState(false);
 
+  let isFirstRender : boolean = true;
+
+  useEffect(() => {
+    isFirstRender = false;
+
+    if (isFirstRender) return;
+
+    if (bookmark) {
+
+    } else {
+        
+    }
+  }, [bookmark]);
+
   function bookmarkOpportunity() {
-    setBookmark(!bookmark);
+    if (id != undefined) {
+      setBookmark(!bookmark);
+      saveUserBookmark(!bookmark, id);
+    } else {
+      console.log("Unable to set bookmark due to no user id!");
+    }
   }
 
   let professorName = Object.keys(research.contact ?? {}).join(', ');
@@ -130,7 +171,7 @@ const Card = ({ research }: CardPropt) => {
                 bookmarkOpportunity();
               }}
             >
-              {bookmark ? <BookmarkIcon fontSize="large" /> : <BookmarkIconUnfilled fontSize="large" />}
+              <SaveButton bookmark={bookmark} />
             </button>
           </div>
 
