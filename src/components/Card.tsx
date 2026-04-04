@@ -12,9 +12,11 @@ import { v4 as uuidv4 } from "uuid";
 
 interface CardPropt {
   research: ResearchType;
+  showApplyButton?: boolean;
+  onApply?: (researchId: string) => void;
 }
 
-const Card = ({ research }: CardPropt) => {
+const Card = ({ research, showApplyButton, onApply }: CardPropt) => {
   const [bookmark, setBookmark] = useState(false);
 
   function bookmarkOpportunity() {
@@ -44,6 +46,7 @@ const Card = ({ research }: CardPropt) => {
             <button
               onClick={(e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 bookmarkOpportunity();
               }}
               className="text-gray-600 hover:text-gray-900"
@@ -111,11 +114,25 @@ const Card = ({ research }: CardPropt) => {
           {research.description}
         </p>
 
-        {/* Tags */}
-        <div className="flex gap-2 flex-wrap">
-          {allKeywords.slice(0, 3).map((keyword) => (
-            <Tag key={uuidv4()} keyword={keyword} />
-          ))}
+        {/* Tags + Apply button */}
+        <div className="flex items-end justify-between">
+          <div className="flex gap-2 flex-wrap">
+            {allKeywords.slice(0, 3).map((keyword) => (
+              <Tag key={uuidv4()} keyword={keyword} />
+            ))}
+          </div>
+          {showApplyButton && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onApply?.(research._id);
+              }}
+              className="flex items-center gap-1 px-4 py-1.5 border border-violet-400 text-violet-700 rounded-full text-sm hover:bg-violet-50 transition-colors flex-shrink-0"
+            >
+              &rarr; Apply
+            </button>
+          )}
         </div>
       </div>
     </NavLink>

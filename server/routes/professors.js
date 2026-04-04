@@ -4,6 +4,24 @@ import { ObjectId } from "mongodb";
 
 const router = express.Router();
 
+function escapeRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function emailLookupFilter(localPart) {
+  if (!localPart) return null;
+  const exact = localPart + "@andrew.cmu.edu";
+  const re = new RegExp("^" + escapeRegex(localPart) + "@", "i");
+  return {
+    $or: [
+      { Email: exact },
+      { Email: { $regex: re } },
+      { email: exact },
+      { email: { $regex: re } },
+    ],
+  };
+}
+
 // Retrieve a list of all professors.
 router.get("/", async (req, res) => {
   try {
@@ -17,13 +35,30 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Get a single professor by id
+// One professor: MongoDB _id (24 hex), full email, or Andrew ID (local part)
 router.get("/:id", async (req, res) => {
   try {
     let db = getDb();
     let collection = db.collection("Professors");
-    let query = { _id: new ObjectId(req.params.id) };
-    let result = await collection.findOne(query);
+    const raw = decodeURIComponent(req.params.id).trim();
+
+    let result = null;
+
+    if (/^[a-f\d]{24}$/i.test(raw)) {
+      try {
+        result = await collection.findOne({ _id: new ObjectId(raw) });
+      } catch {
+        // invalid ObjectId
+      }
+    }
+
+    if (!result) {
+      const localPart = raw.includes("@") ? raw.split("@")[0].trim() : raw;
+      const filter = emailLookupFilter(localPart);
+      if (filter) {
+        result = await collection.findOne(filter);
+      }
+    }
 
     if (!result) {
       res.status(404).send("Not found");
