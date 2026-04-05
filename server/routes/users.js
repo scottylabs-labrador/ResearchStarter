@@ -6,7 +6,7 @@ import { ObjectId } from "mongodb";
 const router = express.Router();
 
 // All user routes require authentication.
-// router.use(requireAuth);
+router.use(requireAuth);
 
 /**
  * Casts a string id to the type MongoDB's driver expects for _id queries.
