@@ -23,6 +23,9 @@ const Card = ({ research, showApplyButton, onApply }: CardPropt) => {
 
   const { data: session } = useSession();
   const id = session?.user?.id ?? undefined;
+  let finishedBookmarkInit = false;
+
+  const [bookmark, setBookmark] = useState(false);
 
   async function saveUserBookmark(bookmark: boolean, id: string) {
     const response = await fetch(`/api/users/saved/${id}`,
@@ -45,43 +48,23 @@ const Card = ({ research, showApplyButton, onApply }: CardPropt) => {
     console.log(response);
   }
 
-  // Currently for testing purposes:
-  const [opportunities, setOpportunities] = useState([]);
-
-  // EXAMPLE OF HOW TO COMMUNICATE W/ MONGO FROM FRONTEND: Fetches the research opportunities from the database.
+  // Fetch bookmark status
   useEffect(() => {
-    async function getOpportunities() {
-      const response = await fetch(`/api/opportunities`);
+    async function getBookmark() {
+      const response = await fetch(`/api/users/${id}`);
       if (!response.ok) {
         const message = `An error occurred: ${response.statusText}`;
         console.error(message);
         return;
       }
-      const opportunities = await response.json();
-      //console.log(opportunities);
-      setOpportunities(opportunities);
+      const userData = await response.json();
+      setBookmark(userData.saved.includes(research._id));
+      finishedBookmarkInit = true;
     }
-    getOpportunities();
+    
+    getBookmark();
     return;
   }, []);
-  // ----- //
-
-
-  const [bookmark, setBookmark] = useState(false);
-
-  let isFirstRender : boolean = true;
-
-  useEffect(() => {
-    isFirstRender = false;
-
-    if (isFirstRender) return;
-
-    if (bookmark) {
-
-    } else {
-        
-    }
-  }, [bookmark]);
 
   function bookmarkOpportunity() {
     if (id != undefined) {
@@ -112,6 +95,7 @@ const Card = ({ research, showApplyButton, onApply }: CardPropt) => {
             {research.timeAdded && (
               <span className="text-sm text-gray-500">Posted: {research.timeAdded}</span>
             )}
+            {finishedBookmarkInit ? <></> : 
             <button
               onClick={(e) => {
                 e.preventDefault();
@@ -121,7 +105,7 @@ const Card = ({ research, showApplyButton, onApply }: CardPropt) => {
               className="text-gray-600 hover:text-gray-900"
             >
               {bookmark ? <BookmarkIcon /> : <BookmarkIconUnfilled />}
-            </button>
+            </button>}
           </div>
         </div>
 
