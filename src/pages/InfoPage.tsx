@@ -11,6 +11,7 @@ import ResumeUploadPopup from '../components/infopage/ResumeUploadPopup'
 import InfoPageHeader from '../components/infopage/InfoPageHeader'
 import ContactsSection from '../components/infopage/ContactsSection'
 import RelatedOpportunitiesSection from '../components/infopage/RelatedOpportunitiesSection'
+import { useSession } from "../lib/authClient"
 
 const InfoPage: React.FC = () => {
         const { id } = useParams<{ id: string }>()
@@ -20,6 +21,9 @@ const InfoPage: React.FC = () => {
         const [loading, setLoading] = useState(true)
         const [error, setError] = useState<string | null>(null)
         const [showResumePopup, setShowResumePopup] = useState(false)
+
+        const { data: session } = useSession();
+        const userId = session?.user?.id ?? undefined;
 
         useEffect(() => {
             if (!id) {
@@ -59,6 +63,7 @@ const InfoPage: React.FC = () => {
                         })) as ResearchType[];
 
                     const foundResearch = normalizedData.find((item) => item._id === id);
+                    console.log(foundResearch);
 
                     if (foundResearch) {
                         setInfo(foundResearch);
@@ -78,9 +83,58 @@ const InfoPage: React.FC = () => {
             fetchData();
         }, [id])
 
+        useEffect(() => {
+            async function fetchBookmark() {
+                console.log(info);
+                if (!info) return;
+                const response = await fetch(`/api/users/${userId}`);
+                if (!response.ok) {
+                    const message = `An error occurred: ${response.statusText}`;
+                    console.error(message);
+                    return;
+                }
+                const userData = await response.json();
+                console.log(userData);
+                console.log(id);
+                if (userData.saved.includes(id)) {
+                    handleSave(info);
+                } else {
+                    handleUnsave(info);
+                }
+            }
+
+            fetchBookmark();
+        }, [info])
+
+
+        async function saveUserBookmark(bookmark: boolean, userId: string) {
+            const response = await fetch(`/api/users/saved/${userId}`,
+            {
+                method: "POST",
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                opportunityId: id,
+                action: bookmark ? 'add' : 'remove'
+                })
+            }
+            );
+            if (!response.ok) {
+                const message = `An error occurred: ${response.statusText}`;
+                console.error(message);
+                return;
+            } 
+            console.log(response);
+            console.log(bookmark ? 'add' : 'remove');
+        }
+
         const handleSave = async (research: ResearchType) => {
             try {
                 setSavedStates(prev => ({ ...prev, [research._id]: true }))
+                if (userId != undefined) {
+                    saveUserBookmark(true, userId);
+                }
                 console.log('Research saved (Local State):', research._id)
             } catch (error) {
                 console.error('Error saving research:', error)
@@ -91,6 +145,9 @@ const InfoPage: React.FC = () => {
         const handleUnsave = async (research: ResearchType) => {
             try {
                 setSavedStates(prev => ({ ...prev, [research._id]: false }))
+                if (userId != undefined) {
+                    saveUserBookmark(false, userId);
+                }
                 console.log('Research unsaved (Local State):', research._id)
             } catch (error) {
                 console.error('Error unsaving research:', error)

@@ -50,7 +50,7 @@ const Card = ({ research, showApplyButton, onApply }: CardPropt) => {
 
   // Fetch bookmark status
   useEffect(() => {
-    async function getBookmark() {
+    async function fetchBookmark() {
       const response = await fetch(`/api/users/${id}`);
       if (!response.ok) {
         const message = `An error occurred: ${response.statusText}`;
@@ -62,7 +62,7 @@ const Card = ({ research, showApplyButton, onApply }: CardPropt) => {
       finishedBookmarkInit = true;
     }
     
-    getBookmark();
+    fetchBookmark();
     return;
   }, []);
 
