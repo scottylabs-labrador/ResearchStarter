@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { ResearchType, ProfessorType } from "../DataTypes";
 import Tag from "../components/Tag";
@@ -83,12 +83,6 @@ const MainPage = () => {
     }
   };
 
-  const truncateDescription = (description: string, maxLength: number = 120) => {
-    if (!description) return "";
-    if (description.length <= maxLength) return description;
-    return description.substring(0, maxLength) + "...";
-  };
-
   const [professors, setProfessors] = useState<ProfessorType[]>([]);
 
   useEffect(() => {
@@ -125,26 +119,110 @@ const MainPage = () => {
 
   const BATCH_SIZE = 5;
   const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
+  const opportunitiesScrollRef = useRef<HTMLDivElement>(null);
+  const professorsScrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollOpportunitiesLeft, setCanScrollOpportunitiesLeft] = useState(false);
+  const [canScrollOpportunitiesRight, setCanScrollOpportunitiesRight] = useState(false);
+  const [canScrollProfessorsLeft, setCanScrollProfessorsLeft] = useState(false);
+  const [canScrollProfessorsRight, setCanScrollProfessorsRight] = useState(false);
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const { scrollLeft, clientWidth, scrollWidth } = e.currentTarget;
+  const maybeExpandOpportunities = (el: HTMLDivElement) => {
+    const { scrollLeft, clientWidth, scrollWidth } = el;
     if (scrollWidth - scrollLeft <= clientWidth + 100) {
       setVisibleCount((prev) => Math.min(prev + BATCH_SIZE, researches.length));
     }
   };
 
+  const updateOpportunityScrollButtons = (el: HTMLDivElement) => {
+    const maxScrollLeft = Math.max(0, el.scrollWidth - el.clientWidth);
+    setCanScrollOpportunitiesLeft(el.scrollLeft > 4);
+    setCanScrollOpportunitiesRight(el.scrollLeft < maxScrollLeft - 4);
+  };
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    maybeExpandOpportunities(e.currentTarget);
+    updateOpportunityScrollButtons(e.currentTarget);
+  };
+
+  const handleOpportunityScrollButton = (direction: "left" | "right") => {
+    const container = opportunitiesScrollRef.current;
+    if (!container) return;
+    const scrollStep = Math.round(container.clientWidth * 0.85);
+    container.scrollBy({
+      left: direction === "right" ? scrollStep : -scrollStep,
+      behavior: "smooth",
+    });
+    requestAnimationFrame(() => {
+      const updatedContainer = opportunitiesScrollRef.current;
+      if (!updatedContainer) return;
+      maybeExpandOpportunities(updatedContainer);
+      updateOpportunityScrollButtons(updatedContainer);
+    });
+  };
+
   const selectedOpportunities = researches.slice(0, visibleCount);
+
+  useEffect(() => {
+    const refreshButtons = () => {
+      const container = opportunitiesScrollRef.current;
+      if (!container) return;
+      updateOpportunityScrollButtons(container);
+    };
+
+    refreshButtons();
+    window.addEventListener("resize", refreshButtons);
+    return () => window.removeEventListener("resize", refreshButtons);
+  }, [selectedOpportunities.length]);
 
   const [profVisibleCount, setProfVisibleCount] = useState(BATCH_SIZE);
 
-  const handleProfScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const { scrollLeft, clientWidth, scrollWidth } = e.currentTarget;
+  const maybeExpandProfessors = (el: HTMLDivElement) => {
+    const { scrollLeft, clientWidth, scrollWidth } = el;
     if (scrollWidth - scrollLeft <= clientWidth + 100) {
       setProfVisibleCount((prev) => Math.min(prev + BATCH_SIZE, professors.length));
     }
   };
 
+  const updateProfessorScrollButtons = (el: HTMLDivElement) => {
+    const maxScrollLeft = Math.max(0, el.scrollWidth - el.clientWidth);
+    setCanScrollProfessorsLeft(el.scrollLeft > 4);
+    setCanScrollProfessorsRight(el.scrollLeft < maxScrollLeft - 4);
+  };
+
+  const handleProfScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    maybeExpandProfessors(e.currentTarget);
+    updateProfessorScrollButtons(e.currentTarget);
+  };
+
   const selectedProfessors = professors.slice(0, profVisibleCount);
+
+  const handleProfessorScrollButton = (direction: "left" | "right") => {
+    const container = professorsScrollRef.current;
+    if (!container) return;
+    const scrollStep = Math.round(container.clientWidth * 0.85);
+    container.scrollBy({
+      left: direction === "right" ? scrollStep : -scrollStep,
+      behavior: "smooth",
+    });
+    requestAnimationFrame(() => {
+      const updatedContainer = professorsScrollRef.current;
+      if (!updatedContainer) return;
+      maybeExpandProfessors(updatedContainer);
+      updateProfessorScrollButtons(updatedContainer);
+    });
+  };
+
+  useEffect(() => {
+    const refreshButtons = () => {
+      const container = professorsScrollRef.current;
+      if (!container) return;
+      updateProfessorScrollButtons(container);
+    };
+
+    refreshButtons();
+    window.addEventListener("resize", refreshButtons);
+    return () => window.removeEventListener("resize", refreshButtons);
+  }, [selectedProfessors.length]);
 
   return (
     <div>
@@ -171,13 +249,39 @@ const MainPage = () => {
         </div>
       </div>
       <div className="w-[100vw] px-14 py-16">
-        <h1 className="font-jersey font-bold text-4xl mb-8">Selected Research Opportunities:</h1>
-        <div className="flex overflow-x-auto gap-6 pb-4 scrollbar-hide" onScroll={handleScroll}>
+        <div className="mb-8 flex items-center justify-between gap-4">
+          <h1 className="font-jersey font-bold text-4xl">Selected Research Opportunities:</h1>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => handleOpportunityScrollButton("left")}
+              disabled={!canScrollOpportunitiesLeft}
+              aria-label="Scroll selected opportunities left"
+              className="rounded-lg border border-tag-dark-color px-4 py-2 font-semibold text-tag-dark-color transition disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              {"<-"}
+            </button>
+            <button
+              type="button"
+              onClick={() => handleOpportunityScrollButton("right")}
+              disabled={!canScrollOpportunitiesRight}
+              aria-label="Scroll selected opportunities right"
+              className="rounded-lg bg-tag-dark-color px-4 py-2 font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              {"->"}
+            </button>
+          </div>
+        </div>
+        <div
+          ref={opportunitiesScrollRef}
+          className="flex overflow-x-auto gap-6 pb-4 scrollbar-hide"
+          onScroll={handleScroll}
+        >
           {selectedOpportunities.map((research) => (
             <div key={research._id} className="flex-none w-[400px]">
               <div className="w-full h-[300px] bg-light-color rounded-xl p-6 flex flex-col">
-                <h3 className="font-jersey font-bold text-4xl mb-2">{research.projectTitle}</h3>
-                <div className="flex gap-2 flex-wrap mb-3">
+                <h3 className="font-jersey font-bold text-4xl mb-2 shrink-0">{research.projectTitle}</h3>
+                <div className="flex gap-2 flex-wrap mb-3 shrink-0">
                   {(Array.isArray(research.college) ? research.college : []).map((word) => (
                     <Tag key={uuidv4().concat("col")} keyword={word} />
                   ))}
@@ -188,10 +292,10 @@ const MainPage = () => {
                     <Tag key={uuidv4().concat("key")} keyword={word} />
                   ))}
                 </div>
-                <p className="text-sm mb-4 flex-1 overflow-hidden">
-                  {truncateDescription(research.description, 300)}
-                </p>
-                <div className="mt-auto flex justify-between items-center">
+                <div className="mb-4 flex-1 min-h-0 overflow-y-auto pr-1">
+                  <p className="text-sm">{research.description}</p>
+                </div>
+                <div className="mt-auto shrink-0 flex justify-between items-center">
                   <NavLink
                     to={`/info/${research._id}`}
                     className="inline-block px-3 py-2 bg-learn-more-color shadow-black shadow-sm text-black rounded hover:bg-opacity-90"
@@ -266,8 +370,34 @@ const MainPage = () => {
 
       {/* Professors Section */}
       <div className="w-[100vw] px-14 py-16">
-        <h1 className="font-jersey font-bold text-4xl mb-8">Featured Professors:</h1>
-        <div className="flex overflow-x-auto gap-6 pb-4 scrollbar-hide" onScroll={handleProfScroll}>
+        <div className="mb-8 flex items-center justify-between gap-4">
+          <h1 className="font-jersey font-bold text-4xl">Featured Professors:</h1>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => handleProfessorScrollButton("left")}
+              disabled={!canScrollProfessorsLeft}
+              aria-label="Scroll featured professors left"
+              className="rounded-lg border border-tag-dark-color px-4 py-2 font-semibold text-tag-dark-color transition disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              {"<-"}
+            </button>
+            <button
+              type="button"
+              onClick={() => handleProfessorScrollButton("right")}
+              disabled={!canScrollProfessorsRight}
+              aria-label="Scroll featured professors right"
+              className="rounded-lg bg-tag-dark-color px-4 py-2 font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              {"->"}
+            </button>
+          </div>
+        </div>
+        <div
+          ref={professorsScrollRef}
+          className="flex overflow-x-auto gap-6 pb-4 scrollbar-hide"
+          onScroll={handleProfScroll}
+        >
           {selectedProfessors.map((professor) => (
             <div key={professor._id} className="flex-none w-[300px]">
               <div className="w-full h-[350px] bg-light-color rounded-xl p-6 flex flex-col items-center text-center justify-between">

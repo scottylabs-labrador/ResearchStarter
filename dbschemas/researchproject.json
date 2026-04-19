@@ -1,0 +1,24 @@
+[
+    {
+      "_id": "string",
+      "Project Title": "string",
+      "Contact": {
+        "key": "value"
+      },
+      "Department": ["string"],
+      "Description": "string",
+      "Desired Skill Level": "string",
+      "Paid/Unpaid": "string",
+      "Position": "string",
+      "Prereqs": ["string"],
+      "Relevant Links": ["string"],
+      "Source": "string",
+      "Time Added": "string",
+      "Time Commitment": "string",
+      "Anticipated End Date": "string",
+      "Keywords": ["string"],
+      "Colleges": ["string"],
+      "Enable Apply": "boolean",
+      "Visibility": ["string"]
+    }
+]

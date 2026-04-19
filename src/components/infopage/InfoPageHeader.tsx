@@ -68,6 +68,7 @@ const InfoPageHeader: React.FC<InfoPageHeaderProps> = ({
           </button>
 
           {/* Apply Button */}
+          {/*
           <button
             onClick={onApplyClick}
             className="bg-dark-color hover:card-highlight font-bold py-2 px-6 rounded-lg shadow-md transition-colors flex items-center gap-2"
@@ -75,6 +76,7 @@ const InfoPageHeader: React.FC<InfoPageHeaderProps> = ({
             <ArrowForwardIcon />
             Apply
           </button>
+          */}
         </div>
       </div>
     </div>
