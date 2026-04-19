@@ -24,12 +24,15 @@ const MainLayout = () => {
   const [navHidden, setNavHidden] = useState(false);
   const lastScrollY = useRef(0);
   const scrollLogicReadyAt = useRef(0);
+  /** First scroll after grace: sync baseline only (covers restored inner scroll with no events during grace). */
+  const needsScrollBaseline = useRef(true);
 
   // After a route change, full reload, or bfcache restore: show the header and
   // absorb restored scroll positions without treating them as "scroll down".
   useEffect(() => {
     const onPageShow = () => {
       setNavHidden(false);
+      needsScrollBaseline.current = true;
       scrollLogicReadyAt.current = performance.now() + SCROLL_HIDE_GRACE_MS;
       lastScrollY.current = window.scrollY;
     };
@@ -41,6 +44,7 @@ const MainLayout = () => {
   // Uses capture mode so it fires for any scrollable element (e.g. FilterPage's inner div)
   useEffect(() => {
     setNavHidden(false);
+    needsScrollBaseline.current = true;
     scrollLogicReadyAt.current = performance.now() + SCROLL_HIDE_GRACE_MS;
     lastScrollY.current = window.scrollY;
 
@@ -48,6 +52,11 @@ const MainLayout = () => {
       const currentScrollY = readVerticalScrollY(e.target ?? document);
       if (performance.now() < scrollLogicReadyAt.current) {
         lastScrollY.current = currentScrollY;
+        return;
+      }
+      if (needsScrollBaseline.current) {
+        lastScrollY.current = currentScrollY;
+        needsScrollBaseline.current = false;
         return;
       }
       if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
