@@ -9,6 +9,9 @@ import ProfessorPlaceholderImg from "../assets/professor_dashboard_placeholder.p
 const professorApiUrl = (param: string) =>
   `http://localhost:5050/professors/${encodeURIComponent(param.trim())}`;
 
+const professorProjectsApiUrl = (param: string) =>
+  `http://localhost:5050/opportunities/professor/${encodeURIComponent(param.trim())}`;
+
 const ProfessorProfile = () => {
   const { andrewId } = useParams<{ andrewId: string }>();
   const [professor, setProfessor] = useState<ProfessorType | null>(null);
@@ -52,6 +55,11 @@ const ProfessorProfile = () => {
           tags: data.Tags,
           profilePicture: data["Profile Picture"],
         });
+
+        let andrew_id = data.Email.split("@")[0];
+        const resProjects = await fetch(professorProjectsApiUrl(andrew_id));
+        const projects_data = await resProjects.json();
+        console.log(projects_data);
       } catch {
         setError(true);
       } finally {

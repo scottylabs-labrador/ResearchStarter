@@ -36,6 +36,26 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// Get research opportunity by andrew id
+router.get("/professor/:andrew_id", async (req, res) => {
+  try {
+    let db = getDb();
+    let collection = db.collection("ResearchProjects");
+    let contact = "Contact." + req.params.andrew_id
+    let query = { [contact] : { $exists: true } };
+    let result = await collection.find(query).toArray();
+
+    if (!result) {
+      res.status(404).send("Not found");
+    } else {
+      res.status(200).send(result);
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching opportunity");
+  }
+});
+
 // Create a new research opportunity.
 router.post("/", async (req, res) => {
   try {
