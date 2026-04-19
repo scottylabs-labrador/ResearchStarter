@@ -275,7 +275,7 @@ const InfoPage: React.FC = () => {
                                     Contact Information
                                 </h2>
                                 <div className="space-y-2">
-                                    {Object.entries(info.contact).map(([name, andrewId]) => (
+                                    {Object.entries(info.contact).map(([andrewId, name]) => (
                                         <p key={andrewId}>
                                             <span className="font-medium">{name}</span>{" — "}
                                             <a
