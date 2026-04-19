@@ -1,0 +1,42 @@
+[
+    {
+      "_id": "string",
+      "Name": "string",
+      "College": ["string"],
+      "Department": ["string"],
+      "Email": "string",
+      "Phone Number": "string",
+      "Bio": {
+        "value": "string",
+        "htmlStripped": "string"
+      },
+      "Media": ["string"],
+      "Positions": [
+        {
+          "institution": {
+            "countryCode": "string",
+            "singleLineFormat": "string",
+            "organisation": "string",
+            "subOrganisation": "string",
+            "city": "string",
+            "country": "string"
+          },
+          "position": "string",
+          "startDate": {
+            "year": "number",
+            "month": "number",
+            "day": "number",
+            "dateTime": "string"
+          },
+          "endDate": {
+            "year": "number",
+            "month": "number",
+            "day": "number",
+            "dateTime": "string"
+          }
+        }
+      ],
+      "Tags": ["string"]
+    }
+  ]
+  
