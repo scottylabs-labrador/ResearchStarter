@@ -39,10 +39,24 @@ router.get("/:id", async (req, res) => {
 // Create a new research opportunity.
 router.post("/", async (req, res) => {
   try {
+    const b = req.body;
     let newDocument = {
-      name: req.body.name,
-      position: req.body.position,
-      level: req.body.level,
+      "Project Title":        b.projectTitle,
+      "Contact":              b.contact,
+      "Department":           b.department,
+      "Description":          b.description,
+      "Desired Skill Level":  b.desiredSkillLevel,
+      "Paid/Unpaid":          b.paidUnpaid,
+      "Position":             b.position,
+      "Prereqs":              b.prereqs,
+      "Relevant Links":       b.relevantLinks,
+      "Source":               b.source,
+      "Time Added":           b.timeAdded,
+      "Time Commitment":      b.timeCommitment,
+      "Anticipated End Date": b.anticipatedEndDate,
+      "Keywords":             b.keywords,
+      "Colleges":             b.colleges,
+      "Enable Apply":         b.enableApply,
     };
     let db = getDb();
     let collection = db.collection("ResearchProjects");

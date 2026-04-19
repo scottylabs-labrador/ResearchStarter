@@ -7,16 +7,18 @@ import users from "./routes/users.js";
 import { connectToDatabase } from "./db/connection.js";
 import { initAuth } from "./auth.js";
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 5050;
 const app = express();
 
 // Credentials-aware CORS — required for better-auth cookie sessions.
-app.use(
-  cors({
-    origin: process.env.BETTER_AUTH_URL || "http://localhost:3000",
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+  credentials: true,
+};
+app.use(cors(corsOptions));
+// Explicitly handle OPTIONS preflight for all routes (required for
+// cross-origin POST/PATCH/DELETE with credentials or custom headers).
+app.options("/*splat", cors(corsOptions));
 
 async function startServer() {
   try {

@@ -70,8 +70,9 @@ const ProfessorDashboard = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newOpportunity, setNewOpportunity] = useState<FormData>(defaultOpportunity);
   const [showConfirmDiscard, setShowConfirmDiscard] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (!isFormValid(newOpportunity)) return;
 
     const now = new Date();
@@ -83,10 +84,24 @@ const ProfessorDashboard = () => {
       enableApply: false,
     };
 
-    // TODO: persist the opportunity (e.g. API call)
-    console.log("Created opportunity:", opportunity);
-    setNewOpportunity(defaultOpportunity());
-    setShowCreateForm(false);
+    // Attempts to add the opportunity to the database
+    try {
+
+      const res = await fetch("http://localhost:5050/opportunities", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(opportunity),
+      });
+
+      if (!res.ok) throw new Error(await res.text());
+      setSubmitError("");
+      setNewOpportunity(defaultOpportunity());
+      setShowCreateForm(false);
+    } catch (err) {
+      setSubmitError("Failed to save opportunity. Please try again.");
+      console.error(err);
+    }
   };
 
   const handleDiscard = () => {
@@ -158,6 +173,9 @@ const ProfessorDashboard = () => {
             onChange={(data) => setNewOpportunity(data)}
           />
           <div className="flex flex-col gap-3 mt-8">
+            {submitError && (
+              <p className="text-red-500 text-sm text-center">{submitError}</p>
+            )}
             <button
               onClick={handleAdd}
               disabled={!isFormValid(newOpportunity)}
