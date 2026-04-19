@@ -2,379 +2,440 @@ import React, { useState, useEffect } from "react";
 import { ResearchOpportunity } from "../../types/ResearchOpportunity";
 import { collegeOptions, departmentOptions } from "../../FilterData";
 
+type FormData = Omit<ResearchOpportunity, "source" | "timeAdded" | "enableApply">;
+
 interface OpportunityFormProps {
-  initialData: Omit<ResearchOpportunity, "id">;
-  onChange: (data: Omit<ResearchOpportunity, "id">) => void;
+  initialData: FormData;
+  onChange: (data: FormData) => void;
 }
 
-const educationOptions = [
-  "Undergraduate",
-  "Graduate",
-  "PhD",
-  "Post-Doc",
-  "High School",
-];
 
-const compensationOptions = [
-  "Paid",
-  "Unpaid",
-  "Course Credit",
-  "Stipend",
-];
+const paidOptions = ["Paid", "Unpaid"];
 
-const locationOptions = [
-  "In-Person",
-  "Remote",
-  "Hybrid",
-];
+const inputClass =
+  "block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500";
+const labelClass = "block text-sm font-bold text-gray-900 mb-1";
 
-const semesterOptions = [
-  "Fall 2025",
-  "Spring 2026",
-  "Summer 2026",
-  "Fall 2026",
-  "Spring 2027",
-  "Summer 2027",
-  "Fall 2027",
-  "Spring 2028",
-  "Summer 2028",
-  "Fall 2028",
-  "Spring 2029",
-  "Summer 2029",
-  "Fall 2029",
-  "Spring 2030",
-];
+interface TagsFieldProps {
+  label: string;
+  tags: string[];
+  input: string;
+  onInputChange: (v: string) => void;
+  onAdd: () => void;
+  onRemove: (t: string) => void;
+  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  placeholder: string;
+}
 
-const majorOptions = [
-  "Computer Science",
-  "Electrical & Computer Engineering",
-  "Mechanical Engineering",
-  "Chemical Engineering",
-  "Biological Sciences",
-  "Physics",
-  "Chemistry",
-  "Mathematical Sciences",
-  "Statistics & Data Science",
-  "Information Systems",
-  "Design",
-  "Architecture",
-  "Psychology",
-  "Economics",
-  "English",
-  "History",
-  "Philosophy",
-  "Business Administration",
-];
+const TagsField: React.FC<TagsFieldProps> = ({
+  label,
+  tags,
+  input,
+  onInputChange,
+  onAdd,
+  onRemove,
+  onKeyDown,
+  placeholder,
+}) => (
+  <div>
+    <label className={labelClass}>{label}</label>
+    <div className="border border-gray-300 rounded-lg p-3">
+      <div className="flex flex-wrap gap-2 items-center">
+        {tags.map((tag) => (
+          <span
+            key={tag}
+            onClick={() => onRemove(tag)}
+            className="bg-purple-200 text-purple-800 text-sm font-medium px-3 py-1 rounded-full cursor-pointer hover:bg-purple-300"
+          >
+            {tag} ×
+          </span>
+        ))}
+        <button
+          type="button"
+          onClick={onAdd}
+          className="bg-purple-500 text-white text-sm font-medium px-3 py-1 rounded-full hover:bg-purple-600"
+        >
+          + Add
+        </button>
+      </div>
+      <input
+        type="text"
+        className="mt-2 block w-full p-2 border-0 focus:ring-0 text-sm"
+        placeholder={placeholder}
+        value={input}
+        onChange={(e) => onInputChange(e.target.value)}
+        onKeyDown={onKeyDown}
+      />
+    </div>
+  </div>
+);
 
 const OpportunityForm: React.FC<OpportunityFormProps> = ({ initialData, onChange }) => {
-  const [formData, setFormData] = useState<Omit<ResearchOpportunity, "id">>(initialData);
-  const [skillInput, setSkillInput] = useState("");
+  const [formData, setFormData] = useState<FormData>(initialData);
+  const [prereqInput, setPrereqInput] = useState("");
+  const [linkInput, setLinkInput] = useState("");
+  const [keywordInput, setKeywordInput] = useState("");
+  const [contactKey, setContactKey] = useState("");
+  const [contactValue, setContactValue] = useState("");
+  const [contactEmailError, setContactEmailError] = useState("");
+
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const handleContactValueChange = (v: string) => {
+    setContactValue(v);
+    setContactEmailError(v && !EMAIL_REGEX.test(v) ? "Please enter a valid email address." : "");
+  };
 
   useEffect(() => {
     setFormData(initialData);
   }, [initialData]);
 
+  const update = (updates: Partial<FormData>) => {
+    setFormData((prev) => {
+      const newState = { ...prev, ...updates };
+      onChange(newState);
+      return newState;
+    });
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { id, value } = e.target;
-    setFormData((prev) => {
-      const newState = { ...prev, [id]: value };
-      onChange(newState);
-      return newState;
-    });
+    update({ [id]: value } as Partial<FormData>);
   };
 
-  const handleToggle = (field: "limitVisibility" | "allowDirectApplications") => {
-    setFormData((prev) => {
-      const newState = { ...prev, [field]: !prev[field] };
-      onChange(newState);
-      return newState;
-    });
+  const addTag = (
+    field: "prereqs" | "relevantLinks" | "keywords",
+    value: string,
+    clear: () => void
+  ) => {
+    if (!value.trim()) return;
+    update({ [field]: [...formData[field], value.trim()] });
+    clear();
   };
 
-  const handleAddSkill = () => {
-    if (skillInput.trim() === "") return;
-    setFormData((prev) => {
-      const updatedSkills = [...prev.requiredSkills, skillInput.trim()];
-      const newState = { ...prev, requiredSkills: updatedSkills };
-      onChange(newState);
-      return newState;
-    });
-    setSkillInput("");
+  const removeTag = (field: "prereqs" | "relevantLinks" | "keywords", tag: string) => {
+    update({ [field]: formData[field].filter((t) => t !== tag) });
   };
 
-  const handleRemoveSkill = (tagToRemove: string) => {
-    setFormData((prev) => {
-      const updatedSkills = prev.requiredSkills.filter((tag) => tag !== tagToRemove);
-      const newState = { ...prev, requiredSkills: updatedSkills };
-      onChange(newState);
-      return newState;
-    });
+  const addContact = () => {
+    if (!contactKey.trim() || !contactValue.trim()) return;
+    if (!EMAIL_REGEX.test(contactValue.trim())) {
+      setContactEmailError("Please enter a valid email address.");
+      return;
+    }
+    update({ contact: { ...formData.contact, [contactKey.trim()]: contactValue.trim() } });
+    setContactKey("");
+    setContactValue("");
+    setContactEmailError("");
   };
 
-  const handleSkillKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleAddSkill();
+  const removeContact = (key: string) => {
+    const updated = { ...formData.contact };
+    delete updated[key];
+    update({ contact: updated });
+  };
+
+  const toggleArrayField = (field: "colleges" | "department", value: string) => {
+    const current = formData[field];
+    if (current.includes(value)) {
+      update({ [field]: current.filter((v) => v !== value) });
+    } else {
+      update({ [field]: [...current, value] });
     }
   };
 
   return (
     <div className="space-y-5">
-      {/* Position Title */}
+      {/* Project Title */}
       <div>
-        <label htmlFor="positionTitle" className="block text-sm font-bold text-gray-900 mb-1">
-          Position Title
+        <label htmlFor="projectTitle" className={labelClass}>
+          <span className="text-red-500">*</span> Project Title
         </label>
         <input
           type="text"
-          id="positionTitle"
-          className="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Enter Position Name/Title"
-          value={formData.positionTitle}
+          id="projectTitle"
+          className={inputClass}
+          placeholder="Enter project title"
+          value={formData.projectTitle}
           onChange={handleChange}
         />
       </div>
 
-      {/* College */}
+      {/* Contact */}
       <div>
-        <label htmlFor="college" className="block text-sm font-bold text-gray-900 mb-1">
-          College
-        </label>
-        <select
-          id="college"
-          className="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-500"
-          value={formData.college}
-          onChange={handleChange}
-        >
-          <option value="">Select College</option>
-          {collegeOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
+        <label className={labelClass}><span className="text-red-500">*</span> Contact</label>
+        <div className="border border-gray-300 rounded-lg p-3 space-y-2">
+          {Object.entries(formData.contact).map(([key, value]) => (
+            <div
+              key={key}
+              className="flex items-center justify-between bg-gray-50 rounded px-3 py-1.5"
+            >
+              <span className="text-sm">
+                <span className="font-medium">{key}:</span> {value}
+              </span>
+              <button
+                type="button"
+                onClick={() => removeContact(key)}
+                className="text-red-400 hover:text-red-600 ml-2 text-sm leading-none"
+              >
+                ×
+              </button>
+            </div>
           ))}
-        </select>
-      </div>
-
-      {/* Department/Area */}
-      <div>
-        <label htmlFor="departmentArea" className="block text-sm font-bold text-gray-900 mb-1">
-          Department/Area
-        </label>
-        <select
-          id="departmentArea"
-          className="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-500"
-          value={formData.departmentArea}
-          onChange={handleChange}
-        >
-          <option value="">Select Department /Area</option>
-          {departmentOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Education Requirement */}
-      <div>
-        <label htmlFor="educationRequirement" className="block text-sm font-bold text-gray-900 mb-1">
-          Education Requirement
-        </label>
-        <select
-          id="educationRequirement"
-          className="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-500"
-          value={formData.educationRequirement}
-          onChange={handleChange}
-        >
-          <option value="">Select Education Requirement</option>
-          {educationOptions.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Compensation Type */}
-      <div>
-        <label htmlFor="compensationType" className="block text-sm font-bold text-gray-900 mb-1">
-          Compensation Type
-        </label>
-        <select
-          id="compensationType"
-          className="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-500"
-          value={formData.compensationType}
-          onChange={handleChange}
-        >
-          <option value="">Select Compensation Type</option>
-          {compensationOptions.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Location */}
-      <div>
-        <label htmlFor="location" className="block text-sm font-bold text-gray-900 mb-1">
-          Location
-        </label>
-        <select
-          id="location"
-          className="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-500"
-          value={formData.location}
-          onChange={handleChange}
-        >
-          <option value="">Select Location Type</option>
-          {locationOptions.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Start Semester */}
-      <div>
-        <label htmlFor="startSemester" className="block text-sm font-bold text-gray-900 mb-1">
-          Start Semester
-        </label>
-        <select
-          id="startSemester"
-          className="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-500"
-          value={formData.startSemester}
-          onChange={handleChange}
-        >
-          <option value="">Select Start Time</option>
-          {semesterOptions.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Predicted End Semester */}
-      <div>
-        <label htmlFor="predictedEndSemester" className="block text-sm font-bold text-gray-900 mb-1">
-          Predicted End Semester
-        </label>
-        <select
-          id="predictedEndSemester"
-          className="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-500"
-          value={formData.predictedEndSemester}
-          onChange={handleChange}
-        >
-          <option value="">Select End Time</option>
-          {semesterOptions.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Limit Visibility */}
-      <div>
-        <div className="flex items-center gap-3 mb-1">
-          <label className="block text-sm font-bold text-gray-900">Limit Visibility</label>
-          <button
-            type="button"
-            onClick={() => handleToggle("limitVisibility")}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-              formData.limitVisibility ? "bg-green-500" : "bg-gray-300"
-            }`}
-          >
-            <span
-              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                formData.limitVisibility ? "translate-x-6" : "translate-x-1"
-              }`}
+          <div className="flex gap-2 pt-1 items-start">
+            <input
+              type="text"
+              className="flex-1 p-2 border border-gray-200 rounded text-sm"
+              placeholder="Full Name"
+              value={contactKey}
+              onChange={(e) => setContactKey(e.target.value)}
             />
-          </button>
+            <div className="flex-1 flex flex-col">
+              <input
+                type="text"
+                className={`p-2 border rounded text-sm ${contactEmailError ? "border-red-400 focus:border-red-400" : "border-gray-200"}`}
+                placeholder="Email"
+                value={contactValue}
+                onChange={(e) => handleContactValueChange(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    addContact();
+                  }
+                }}
+              />
+              {contactEmailError && (
+                <span className="text-red-500 text-xs mt-1">{contactEmailError}</span>
+              )}
+            </div>
+            <button
+              type="button"
+              onClick={addContact}
+              className="bg-purple-500 text-white text-sm px-3 py-1 rounded-full hover:bg-purple-600 whitespace-nowrap"
+            >
+              + Add
+            </button>
+          </div>
         </div>
-        <select
-          id="limitMajor"
-          className="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-500"
-          value={formData.limitMajor}
-          onChange={handleChange}
-          disabled={!formData.limitVisibility}
-        >
-          <option value="">Select Majors to Limit Visibility To</option>
-          {majorOptions.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
       </div>
 
-      {/* Website */}
+      {/* Colleges */}
       <div>
-        <label htmlFor="website" className="block text-sm font-bold text-gray-900 mb-1">
-          Website
-        </label>
-        <input
-          type="text"
-          id="website"
-          className="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Website if needed"
-          value={formData.website}
-          onChange={handleChange}
-        />
+        <label className={labelClass}><span className="text-red-500">*</span> Colleges</label>
+        <div className="border border-gray-300 focus-within:border-gray-200 rounded-lg p-3">
+          <div className="flex flex-wrap gap-2 mb-2">
+            {formData.colleges.map((c) => (
+              <span
+                key={c}
+                onClick={() => toggleArrayField("colleges", c)}
+                className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full cursor-pointer hover:bg-blue-200"
+              >
+                {c} ×
+              </span>
+            ))}
+          </div>
+          <select
+            className="block w-full p-2 border border-gray-200 rounded text-sm text-gray-500"
+            value=""
+            onChange={(e) => {
+              if (e.target.value) toggleArrayField("colleges", e.target.value);
+            }}
+          >
+            <option value="">Select a college</option>
+            {collegeOptions
+              .filter((opt) => !formData.colleges.includes(opt.value))
+              .map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Department */}
+      <div>
+        <label className={labelClass}><span className="text-red-500">*</span> Department</label>
+        <div className="border border-gray-300 focus-within:border-gray-200 rounded-lg p-3">
+          <div className="flex flex-wrap gap-2 mb-2">
+            {formData.department.map((d) => (
+              <span
+                key={d}
+                onClick={() => toggleArrayField("department", d)}
+                className="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full cursor-pointer hover:bg-green-200"
+              >
+                {d} ×
+              </span>
+            ))}
+          </div>
+          <select
+            className="block w-full p-2 border border-gray-200 rounded text-sm text-gray-500"
+            value=""
+            onChange={(e) => {
+              if (e.target.value) toggleArrayField("department", e.target.value);
+            }}
+          >
+            <option value="">Select a department</option>
+            {departmentOptions
+              .filter((opt) => !formData.department.includes(opt.value))
+              .map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+          </select>
+        </div>
       </div>
 
       {/* Description */}
       <div>
-        <label htmlFor="description" className="block text-sm font-bold text-gray-900 mb-1">
-          Description
+        <label htmlFor="description" className={labelClass}>
+          <span className="text-red-500">*</span> Description
         </label>
         <textarea
           id="description"
           rows={5}
-          className="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Enter Department/Area"
+          className={inputClass}
+          placeholder="Describe the research opportunity"
           value={formData.description}
           onChange={handleChange}
         />
       </div>
 
-      {/* Required/Recommended Skills */}
+      {/* Desired Skill Level */}
       <div>
-        <label className="block text-sm font-bold text-gray-900 mb-1">
-          Required/Recommended Skills
+        <label htmlFor="desiredSkillLevel" className={labelClass}>
+          Desired Skill Level
         </label>
-        <div className="border border-gray-300 rounded-lg p-3">
-          <div className="flex flex-wrap gap-2 items-center">
-            {formData.requiredSkills.map((tag) => (
-              <span
-                key={tag}
-                onClick={() => handleRemoveSkill(tag)}
-                className="bg-purple-200 text-purple-800 text-sm font-medium px-3 py-1 rounded-full cursor-pointer hover:bg-purple-300"
-              >
-                {tag}
-              </span>
-            ))}
-            <button
-              type="button"
-              onClick={handleAddSkill}
-              className="bg-purple-500 text-white text-sm font-medium px-3 py-1 rounded-full hover:bg-purple-600"
-            >
-              + Add Skills
-            </button>
-          </div>
-          <input
-            type="text"
-            className="mt-2 block w-full p-2 border-0 focus:ring-0 text-sm"
-            placeholder="Type a skill and press Enter"
-            value={skillInput}
-            onChange={(e) => setSkillInput(e.target.value)}
-            onKeyDown={handleSkillKeyDown}
-          />
-        </div>
+        <input
+          type="text"
+          id="desiredSkillLevel"
+          className={inputClass}
+          placeholder="e.g. Undergraduate Students, Masters Students"
+          value={formData.desiredSkillLevel}
+          onChange={handleChange}
+        />
       </div>
+
+      {/* Paid/Unpaid */}
+      <div>
+        <label htmlFor="paidUnpaid" className={labelClass}>
+          <span className="text-red-500">*</span> Paid/Unpaid
+        </label>
+        <select
+          id="paidUnpaid"
+          className={`${inputClass} text-gray-500`}
+          value={formData.paidUnpaid}
+          onChange={handleChange}
+        >
+          <option value="">Select compensation type</option>
+          {paidOptions.map((opt) => (
+            <option key={opt} value={opt}>
+              {opt}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Position */}
+      <div>
+        <label htmlFor="position" className={labelClass}>
+          <span className="text-red-500">*</span> Position
+        </label>
+        <input
+          type="text"
+          id="position"
+          className={inputClass}
+          placeholder="e.g. Independent Study"
+          value={formData.position}
+          onChange={handleChange}
+        />
+      </div>
+
+      {/* Prerequisites */}
+      <TagsField
+        label="Prerequisites"
+        tags={formData.prereqs}
+        input={prereqInput}
+        onInputChange={setPrereqInput}
+        onAdd={() => addTag("prereqs", prereqInput, () => setPrereqInput(""))}
+        onRemove={(t) => removeTag("prereqs", t)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            addTag("prereqs", prereqInput, () => setPrereqInput(""));
+          }
+        }}
+        placeholder="e.g. Machine Learning with Python"
+      />
+
+      {/* Relevant Links */}
+      <TagsField
+        label="Relevant Links"
+        tags={formData.relevantLinks}
+        input={linkInput}
+        onInputChange={setLinkInput}
+        onAdd={() => addTag("relevantLinks", linkInput, () => setLinkInput(""))}
+        onRemove={(t) => removeTag("relevantLinks", t)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            addTag("relevantLinks", linkInput, () => setLinkInput(""));
+          }
+        }}
+        placeholder="e.g. https://www.scottylabs.org/"
+      />
+
+      {/* Time Commitment */}
+      <div>
+        <label htmlFor="timeCommitment" className={labelClass}>
+          Time Commitment (hrs/week)
+        </label>
+        <input
+          type="number"
+          id="timeCommitment"
+          className={inputClass}
+          placeholder="e.g. 5"
+          min="0"
+          step="1"
+          value={formData.timeCommitment}
+          onChange={(e) => update({ timeCommitment: Math.trunc(Math.max(0, Number(e.target.value))).toString() })}
+        />
+      </div>
+
+      {/* Anticipated End Date */}
+      <div>
+        <label htmlFor="anticipatedEndDate" className={labelClass}>
+          <span className="text-red-500">*</span> Anticipated End Date
+        </label>
+        <input
+          type="text"
+          id="anticipatedEndDate"
+          className={inputClass}
+          placeholder="e.g. May 2026"
+          value={formData.anticipatedEndDate}
+          onChange={handleChange}
+        />
+      </div>
+
+      {/* Keywords */}
+      <TagsField
+        label="Keywords"
+        tags={formData.keywords}
+        input={keywordInput}
+        onInputChange={setKeywordInput}
+        onAdd={() => addTag("keywords", keywordInput, () => setKeywordInput(""))}
+        onRemove={(t) => removeTag("keywords", t)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            addTag("keywords", keywordInput, () => setKeywordInput(""));
+          }
+        }}
+        placeholder="e.g. Computer Vision"
+      />
     </div>
   );
 };

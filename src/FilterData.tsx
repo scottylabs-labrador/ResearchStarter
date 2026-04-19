@@ -38,6 +38,11 @@ export const collegeOptions: OptionType[] = [
     label: "Tepper School of Business",
     color: "#000000",
   },
+  {
+    value: "Unaffiliated",
+    label: "Unaffiliated",
+    color: "#000000",
+  }
 ];
 
 export const departmentOptions: OptionType[] = [
@@ -263,4 +268,9 @@ export const departmentOptions: OptionType[] = [
     label: "Executive Education (Tepper)",
     color: "#FFC400",
   },
+  {
+    value: "Unaffiliated",
+    label: "Unaffiliated",
+    color: "#FFC400",
+  }
 ];

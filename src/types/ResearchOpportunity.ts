@@ -1,17 +1,23 @@
 export interface ResearchOpportunity {
-  id: string;
-  positionTitle: string;
-  college: string;
-  departmentArea: string;
-  educationRequirement: string;
-  compensationType: string;
-  location: string;
-  startSemester: string;
-  predictedEndSemester: string;
-  limitVisibility: boolean;
-  limitMajor: string;
-  allowDirectApplications: boolean;
-  website: string;
+  projectTitle: string;
+  contact: Record<string, string>;
+  department: string[];
   description: string;
-  requiredSkills: string[];
+  desiredSkillLevel: string;
+  paidUnpaid: string;
+  position: string;
+  prereqs: string[];
+  relevantLinks: string[];
+  source: string;
+  timeAdded: string;
+  timeCommitment: string;
+  anticipatedEndDate: string;
+  keywords: string[];
+  colleges: string[];
+  enableApply: boolean;
 }
+
+// Fields excluded from the creation form (set programmatically):
+//   source      — defaults to "Created by Professor"
+//   timeAdded   — defaults to current date (e.g. "4/18/26")
+//   enableApply — defaults to false
