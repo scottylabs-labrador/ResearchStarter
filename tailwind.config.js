@@ -45,9 +45,14 @@ export default {
           "0%": { transform: "translateX(-100%) scaleY(1.25) scaleX(1.20)" },
           "100%": { transform: "translateX(0%) scaleY(1.25) scaleX(1.20)" },
         },
+        dropIn: {
+          "0%": { opacity: "0", transform: "translateY(-6px) scale(0.97)" },
+          "100%": { opacity: "1", transform: "translateY(0) scale(1)" },
+        },
       },
       animation: {
         slidingIn: "slideIn 0.5s linear",
+        dropIn: "dropIn 160ms cubic-bezier(0.16, 1, 0.3, 1) forwards",
       },
     },
   },

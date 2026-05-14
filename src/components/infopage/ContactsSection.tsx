@@ -16,12 +16,12 @@ interface ContactsSectionProps {
 
 const ContactsSection: React.FC<ContactsSectionProps> = ({ contacts }) => {
   return (
-    <div className="bg-white p-6 rounded-lg mb-8">
-      <div className="flex items-center mb-4">
-        <PersonIcon className="text-gray-700 text-3xl mr-2" />
+    <div className="bg-white px-6 lg:px-8 py-8 mb-8">
+      <div className="flex items-center gap-2 mb-6">
+        <PersonIcon className="text-gray-700 text-3xl" />
         <h2 className="text-2xl font-bold text-gray-900">Contacts</h2>
       </div>
-      <div className="flex w-full overflow-x-auto space-x-4 pb-4">
+      <div className="flex w-full overflow-x-auto gap-4 pb-4">
         {contacts.map((contact, index) => (
           <ContactCard key={index} {...contact} />
         ))}

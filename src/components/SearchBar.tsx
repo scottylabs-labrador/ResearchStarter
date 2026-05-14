@@ -9,7 +9,7 @@ interface searchBarPropt {
 
 const SearchBar = ({ input, handleChange }: searchBarPropt) => {
   return (
-    <div className="w-full h-[5vh] ">
+    <div className="w-full">
       <InputBar input={input} handleChange={handleChange} />
     </div>
   );

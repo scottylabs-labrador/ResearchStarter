@@ -1,17 +1,15 @@
     import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import MailIcon from '@mui/icons-material/Mail'
-import LinkIcon from '@mui/icons-material/Link'
-import InfoIcon from '@mui/icons-material/Info'
 import { ResearchType } from '../DataTypes'
 import { parseContact, toArray } from '../utils'
-import RelatedOpportunities from '../components/RelatedOpportunities'
 import ResumeUploadPopup from '../components/infopage/ResumeUploadPopup'
 import InfoPageHeader from '../components/infopage/InfoPageHeader'
+import InfoSidebar from '../components/infopage/InfoSidebar'
 import ContactsSection from '../components/infopage/ContactsSection'
 import RelatedOpportunitiesSection from '../components/infopage/RelatedOpportunitiesSection'
 import { useSession } from "../lib/authClient"
+import DEV_MOCK_RESEARCHES from "../data/devMockResearches"
 
 const InfoPage: React.FC = () => {
         const { id } = useParams<{ id: string }>()
@@ -74,7 +72,21 @@ const InfoPage: React.FC = () => {
 
                 } catch (err) {
                     console.error("Error fetching data", err);
-                    setError("Failed to load research data");
+                    // Dev-only fallback when the backend is unreachable.
+                    if (
+                        import.meta.env.DEV &&
+                        import.meta.env.VITE_DEV_BYPASS_AUTH === "true"
+                    ) {
+                        const found = DEV_MOCK_RESEARCHES.find((item) => item._id === id);
+                        if (found) {
+                            setInfo(found);
+                            setAllResearch(DEV_MOCK_RESEARCHES);
+                        } else {
+                            setError(`Research with ID ${id} not found`);
+                        }
+                    } else {
+                        setError("Failed to load research data");
+                    }
                 } finally {
                     setLoading(false);
                 }
@@ -85,8 +97,9 @@ const InfoPage: React.FC = () => {
 
         useEffect(() => {
             async function fetchBookmark() {
-                console.log(info);
                 if (!info) return;
+                // Skip in dev bypass mode — no backend available
+                if (import.meta.env.DEV && import.meta.env.VITE_DEV_BYPASS_AUTH === "true") return;
                 const response = await fetch(`/api/users/${userId}`);
                 if (!response.ok) {
                     const message = `An error occurred: ${response.statusText}`;
@@ -94,8 +107,6 @@ const InfoPage: React.FC = () => {
                     return;
                 }
                 const userData = await response.json();
-                console.log(userData);
-                console.log(id);
                 if (userData.saved.includes(id)) {
                     handleSave(info);
                 } else {
@@ -193,10 +204,10 @@ const InfoPage: React.FC = () => {
         if (loading) {
             return (
                 <main className="min-h-screen max-w-7xl mx-auto">
-                    <div className="px-6 sm:px-6 lg:px-8 py-8">
+                    <div className="px-6 lg:px-8 py-6">
                         <button
                             onClick={handleBackClick}
-                            className="p-2 rounded-full hover:bg-gray-200 transition-colors"
+                            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
                             aria-label="Go back"
                         >
                             <ArrowBackIcon className="text-gray-600 text-3xl" />
@@ -216,10 +227,10 @@ const InfoPage: React.FC = () => {
         if (error || !info) {
             return (
                 <main className="min-h-screen max-w-7xl mx-auto">
-                    <div className="px-6 sm:px-6 lg:px-8 py-8">
+                    <div className="px-6 lg:px-8 py-6">
                         <button
                             onClick={handleBackClick}
-                            className="p-2 rounded-full hover:bg-gray-200 transition-colors"
+                            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
                             aria-label="Go back"
                         >
                             <ArrowBackIcon className="text-gray-600 text-3xl" />
@@ -244,16 +255,16 @@ const InfoPage: React.FC = () => {
 
         return (
             <main className="min-h-screen max-w-7xl mx-auto">
-                <div className="px-6 sm:px-6 lg:px-8 py-8">
+                <div className="px-6 lg:px-8 py-6">
                     <button
                         onClick={handleBackClick}
-                        className="p-2 rounded-full hover:bg-gray-200 transition-colors"
+                        className="p-2 rounded-full hover:bg-gray-100 transition-colors"
                         aria-label="Go back"
                     >
                         <ArrowBackIcon className="text-gray-600 text-3xl" />
                     </button>
                 </div>
-                
+
                 <InfoPageHeader
                     title={info.projectTitle}
                     professorOrLabName={Object.keys(info.contact).join(', ')}
@@ -263,119 +274,33 @@ const InfoPage: React.FC = () => {
                     isBookmarked={savedStates[info._id] || false}
                     onBookmarkToggle={handleBookmarkToggle}
                     onApplyClick={handleApply}
+                    position={info.position}
+                    compensation={info.paidUnpaid}
+                    timeCommitment={info.timeCommitment}
                 />
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-0">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        {/* Left Column */}
-                        <div className="lg:col-span-1 space-y-6">
-                            {/* Contact Info Card */}
-                            <div className="bg-light-color rounded-lg p-6 border border-gray-200">
-                                <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                                    <MailIcon className="text-gray-500" />
-                                    Contact Information
-                                </h2>
-                                <div className="space-y-2">
-                                    {Object.entries(info.contact).map(([andrewId, name]) => (
-                                        <p key={andrewId}>
-                                            <span className="font-medium">{name}</span>{" — "}
-                                            <a
-                                                href={`mailto:${andrewId}@andrew.cmu.edu`}
-                                                className="text-blue-600 hover:text-blue-800"
-                                            >
-                                                {andrewId}@andrew.cmu.edu
-                                            </a>
-                                        </p>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Relevant Links Card */}
-                            {info.relevantLinks && info.relevantLinks.length > 0 && (
-                                <div className="bg-light-color rounded-lg p-6 border border-gray-200">
-                                    <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                                        <LinkIcon className="text-gray-500" />
-                                        Relevant Links
-                                    </h2>
-                                    <div className="space-y-2">
-                                        {info.relevantLinks.map((link, i) => (
-                                            <a
-                                                key={i}
-                                                href={link.startsWith('http') ? link : `https://${link}`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-blue-600 hover:text-blue-800 break-words block"
-                                            >
-                                                {link}
-                                            </a>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Details Card */}
-                            {(info.position || info.paidUnpaid || info.timeCommitment || info.anticipatedEndDate || info.desiredSkillLevel || (info.prereqs && info.prereqs.length != 0)) && (
-                                <div className="bg-light-color rounded-lg p-6 border border-gray-200">
-                                    <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                                        <InfoIcon className="text-gray-500" />
-                                        Details
-                                    </h2>
-                                    <div className="space-y-4">
-                                        {info.position && (
-                                            <div>
-                                                <p className="font-medium">Position:</p>
-                                                <p>{info.position}</p>
-                                            </div>
-                                        )}
-                                        {info.paidUnpaid && (
-                                            <div>
-                                                <p className="font-medium">Compensation:</p>
-                                                <p>{info.paidUnpaid}</p>
-                                            </div>
-                                        )}
-                                        {info.desiredSkillLevel && (
-                                            <div>
-                                                <p className="font-medium">Desired Skill Level:</p>
-                                                <p>{info.desiredSkillLevel}</p>
-                                            </div>
-                                        )}
-                                        {info.timeCommitment && (
-                                            <div>
-                                                <p className="font-medium">Time Commitment:</p>
-                                                <p>{info.timeCommitment}</p>
-                                            </div>
-                                        )}
-                                        {info.anticipatedEndDate && (
-                                            <div>
-                                                <p className="font-medium">Anticipated End Date:</p>
-                                                <p>{info.anticipatedEndDate}</p>
-                                            </div>
-                                        )}
-                                        {info.prereqs && info.prereqs.length != 0 && (
-                                            <div>
-                                                <p className="font-medium">Prerequisites:</p>
-                                                <ul>
-                                                    {info.prereqs.map((prereq) => 
-                                                        <li>{prereq}</li>
-                                                    )}
-                                                </ul>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            )}
+                <div className="px-6 lg:px-8 pb-16">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                        {/* Description */}
+                        <div className="lg:col-span-2">
+                            <section>
+                                <p className="text-sm font-semibold text-gray-900 mb-3">
+                                    About this opportunity
+                                </p>
+                                {info.description ? (
+                                    <p className="text-base text-gray-700 leading-relaxed whitespace-pre-line break-words max-w-prose">
+                                        {info.description}
+                                    </p>
+                                ) : (
+                                    <p className="text-base text-gray-400 italic">
+                                        No description available.
+                                    </p>
+                                )}
+                            </section>
                         </div>
 
-                        {/* Right Column */}
-                        <div className="lg:col-span-2 space-y-8">
-                            {/* Main Content */}
-                            <div className="prose max-w-none">
-                                <h2 className="text-3xl font-semibold mb-4">About the Research</h2>
-                                {info.description ? (
-                                    <p className="text-700 whitespace-pre-line break-words">{info.description}</p>
-                                ) : (
-                                    <p className="text-gray-500 italic">No description available.</p>
-                                )}
-                            </div>
+                        {/* Sidebar */}
+                        <div className="lg:col-span-1">
+                            <InfoSidebar info={info} />
                         </div>
                     </div>
                 </div>

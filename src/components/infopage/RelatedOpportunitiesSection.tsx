@@ -18,15 +18,19 @@ interface RelatedOpportunitiesSectionProps {
 const RelatedOpportunitiesSection: React.FC<RelatedOpportunitiesSectionProps> = ({ opportunities }) => {
   return (
     <div className="w-screen ml-[calc(50%-50vw)] mb-8">
-      <div className="bg-violet-400 p-6 rounded-lg px-4 sm:px-6 lg:px-8">
-        <h2 className="font-jersey text-6xl font-bold text-gray-900 mb-4">Related opportunities</h2>
-        <div className="flex overflow-x-auto space-x-4 pb-4">
+      <div className="bg-brand-50 border-t border-gray-200 px-10 lg:px-16 py-12">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          Related opportunities
+        </h2>
+        <div className="flex overflow-x-auto gap-4 px-6 py-6 -mx-6 -my-6">
           {opportunities.map((opportunity, index) => (
             <OpportunityCard
               key={index}
               opportunityName={opportunity.opportunityName}
               isBookmarked={opportunity.isBookmarked}
-              onBookmarkToggle={() => console.log(`Bookmark toggled for ${opportunity.opportunityName}`)}
+              onBookmarkToggle={() =>
+                console.log(`Bookmark toggled for ${opportunity.opportunityName}`)
+              }
               professorName={opportunity.professorName}
               department={opportunity.department}
               date={opportunity.date}
@@ -41,5 +45,3 @@ const RelatedOpportunitiesSection: React.FC<RelatedOpportunitiesSectionProps> = 
 };
 
 export default RelatedOpportunitiesSection;
-
-

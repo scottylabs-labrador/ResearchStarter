@@ -10,6 +10,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 const NavBar = () => {
   const { data: session } = useSession();
@@ -35,15 +36,17 @@ const NavBar = () => {
   }, []);
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
-    isActive
-      ? "text-black bg-transparent hover:bg-light-color hover:text-black rounded-xl px-2 py-2"
-      : "text-black bg-transparent hover:bg-light-color hover:text-black rounded-xl px-2 py-2";
+    `flex items-center gap-2 px-3 py-2 text-sm border-b-2 transition-[color,border-color,transform] duration-200 ease-out active:scale-[0.97] ${
+      isActive
+        ? "text-tag-dark-color font-semibold border-tag-dark-color"
+        : "text-gray-700 font-medium border-transparent hover:text-tag-dark-color hover:border-violet-300"
+    }`;
 
   return (
     <>
-      <nav className={`bg-white block h-[10vh] w-full pl-4 fixed z-20 border-nav-border-color border-[1px] transition-transform duration-300 ${hidden ? "-translate-y-full" : "translate-y-0"}`}>
+      <nav className={`bg-white block h-[10vh] w-full px-8 fixed z-20 border-nav-border-color border-[1px] transition-transform duration-300 ${hidden ? "-translate-y-full" : "translate-y-0"}`}>
         <div className="grid grid-cols-12 justify-around w-full h-full items-center">
-          <div className="col-start-2 h-full flex items-center">
+          <div className="col-start-1 h-full flex items-center">
             {/* Logo */}
             <NavLink className="w-full h-full inline-block" to="/main">
               <img
@@ -71,20 +74,29 @@ const NavBar = () => {
           </div>
 
           {/* User avatar + dropdown */}
-          <div className="col-start-11 h-full flex items-center justify-end pr-4 relative" ref={dropdownRef}>
+          <div className="col-start-11 col-span-2 h-full flex items-center justify-end relative" ref={dropdownRef}>
+            {/* Pill-shaped trigger: avatar disc + chevron. The chevron rotation
+                makes it immediately clear this is a menu, not a status badge. */}
             <button
               onClick={() => setOpen((prev) => !prev)}
-              className="w-12 h-12 rounded-full bg-brand-300 hover:bg-brand-400 text-sm font-bold transition-colors"
               aria-label="Open user menu"
+              aria-expanded={open}
+              className="flex items-center gap-1.5 pl-1 pr-2 py-1 rounded-full hover:bg-gray-100 transition-colors duration-200 ease-out"
             >
-              {initial}
+              <div className="w-8 h-8 rounded-full bg-brand-300 flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
+                {initial !== "?" ? initial : <AccountCircleOutlinedIcon fontSize="small" />}
+              </div>
+              <KeyboardArrowDownIcon
+                fontSize="small"
+                className={`text-gray-500 transition-transform duration-200 ease-out ${open ? "rotate-180" : ""}`}
+              />
             </button>
 
             {open && (
-              <div className="absolute right-0 top-14 w-64 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
+              <div className="animate-dropIn origin-top-right absolute right-0 top-12 w-64 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
                 {/* Identity */}
                 <div className="px-4 py-3 border-b border-gray-100">
-                  <p className="font-semibold text-sm text-gray-900 truncate">{name}</p>
+                  <p className="font-semibold text-sm text-gray-900 truncate">{name || "Signed in"}</p>
                   <p className="text-xs text-gray-500 truncate">{email}</p>
                 </div>
 

@@ -8,11 +8,11 @@ interface InputBarPropt {
 
 const InputBar = ({ input, handleChange }: InputBarPropt) => {
   return (
-    <div className="w-full px-4 py-1 h-full flex items-center border rounded-full border-gray-500">
-      <FaSearch className="inline-block text-black" />
+    <div className="w-full h-11 px-4 flex items-center gap-3 border border-gray-300 rounded-full bg-white transition-colors focus-within:border-brand-400">
+      <FaSearch className="inline-block text-gray-400 text-sm" />
       <input
         type="text"
-        className="px-4 bg-transparent w-full text-black border-none h-full text-xl focus:outline-none"
+        className="w-full bg-transparent text-sm text-gray-900 border-none focus:outline-none"
         placeholder="Search for research opportunities..."
         value={input}
         onChange={(e) => {

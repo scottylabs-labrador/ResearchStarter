@@ -89,9 +89,9 @@ const Card = ({ research, showApplyButton, onApply }: CardPropt) => {
     <NavLink to={`/info/${research._id}`} className="no-underline text-black">
       <div className="w-full bg-white rounded-xl p-6 border border-violet-300 hover:shadow-[0_4px_20px_#E2CFFF] transition-all duration-300">
         {/* Header row: title + posted date + bookmark */}
-        <div className="flex items-start justify-between mb-2">
+        <div className="flex items-start justify-between gap-3 mb-3">
           <h3 className="font-bold text-xl hover:text-purple-700">{research.projectTitle}</h3>
-          <div className="flex items-center gap-2 flex-shrink-0 ml-4">
+          <div className="flex items-center gap-2 flex-shrink-0">
             {research.timeAdded && (
               <span className="text-sm text-gray-500">Posted: {research.timeAdded}</span>
             )}
@@ -110,7 +110,7 @@ const Card = ({ research, showApplyButton, onApply }: CardPropt) => {
         </div>
 
         {/* Info line: professor | college | position */}
-        <div className="flex flex-wrap items-center gap-x-1 text-sm text-gray-600 mb-1">
+        <div className="flex flex-wrap items-center gap-x-1 text-sm text-gray-600 mb-2">
           {(() => {
             const items: React.ReactNode[] = [];
             if (professorName) {
@@ -148,7 +148,7 @@ const Card = ({ research, showApplyButton, onApply }: CardPropt) => {
 
         {/* Date */}
         {research.anticipatedEndDate && (
-          <div className="flex items-center gap-1 text-sm text-gray-600 mb-1">
+          <div className="flex items-center gap-1 text-sm text-gray-600 mb-2">
             <CiCalendar className="text-base" />
             <span>{research.anticipatedEndDate}</span>
           </div>
@@ -156,7 +156,7 @@ const Card = ({ research, showApplyButton, onApply }: CardPropt) => {
 
         {/* Compensation */}
         {research.paidUnpaid && (
-          <div className="flex items-center gap-1 text-sm text-gray-600 mb-3">
+          <div className="flex items-center gap-1 text-sm text-gray-600 mb-4">
             <TbCoin className="text-base" />
             <span>{research.paidUnpaid}</span>
           </div>

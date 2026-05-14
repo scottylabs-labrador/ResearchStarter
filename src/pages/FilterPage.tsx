@@ -6,6 +6,7 @@ import SearchBar from "../components/SearchBar";
 import { ResearchType } from "../DataTypes";
 import { parseContact, toArray } from "../utils";
 import { useNavBarHidden } from "../contexts/NavBarContext";
+import DEV_MOCK_RESEARCHES from "../data/devMockResearches";
 
 type FilterKeysType = { [key: string]: boolean };
 
@@ -78,6 +79,14 @@ const FilterPage = () => {
         setResearches(transformed);
       } catch {
         console.log("Error Fetching Data");
+        // Local-only design preview fallback. Active ONLY when running `vite` in
+        // DEV with VITE_DEV_BYPASS_AUTH=true. Stripped from production builds.
+        if (
+          import.meta.env.DEV &&
+          import.meta.env.VITE_DEV_BYPASS_AUTH === "true"
+        ) {
+          setResearches(DEV_MOCK_RESEARCHES);
+        }
       } finally {
         setLoading(false);
       }
@@ -239,7 +248,7 @@ const FilterPage = () => {
     return results;
   }, [researches, collegeChecks, selectedDepartment, selectedEducation, selectedCompensation, selectedSemester, input, sortBy]);
 
-  const contentLeft = sidebarVisible ? "240px" : "0px";
+  const contentLeft = sidebarVisible ? "280px" : "0px";
 
   return (
     <>
@@ -270,66 +279,87 @@ const FilterPage = () => {
           height: navHidden ? "100vh" : "90vh",
         }}
       >
-        {/* Header: search bar + filters + sort — collapses on scroll like the navbar */}
+        {/* Header: search bar + filters + sort — collapses on scroll like the navbar.
+            grid-rows-[1fr]→[0fr] gives a clean, self-sizing collapse without the
+            magic max-h-[300px] clip (which used to truncate wrapped filter chips). */}
         <div
-          className={`px-10 pt-6 pb-4 transition-all duration-300 overflow-hidden ${
-            searchBarHidden ? "max-h-0 pt-0 pb-0 opacity-0" : "max-h-[300px] opacity-100"
+          className={`grid transition-all duration-300 ${
+            searchBarHidden ? "grid-rows-[0fr]" : "grid-rows-[1fr]"
           }`}
         >
-          {/* Show sidebar button when hidden */}
-          <div className="flex items-center gap-4 mb-4">
-            {!sidebarVisible && (
-              <button
-                onClick={() => setSidebarVisible(true)}
-                className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 bg-gray-100 px-3 py-1.5 rounded-full border border-gray-300"
-              >
-                <span className="text-xs">›</span> Filter
-              </button>
-            )}
-            <h1 className="text-4xl font-extrabold">Search</h1>
-          </div>
+          <div
+            className={`overflow-hidden transition-all duration-300 ${
+              searchBarHidden ? "opacity-0" : "opacity-100"
+            }`}
+          >
+            <div className="px-8 py-6">
+              {/* Show sidebar button when hidden */}
+              <div className="flex items-center gap-4 mb-4">
+                {!sidebarVisible && (
+                  <button
+                    onClick={() => setSidebarVisible(true)}
+                    className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full border border-gray-300 transition-colors duration-200 ease-out"
+                  >
+                    <span className="text-xs">›</span> Filter
+                  </button>
+                )}
+                <h1 className="text-2xl font-semibold text-gray-800">Search</h1>
+              </div>
 
-          <div className="w-full mb-3">
-            <SearchBar input={input} handleChange={setInput} />
-          </div>
+              <div className="w-full mb-6">
+                <SearchBar input={input} handleChange={setInput} />
+              </div>
 
-          {/* Active filter chips + sort */}
-          <div className="flex items-center justify-between">
-            <div className="flex flex-wrap gap-2">
-              {activeFilters.map((filter) => (
-                <button
-                  key={`${filter.type}-${filter.value}`}
-                  onClick={() => removeFilter(filter)}
-                  className="flex items-center gap-1 px-3 py-1 bg-brand-50 border border-purple-300 rounded-full text-sm text-purple-700 hover:bg-purple-100"
-                >
-                  {filter.label}
-                  <span className="ml-1 text-xs font-bold">×</span>
-                </button>
-              ))}
-            </div>
-            <div className="flex items-center gap-3 text-sm text-gray-600 flex-shrink-0">
-              <button
-                onClick={() => setSortBy("year")}
-                className={`flex items-center gap-1 ${sortBy === "year" ? "text-gray-900 font-medium" : ""}`}
-              >
-                Year <span className="text-xs">▼</span>
-              </button>
-              <button
-                onClick={() => setSortBy("time")}
-                className={`flex items-center gap-1 ${sortBy === "time" ? "text-gray-900 font-medium" : ""}`}
-              >
-                Time <span className="text-xs">▼</span>
-              </button>
+              {/* Active filter chips + sort */}
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex flex-wrap gap-2">
+                  {activeFilters.map((filter) => (
+                    <button
+                      key={`${filter.type}-${filter.value}`}
+                      onClick={() => removeFilter(filter)}
+                      className="flex items-center gap-1 px-3 py-1 bg-brand-50 border border-purple-300 rounded-full text-sm text-purple-700 transition-colors duration-200 ease-out hover:bg-purple-100 active:scale-[0.97]"
+                    >
+                      {filter.label}
+                      <span className="ml-1 text-xs font-bold">×</span>
+                    </button>
+                  ))}
+                </div>
+                {/* Sort: segmented control. Active option lifts to white over the
+                    gray track — same "active vs hover have different shapes"
+                    discipline used in the navbar underline. */}
+                <div className="inline-flex items-center bg-gray-100 rounded-md p-0.5 text-sm flex-shrink-0">
+                  <button
+                    onClick={() => setSortBy("year")}
+                    className={`px-3 py-1 rounded transition-colors duration-200 ease-out ${
+                      sortBy === "year"
+                        ? "bg-white text-gray-900 font-medium"
+                        : "text-gray-600 hover:text-gray-900"
+                    }`}
+                  >
+                    Year
+                  </button>
+                  <button
+                    onClick={() => setSortBy("time")}
+                    className={`px-3 py-1 rounded transition-colors duration-200 ease-out ${
+                      sortBy === "time"
+                        ? "bg-white text-gray-900 font-medium"
+                        : "text-gray-600 hover:text-gray-900"
+                    }`}
+                  >
+                    Time
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Cards */}
         <div
-          className="px-10 pb-6 overflow-y-auto flex-1"
+          className="px-8 pb-6 overflow-y-auto flex-1"
           onScroll={handleScroll}
         >
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-4">
             {loading ? (
               <div className="flex flex-col items-center pt-10">
                 <h2>Loading...</h2>

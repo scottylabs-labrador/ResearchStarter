@@ -6,6 +6,8 @@ import { v4 as uuidv4 } from "uuid";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkIconUnfilled from "@mui/icons-material/BookmarkBorderOutlined";
 import PersonIcon from "@mui/icons-material/Person";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { parseContact, toArray } from "../utils";
 
 function professorPublicProfilePath(p: ProfessorType): string {
@@ -226,49 +228,80 @@ const MainPage = () => {
 
   return (
     <div>
-      <div className="w-[100vw] h-[60vh] bg-gradient-to-r from-dark-color from-30% to-light-color to-90% grid grid-cols-10 grid-rows-4">
-        <div className="col-start-1 col-end-4 grid-rows-1 flex items-center justify-center">
-          <h2 className="font-jersey text-5xl font-semibold italic transition translate-x-5">
-            Welcome to...
-          </h2>
-        </div>
-        <div className="col-start-2 col-end-6 row-start-2 row-end-4 flex items-center">
-          <h1 className="font-jersey text-9xl leading-[0.8] tracking-wider font-bold animate-slidingIn transform scale-y-125 scale-x-120 origin-left">
-            CMU Research
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      {/* Single full-width container. Gradient transitions from deep purple at
+          ~65% to the lavender light-color — same two-tone concept but as a
+          smooth blend, no hard panel seam. */}
+      <div
+        className="w-[100vw] min-h-[72vh] relative overflow-hidden flex items-center"
+        style={{ background: "linear-gradient(to right, #7E55B2 0%, #7E55B2 50%, #9E7FCC 75%, #B99EE0 100%)" }}
+      >
+
+        {/* Content — px-20 gives noticeably more breathing room from the edge */}
+        <div className="relative z-10 px-20 py-20 max-w-2xl">
+
+          {/* Eyebrow */}
+          <p className="text-xs font-semibold uppercase tracking-widest text-brand-300 mb-6">
+            Carnegie Mellon University
+          </p>
+
+          {/* Headline */}
+          <h1
+            className="font-jersey font-bold tracking-tight leading-[0.88] text-white mb-7"
+            style={{ fontSize: "clamp(64px, 8vw, 112px)" }}
+          >
+            CMU<br />Research
           </h1>
-        </div>
-        <div className="col-start-2 col-end-5 row-start-4 flex items-center">
-          <div>
-            <button className="px-5 py-3 text-lg bg-tag-dark-color text-white rounded-xl mr-10">
-              <NavLink to="/" className="font-jersey font-bold text-lg">Start Applying</NavLink>
-            </button>
-            <button className="px-5 py-3 text-lg bg-transparent text-tag-dark-color rounded-xl font-bold border-[2px] border-tag-dark-color rounded">
-              <NavLink to="/" className="font-jersey font-bold text-lg">Start Posting</NavLink>
-            </button>
+
+          {/* Descriptor */}
+          <p className="text-base text-white/70 leading-relaxed max-w-sm mb-10">
+            Discover faculty-led research opportunities across every CMU college and department.
+          </p>
+
+          {/* CTAs */}
+          <div className="flex items-center gap-6">
+            {/* Primary: lifts on hover with shadow, scales on press */}
+            <NavLink
+              to="/"
+              className="px-7 py-3 bg-white text-card-highlight font-semibold text-sm rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(0,0,0,0.25)] active:translate-y-0 active:shadow-none active:scale-[0.97]"
+            >
+              Start Applying
+            </NavLink>
+            {/* Secondary: underline grows in from left on hover */}
+            <NavLink
+              to="/"
+              className="text-sm font-semibold text-white/80 hover:text-white transition-colors duration-200 underline-offset-4 decoration-white/40 hover:decoration-white hover:underline"
+            >
+              Start Posting &rarr;
+            </NavLink>
           </div>
         </div>
       </div>
+
+      {/* ── Research Opportunities carousel ──────────────────────────────── */}
       <div className="w-[100vw] px-14 py-16">
         <div className="mb-8 flex items-center justify-between gap-4">
-          <h1 className="font-jersey font-bold text-4xl">Selected Research Opportunities:</h1>
+          {/* Section heading: Inter bold — navigational label, not a display moment.
+              Jersey lives only in the hero. */}
+          <h2 className="font-bold text-2xl text-gray-900">Selected Research Opportunities</h2>
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => handleOpportunityScrollButton("left")}
               disabled={!canScrollOpportunitiesLeft}
               aria-label="Scroll selected opportunities left"
-              className="rounded-lg border border-tag-dark-color px-4 py-2 font-semibold text-tag-dark-color transition disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-lg border border-tag-dark-color px-3 py-2 text-tag-dark-color transition hover:bg-brand-50 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              {"<-"}
+              <ArrowBackIcon fontSize="small" />
             </button>
             <button
               type="button"
               onClick={() => handleOpportunityScrollButton("right")}
               disabled={!canScrollOpportunitiesRight}
               aria-label="Scroll selected opportunities right"
-              className="rounded-lg bg-tag-dark-color px-4 py-2 font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-lg bg-tag-dark-color px-3 py-2 text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              {"->"}
+              <ArrowForwardIcon fontSize="small" />
             </button>
           </div>
         </div>
@@ -277,10 +310,14 @@ const MainPage = () => {
           className="flex overflow-x-auto gap-6 pb-4 scrollbar-hide"
           onScroll={handleScroll}
         >
-          {selectedOpportunities.map((research) => (
+          {selectedOpportunities.length === 0 ? (
+            <p className="text-gray-500 text-sm py-8">No research opportunities to show yet.</p>
+          ) : selectedOpportunities.map((research) => (
             <div key={research._id} className="flex-none w-[400px]">
               <div className="w-full h-[300px] bg-light-color rounded-xl p-6 flex flex-col">
-                <h3 className="font-jersey font-bold text-4xl mb-2 shrink-0">{research.projectTitle}</h3>
+                {/* Card title: Inter semibold instead of Jersey display — display
+                    fonts are for headings, not 5-10 word content strings */}
+                <h3 className="font-semibold text-lg leading-snug mb-2 shrink-0">{research.projectTitle}</h3>
                 <div className="flex gap-2 flex-wrap mb-3 shrink-0">
                   {(Array.isArray(research.college) ? research.college : []).map((word) => (
                     <Tag key={uuidv4().concat("col")} keyword={word} />
@@ -293,12 +330,13 @@ const MainPage = () => {
                   ))}
                 </div>
                 <div className="mb-4 flex-1 min-h-0 overflow-y-auto pr-1">
-                  <p className="text-sm">{research.description}</p>
+                  <p className="text-sm leading-relaxed text-gray-700">{research.description}</p>
                 </div>
                 <div className="mt-auto shrink-0 flex justify-between items-center">
+                  {/* Learn More: brand color instead of the grey learn-more-color token */}
                   <NavLink
                     to={`/info/${research._id}`}
-                    className="inline-block px-3 py-2 bg-learn-more-color shadow-black shadow-sm text-black rounded hover:bg-opacity-90"
+                    className="inline-block px-3 py-1.5 bg-tag-dark-color text-white text-sm rounded-lg hover:opacity-90 transition-opacity"
                   >
                     Learn More
                   </NavLink>
@@ -315,52 +353,43 @@ const MainPage = () => {
         </div>
       </div>
 
-      {/* Info Banner Section */}
+      {/* ── Info Banner ──────────────────────────────────────────────────── */}
       <div className="w-[100vw] bg-gradient-to-r from-dark-color to-light-color px-14 py-20">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left - App Screenshot */}
-          <div className="bg-white rounded-xl shadow-lg p-4 overflow-hidden">
-            <div className="bg-gray-100 rounded-lg p-6 space-y-4">
-              <div className="h-6 bg-gray-300 rounded w-3/4"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-              <div className="flex gap-2 flex-wrap">
-                <span className="px-3 py-1 bg-violet-300 rounded-full text-xs">Dietrich</span>
-                <span className="px-3 py-1 bg-violet-300 rounded-full text-xs">Decision Science</span>
-                <span className="px-3 py-1 bg-violet-300 rounded-full text-xs">Undergrad</span>
-                <span className="px-3 py-1 bg-violet-300 rounded-full text-xs">Topic</span>
-              </div>
-              <div className="grid grid-cols-2 gap-4 mt-4">
-                <div className="space-y-2">
-                  <div className="h-4 bg-gray-300 rounded w-2/3"></div>
-                  <div className="h-3 bg-gray-200 rounded w-full"></div>
-                  <div className="h-3 bg-gray-200 rounded w-full"></div>
-                  <div className="h-3 bg-gray-200 rounded w-3/4"></div>
-                </div>
-                <div className="space-y-2">
-                  <div className="h-4 bg-gray-300 rounded w-1/2"></div>
-                  <div className="h-3 bg-gray-200 rounded w-full"></div>
-                  <div className="h-3 bg-gray-200 rounded w-full"></div>
-                  <div className="h-3 bg-gray-200 rounded w-5/6"></div>
+          {/* Left - feature list replacing the unfinished placeholder wireframe */}
+          <div className="bg-white bg-opacity-60 rounded-2xl p-8 space-y-6">
+            {[
+              { label: "Filter by college, department & compensation", detail: "Narrow down to exactly what fits your schedule and goals." },
+              { label: "Browse professor profiles", detail: "See research focus areas, open positions, and contact info in one place." },
+              { label: "Save opportunities for later", detail: "Bookmark anything that catches your eye and revisit it anytime." },
+            ].map(({ label, detail }) => (
+              <div key={label} className="flex gap-4 items-start">
+                <div className="w-2 h-2 rounded-full bg-tag-dark-color mt-2 flex-shrink-0" />
+                <div>
+                  <p className="font-semibold text-gray-900 text-sm">{label}</p>
+                  <p className="text-gray-600 text-sm leading-relaxed">{detail}</p>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
 
           {/* Right - Text Content */}
           <div>
-            <h2 className="font-jersey font-bold text-6xl leading-tight mb-6">
-              Get information of current CMU Research Opportunities with Ease!
+            {/* Inter bold — a second Jersey headline would compete with the hero
+                and devalue the display font. Inter at this size is authoritative
+                without stealing the hero's identity. */}
+            <h2 className="font-bold text-4xl leading-tight tracking-tight text-gray-900 mb-4">
+              Find your next research opportunity at CMU
             </h2>
-            <p className="text-gray-800 mb-8 leading-relaxed">
-              Browse through a curated collection of research opportunities across all CMU colleges
-              and departments. Filter by your interests, save opportunities for later, and connect
-              directly with professors and lab leads. Whether you're an undergraduate looking for
-              your first research experience or a graduate student seeking new collaborations,
-              we make it easy to find the perfect match.
+            <p className="text-base text-gray-700 mb-8 leading-relaxed max-w-prose">
+              Browse a curated collection of research opportunities across every CMU college and
+              department. Filter by your interests, save for later, and connect directly with
+              professors&#8202;&mdash;&#8202;whether you&rsquo;re an undergraduate looking for your first
+              lab or a graduate student seeking new collaborations.
             </p>
             <NavLink
               to="/"
-              className="inline-block px-6 py-3 te bg-white text-black font-bold rounded-lg hover:bg-gray-800 transition-colors"
+              className="inline-block px-6 py-3 bg-tag-dark-color text-white font-bold rounded-xl hover:opacity-90 transition-opacity active:scale-[0.97] transition-transform"
             >
               Start Searching
             </NavLink>
@@ -368,28 +397,28 @@ const MainPage = () => {
         </div>
       </div>
 
-      {/* Professors Section */}
+      {/* ── Featured Professors carousel ─────────────────────────────────── */}
       <div className="w-[100vw] px-14 py-16">
         <div className="mb-8 flex items-center justify-between gap-4">
-          <h1 className="font-jersey font-bold text-4xl">Featured Professors:</h1>
+          <h2 className="font-bold text-2xl text-gray-900">Featured Professors</h2>
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => handleProfessorScrollButton("left")}
               disabled={!canScrollProfessorsLeft}
               aria-label="Scroll featured professors left"
-              className="rounded-lg border border-tag-dark-color px-4 py-2 font-semibold text-tag-dark-color transition disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-lg border border-tag-dark-color px-3 py-2 text-tag-dark-color transition hover:bg-brand-50 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              {"<-"}
+              <ArrowBackIcon fontSize="small" />
             </button>
             <button
               type="button"
               onClick={() => handleProfessorScrollButton("right")}
               disabled={!canScrollProfessorsRight}
               aria-label="Scroll featured professors right"
-              className="rounded-lg bg-tag-dark-color px-4 py-2 font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-lg bg-tag-dark-color px-3 py-2 text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              {"->"}
+              <ArrowForwardIcon fontSize="small" />
             </button>
           </div>
         </div>
@@ -398,7 +427,9 @@ const MainPage = () => {
           className="flex overflow-x-auto gap-6 pb-4 scrollbar-hide"
           onScroll={handleProfScroll}
         >
-          {selectedProfessors.map((professor) => (
+          {selectedProfessors.length === 0 ? (
+            <p className="text-gray-500 text-sm py-8">No featured professors to show yet.</p>
+          ) : selectedProfessors.map((professor) => (
             <div key={professor._id} className="flex-none w-[300px]">
               <div className="w-full h-[350px] bg-light-color rounded-xl p-6 flex flex-col items-center text-center justify-between">
                 <Link
@@ -416,7 +447,7 @@ const MainPage = () => {
                       <PersonIcon className="text-gray-400" style={{ fontSize: '3rem' }} />
                     )}
                   </div>
-                  <h3 className="font-bold text-xl mb-1 hover:text-purple-700">
+                  <h3 className="font-bold text-xl mb-1 hover:text-tag-dark-color transition-colors">
                     {professor.name}
                   </h3>
                   {professor.department.length > 0 && (
@@ -442,7 +473,7 @@ const MainPage = () => {
                   {professor.email && (
                     <a
                       href={`mailto:${professor.email}`}
-                      className="text-sm text-blue-600 hover:text-blue-800"
+                      className="text-sm text-tag-dark-color hover:opacity-80 transition-opacity"
                     >
                       {professor.email}
                     </a>
