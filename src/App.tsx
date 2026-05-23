@@ -34,6 +34,9 @@ const router = createBrowserRouter(
 const App = () => {
   const { data: session, isPending } = useSession();
 
+  // temporary bypass for auth since database is down, REMEMBER TO REMOVE
+  return <RouterProvider router={router} />;
+
   if (isPending) return null;
 
   return session ? <RouterProvider router={router} /> : <SignInPage />;
