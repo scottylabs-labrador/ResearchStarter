@@ -263,7 +263,7 @@ const MainPage = () => {
             {/* Primary: lifts on hover with shadow, scales on press */}
             <NavLink
               to="/"
-              className="px-7 py-3 bg-white text-card-highlight font-semibold text-sm rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(0,0,0,0.25)] active:translate-y-0 active:shadow-none active:scale-[0.97]"
+              className="px-7 py-3 bg-white text-card-highlight font-semibold text-sm rounded-xl transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(0,0,0,0.25)] active:translate-y-0 active:shadow-none active:scale-[0.97]"
             >
               Start Applying
             </NavLink>
@@ -290,7 +290,7 @@ const MainPage = () => {
               onClick={() => handleOpportunityScrollButton("left")}
               disabled={!canScrollOpportunitiesLeft}
               aria-label="Scroll selected opportunities left"
-              className="rounded-lg border border-tag-dark-color px-3 py-2 text-tag-dark-color transition hover:bg-brand-50 disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-lg border border-tag-dark-color px-3 py-2 text-tag-dark-color transition-[background-color] duration-150 ease-out hover:bg-brand-50 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ArrowBackIcon fontSize="small" />
             </button>
@@ -299,7 +299,7 @@ const MainPage = () => {
               onClick={() => handleOpportunityScrollButton("right")}
               disabled={!canScrollOpportunitiesRight}
               aria-label="Scroll selected opportunities right"
-              className="rounded-lg bg-tag-dark-color px-3 py-2 text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-lg bg-tag-dark-color px-3 py-2 text-white transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ArrowForwardIcon fontSize="small" />
             </button>
@@ -336,7 +336,7 @@ const MainPage = () => {
                   {/* Learn More: brand color instead of the grey learn-more-color token */}
                   <NavLink
                     to={`/info/${research._id}`}
-                    className="inline-block px-3 py-1.5 bg-tag-dark-color text-white text-sm rounded-lg hover:opacity-90 transition-opacity"
+                    className="inline-block px-3 py-1.5 bg-tag-dark-color text-white text-sm rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
                   >
                     Learn More
                   </NavLink>
@@ -389,7 +389,7 @@ const MainPage = () => {
             </p>
             <NavLink
               to="/"
-              className="inline-block px-6 py-3 bg-tag-dark-color text-white font-bold rounded-xl hover:opacity-90 transition-opacity active:scale-[0.97] transition-transform"
+              className="inline-block px-6 py-3 bg-tag-dark-color text-white font-bold rounded-xl transition-[opacity,transform] duration-200 ease-out hover:opacity-90 active:scale-[0.97]"
             >
               Start Searching
             </NavLink>
@@ -407,7 +407,7 @@ const MainPage = () => {
               onClick={() => handleProfessorScrollButton("left")}
               disabled={!canScrollProfessorsLeft}
               aria-label="Scroll featured professors left"
-              className="rounded-lg border border-tag-dark-color px-3 py-2 text-tag-dark-color transition hover:bg-brand-50 disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-lg border border-tag-dark-color px-3 py-2 text-tag-dark-color transition-[background-color] duration-150 ease-out hover:bg-brand-50 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ArrowBackIcon fontSize="small" />
             </button>
@@ -416,7 +416,7 @@ const MainPage = () => {
               onClick={() => handleProfessorScrollButton("right")}
               disabled={!canScrollProfessorsRight}
               aria-label="Scroll featured professors right"
-              className="rounded-lg bg-tag-dark-color px-3 py-2 text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-lg bg-tag-dark-color px-3 py-2 text-white transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ArrowForwardIcon fontSize="small" />
             </button>

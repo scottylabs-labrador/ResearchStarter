@@ -272,7 +272,7 @@ const FilterPage = () => {
 
       {/* Main content area */}
       <div
-        className="fixed right-0 bg-white transition-all duration-300 overflow-hidden flex flex-col"
+        className="fixed right-0 bg-white transition-[left,top,height] duration-300 ease-out overflow-hidden flex flex-col"
         style={{
           top: navHidden ? 0 : "10vh",
           left: contentLeft,
@@ -283,12 +283,12 @@ const FilterPage = () => {
             grid-rows-[1fr]→[0fr] gives a clean, self-sizing collapse without the
             magic max-h-[300px] clip (which used to truncate wrapped filter chips). */}
         <div
-          className={`grid transition-all duration-300 ${
+          className={`grid transition-[grid-template-rows] duration-300 ease-out ${
             searchBarHidden ? "grid-rows-[0fr]" : "grid-rows-[1fr]"
           }`}
         >
           <div
-            className={`overflow-hidden transition-all duration-300 ${
+            className={`overflow-hidden transition-opacity duration-200 ease-out ${
               searchBarHidden ? "opacity-0" : "opacity-100"
             }`}
           >

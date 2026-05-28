@@ -36,7 +36,7 @@ const NavBar = () => {
   }, []);
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center gap-2 px-3 py-2 text-sm border-b-2 transition-[color,border-color,transform] duration-200 ease-out active:scale-[0.97] ${
+    `flex items-center gap-2 px-3 py-2 text-sm border-b-2 transition-[color,border-color] duration-150 ease-out active:scale-[0.97] ${
       isActive
         ? "text-tag-dark-color font-semibold border-tag-dark-color"
         : "text-gray-700 font-medium border-transparent hover:text-tag-dark-color hover:border-violet-300"
@@ -44,7 +44,7 @@ const NavBar = () => {
 
   return (
     <>
-      <nav className={`bg-white block h-[10vh] w-full px-8 fixed z-20 border-nav-border-color border-[1px] transition-transform duration-300 ${hidden ? "-translate-y-full" : "translate-y-0"}`}>
+      <nav className={`bg-white block h-[10vh] w-full px-8 fixed z-20 border-nav-border-color border-[1px] transition-transform duration-300 ease-out ${hidden ? "-translate-y-full" : "translate-y-0"}`}>
         <div className="grid grid-cols-12 justify-around w-full h-full items-center">
           <div className="col-start-1 h-full flex items-center">
             {/* Logo */}
@@ -81,14 +81,14 @@ const NavBar = () => {
               onClick={() => setOpen((prev) => !prev)}
               aria-label="Open user menu"
               aria-expanded={open}
-              className="flex items-center gap-1.5 pl-1 pr-2 py-1 rounded-full hover:bg-gray-100 transition-colors duration-200 ease-out"
+              className="flex items-center gap-1.5 pl-1 pr-2 py-1 rounded-full hover:bg-gray-100 transition-colors duration-150 ease-out active:scale-[0.97]"
             >
               <div className="w-8 h-8 rounded-full bg-brand-300 flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
                 {initial !== "?" ? initial : <AccountCircleOutlinedIcon fontSize="small" />}
               </div>
               <KeyboardArrowDownIcon
                 fontSize="small"
-                className={`text-gray-500 transition-transform duration-200 ease-out ${open ? "rotate-180" : ""}`}
+                className={`text-gray-500 transition-transform duration-200 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] ${open ? "rotate-180" : ""}`}
               />
             </button>
 
@@ -104,7 +104,7 @@ const NavBar = () => {
                 <NavLink
                   to="/profile"
                   onClick={() => setOpen(false)}
-                  className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150 active:scale-[0.97]"
                 >
                   <AccountCircleOutlinedIcon fontSize="small" />
                   Manage account
@@ -113,7 +113,7 @@ const NavBar = () => {
                 {/* Sign out */}
                 <button
                   onClick={() => { setOpen(false); signOut(); }}
-                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150 active:scale-[0.97]"
                 >
                   <LogoutOutlinedIcon fontSize="small" />
                   Sign out

@@ -87,7 +87,7 @@ const Card = ({ research, showApplyButton, onApply }: CardPropt) => {
 
   return (
     <NavLink to={`/info/${research._id}`} className="no-underline text-black">
-      <div className="w-full bg-white rounded-xl p-6 border border-violet-300 hover:shadow-[0_4px_20px_#E2CFFF] transition-all duration-300">
+      <div className="w-full bg-white rounded-xl p-6 border border-violet-300 hover:shadow-[0_4px_20px_#E2CFFF] transition-shadow duration-200 ease-out active:scale-[0.98]">
         {/* Header row: title + posted date + bookmark */}
         <div className="flex items-start justify-between gap-3 mb-3">
           <h3 className="font-bold text-xl hover:text-purple-700">{research.projectTitle}</h3>
