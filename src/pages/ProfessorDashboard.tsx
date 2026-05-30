@@ -157,7 +157,7 @@ const ProfessorDashboard = () => {
         {!showCreateForm && (
           <button
             onClick={() => setShowCreateForm(true)}
-            className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+            className="px-4 py-2 bg-card-highlight text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
           >
             + Add Research Opportunity
           </button>
@@ -179,13 +179,13 @@ const ProfessorDashboard = () => {
             <button
               onClick={handleAdd}
               disabled={!isFormValid(newOpportunity)}
-              className="w-full py-3 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 bg-card-highlight text-white font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Add
             </button>
             <button
               onClick={handleDiscard}
-              className="w-full py-3 bg-red-400 text-white rounded-lg font-semibold hover:bg-red-500"
+              className="w-full py-3 bg-red-500 text-white font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
             >
               Discard
             </button>
@@ -202,13 +202,13 @@ const ProfessorDashboard = () => {
             <div className="flex justify-center space-x-2">
               <button
                 onClick={() => setShowConfirmDiscard(false)}
-                className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+                className="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg transition-colors duration-150 ease-out hover:bg-gray-50 active:scale-[0.97]"
               >
                 No
               </button>
               <button
                 onClick={confirmDiscard}
-                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                className="px-4 py-2 bg-red-500 text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
               >
                 Discard
               </button>

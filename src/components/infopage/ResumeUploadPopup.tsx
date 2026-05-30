@@ -37,8 +37,8 @@ const ResumeUploadPopup: React.FC<ResumeUploadPopupProps> = ({ isOpen, onClose, 
             file:mr-4 file:py-2 file:px-4
             file:rounded-full file:border-0
             file:text-sm file:font-semibold
-            file:bg-blue-50 file:text-blue-700
-            hover:file:bg-blue-100 mb-4"
+            file:bg-brand-50 file:text-purple-700
+            hover:file:bg-purple-100 mb-4"
         />
         {selectedFile && (
           <p className="text-sm text-gray-700 mb-4">Selected file: {selectedFile.name}</p>
@@ -46,16 +46,14 @@ const ResumeUploadPopup: React.FC<ResumeUploadPopupProps> = ({ isOpen, onClose, 
         <div className="flex justify-end space-x-4">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors"
+            className="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg transition-colors duration-150 ease-out hover:bg-gray-50 active:scale-[0.97]"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={!selectedFile}
-            className={"px-4 py-2 rounded-lg text-white font-semibold " +
-              (selectedFile ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-300 cursor-not-allowed') +
-            " transition-colors"}
+            className="px-4 py-2 bg-card-highlight text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Upload
           </button>

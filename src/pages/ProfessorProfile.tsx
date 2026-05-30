@@ -139,7 +139,7 @@ const ProfessorProfile = () => {
 
       {/* Tab bar */}
       <div className="max-w-4xl w-full border-b border-gray-300 flex justify-center">
-        <button className="px-6 py-3 text-gray-900 border-b-2 border-violet-500 font-medium">
+        <button className="px-6 py-3 text-gray-900 border-b-2 border-card-highlight font-medium">
           Research Listing
         </button>
       </div>
@@ -172,7 +172,7 @@ const ProfessorProfile = () => {
 
       {/* View All button */}
       <div className="max-w-4xl w-full my-10">
-        <button className="w-full py-3 bg-violet-500 text-white rounded-lg text-lg font-medium hover:bg-violet-600 transition-colors">
+        <button className="w-full py-3 bg-card-highlight text-white text-lg font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]">
           View All
         </button>
       </div>

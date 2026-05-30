@@ -66,13 +66,13 @@ const BioBlurbSection: React.FC<BioBlurbSectionProps> = ({
             <div className="flex justify-end space-x-2 mt-3">
               <button
                 onClick={handleCancel}
-                className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+                className="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg transition-colors duration-150 ease-out hover:bg-gray-50 active:scale-[0.97]"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveBio}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                className="px-4 py-2 bg-card-highlight text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
               >
                 Save
               </button>

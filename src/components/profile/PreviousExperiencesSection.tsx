@@ -164,7 +164,7 @@ const PreviousExperiencesSection = ({
                   <div className="flex justify-end space-x-2 mt-2">
                     <button
                       onClick={handleCancelEdit}
-                      className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300 text-sm"
+                      className="px-3 py-1 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg transition-colors duration-150 ease-out hover:bg-gray-50 active:scale-[0.97]"
                     >
                       Cancel
                     </button>
@@ -173,13 +173,13 @@ const PreviousExperiencesSection = ({
                         setExperienceToDelete(experience.id);
                         setShowConfirmDeleteModal(true);
                       }}
-                      className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 text-sm"
+                      className="px-3 py-1 bg-red-500 text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
                     >
                       Delete
                     </button>
                     <button
                       onClick={() => handleSaveEdit(experience.id)}
-                      className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm"
+                      className="px-3 py-1 bg-card-highlight text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
                     >
                       Save
                     </button>
@@ -209,7 +209,7 @@ const PreviousExperiencesSection = ({
                   </div>
                   <button
                     onClick={() => handleEditClick(experience)}
-                    className="text-blue-500 hover:text-blue-700 text-sm"
+                    className="text-sm text-purple-600 hover:text-purple-800 transition-colors duration-200 ease-out"
                   >
                     Edit
                   </button>
@@ -219,13 +219,13 @@ const PreviousExperiencesSection = ({
           ))}
           <button
             onClick={onBackToProfileClick}
-            className="mt-4 ml-2 px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+            className="mt-4 ml-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg transition-colors duration-150 ease-out hover:bg-gray-50 active:scale-[0.97]"
           >
             Back to Profile
           </button>
           <button
             onClick={onAddExperienceClick}
-            className="mt-4 ml-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+            className="mt-4 ml-2 px-4 py-2 bg-card-highlight text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
           >
             + Add New Experience
           </button>
@@ -243,13 +243,13 @@ const PreviousExperiencesSection = ({
             <div className="flex justify-end space-x-2 mt-4">
               <button
                 onClick={onCancelAddExperienceClick}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+                className="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg transition-colors duration-150 ease-out hover:bg-gray-50 active:scale-[0.97]"
               >
                 Cancel
               </button>
               <button
                 onClick={handleAddExperience}
-                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                className="px-4 py-2 bg-card-highlight text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
               >
                 Save
               </button>
@@ -265,13 +265,13 @@ const PreviousExperiencesSection = ({
             <div className="flex justify-end space-x-2">
               <button
                 onClick={() => setShowConfirmDeleteModal(false)}
-                className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+                className="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg transition-colors duration-150 ease-out hover:bg-gray-50 active:scale-[0.97]"
               >
                 No
               </button>
               <button
                 onClick={() => experienceToDelete && handleDelete(experienceToDelete)}
-                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                className="px-4 py-2 bg-red-500 text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
               >
                 Yes, Delete
               </button>

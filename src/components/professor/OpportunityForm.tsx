@@ -53,7 +53,7 @@ const TagsField: React.FC<TagsFieldProps> = ({
         <button
           type="button"
           onClick={onAdd}
-          className="bg-purple-500 text-white text-sm font-medium px-3 py-1 rounded-full hover:bg-purple-600"
+          className="bg-card-highlight text-white text-sm font-medium px-3 py-1 rounded-full transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
         >
           + Add
         </button>

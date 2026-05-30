@@ -243,7 +243,7 @@ const InfoPage: React.FC = () => {
                             </div>
                             <button
                                 onClick={handleBackClick}
-                                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                                className="px-4 py-2 bg-card-highlight text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
                             >
                                 Go Back
                             </button>

@@ -27,10 +27,10 @@ const FilterPage = () => {
   const [collegeChecks, setCollegeChecks] = useState<Record<string, boolean>>({});
 
   // Dropdown filters
-  const [selectedDepartment, setSelectedDepartment] = useState("");
-  const [selectedEducation, setSelectedEducation] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState<string[]>([]);
+  const [selectedEducation, setSelectedEducation] = useState<string[]>([]);
   const [selectedCompensation, setSelectedCompensation] = useState("");
-  const [selectedSemester, setSelectedSemester] = useState("");
+  const [selectedSemester, setSelectedSemester] = useState<string[]>([]);
 
   // Sort
   const [sortBy, setSortBy] = useState<"year" | "time">("time");
@@ -113,10 +113,10 @@ const FilterPage = () => {
         filters.push({ label: abbr[name] || name, type: "college", value: name });
       }
     });
-    if (selectedDepartment) filters.push({ label: selectedDepartment, type: "department", value: selectedDepartment });
-    if (selectedEducation) filters.push({ label: selectedEducation, type: "education", value: selectedEducation });
+    selectedDepartment.forEach((dep) => filters.push({ label: dep, type: "department", value: dep }));
+    selectedEducation.forEach((edu) => filters.push({ label: edu, type: "education", value: edu }));
     if (selectedCompensation) filters.push({ label: selectedCompensation, type: "compensation", value: selectedCompensation });
-    if (selectedSemester) filters.push({ label: selectedSemester, type: "semester", value: selectedSemester });
+    selectedSemester.forEach((sem) => filters.push({ label: sem, type: "semester", value: sem }));
     return filters;
   }, [collegeChecks, selectedDepartment, selectedEducation, selectedCompensation, selectedSemester]);
 
@@ -126,16 +126,16 @@ const FilterPage = () => {
         setCollegeChecks((prev) => ({ ...prev, [filter.value]: false }));
         break;
       case "department":
-        setSelectedDepartment("");
+        setSelectedDepartment((prev) => prev.filter((v) => v !== filter.value));
         break;
       case "education":
-        setSelectedEducation("");
+        setSelectedEducation((prev) => prev.filter((v) => v !== filter.value));
         break;
       case "compensation":
         setSelectedCompensation("");
         break;
       case "semester":
-        setSelectedSemester("");
+        setSelectedSemester((prev) => prev.filter((v) => v !== filter.value));
         break;
     }
   };
@@ -163,10 +163,10 @@ const FilterPage = () => {
 
   const handleResetAll = () => {
     setCollegeChecks({});
-    setSelectedDepartment("");
-    setSelectedEducation("");
+    setSelectedDepartment([]);
+    setSelectedEducation([]);
     setSelectedCompensation("");
-    setSelectedSemester("");
+    setSelectedSemester([]);
   };
 
   // Filter + search logic
@@ -187,17 +187,21 @@ const FilterPage = () => {
     }
 
     // Department filter
-    if (selectedDepartment) {
+    if (selectedDepartment.length > 0) {
       results = results.filter((r) => {
         const deps = Array.isArray(r.department) ? r.department : [];
-        return deps.some((d) => d.toLowerCase().includes(selectedDepartment.toLowerCase()));
+        return selectedDepartment.some((sel) =>
+          deps.some((d) => d.toLowerCase().includes(sel.toLowerCase()))
+        );
       });
     }
 
     // Education filter
-    if (selectedEducation) {
+    if (selectedEducation.length > 0) {
       results = results.filter((r) =>
-        r.desiredSkillLevel?.toLowerCase().includes(selectedEducation.toLowerCase())
+        selectedEducation.some((sel) =>
+          r.desiredSkillLevel?.toLowerCase().includes(sel.toLowerCase())
+        )
       );
     }
 
@@ -209,9 +213,11 @@ const FilterPage = () => {
     }
 
     // Semester filter
-    if (selectedSemester) {
+    if (selectedSemester.length > 0) {
       results = results.filter((r) =>
-        r.anticipatedEndDate?.toLowerCase().includes(selectedSemester.toLowerCase())
+        selectedSemester.some((sel) =>
+          r.anticipatedEndDate?.toLowerCase().includes(sel.toLowerCase())
+        )
       );
     }
 

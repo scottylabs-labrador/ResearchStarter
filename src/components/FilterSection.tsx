@@ -10,14 +10,14 @@ interface FilterSectionProps {
   collegeChecks: Record<string, boolean>;
   onCollegeCheck: (name: string, checked: boolean) => void;
   onCollegeReset: () => void;
-  selectedDepartment: string;
-  onDepartmentChange: (value: string) => void;
-  selectedEducation: string;
-  onEducationChange: (value: string) => void;
+  selectedDepartment: string[];
+  onDepartmentChange: (value: string[]) => void;
+  selectedEducation: string[];
+  onEducationChange: (value: string[]) => void;
   selectedCompensation: string;
   onCompensationChange: (value: string) => void;
-  selectedSemester: string;
-  onSemesterChange: (value: string) => void;
+  selectedSemester: string[];
+  onSemesterChange: (value: string[]) => void;
   onResetAll: () => void;
 }
 
@@ -37,6 +37,9 @@ const educationOptions = ["Undergraduate", "Masters", "PhD"];
 const compensationOptions = ["Paid", "Unpaid"];
 const semesterOptions = ["Fall", "Spring", "Summer"];
 
+const toggleValue = (arr: string[], value: string): string[] =>
+  arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value];
+
 const FilterSection = ({
   navHidden,
   visible,
@@ -55,6 +58,7 @@ const FilterSection = ({
   onResetAll,
 }: FilterSectionProps) => {
   const [collegeExpanded, setCollegeExpanded] = useState(true);
+  const [departmentExpanded, setDepartmentExpanded] = useState(false);
 
   if (!visible) return null;
 
@@ -124,43 +128,70 @@ const FilterSection = ({
 
         {/* Department */}
         <div className="mb-8">
-          <h3 className="font-semibold text-sm text-gray-800 mb-2">Department</h3>
-          <div className="relative">
-            <select
-              value={selectedDepartment}
-              onChange={(e) => onDepartmentChange(e.target.value)}
-              className="w-full appearance-none bg-white border border-gray-300 rounded-md px-3 py-2 pr-9 text-sm text-gray-700"
-            >
-              <option value="">None</option>
-              {departmentOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
-              ))}
-            </select>
-            <KeyboardArrowDownIcon
-              fontSize="small"
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
-            />
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-semibold text-sm text-gray-800">Department</h3>
+            {selectedDepartment.length > 0 && (
+              <button
+                onClick={() => onDepartmentChange([])}
+                className="text-xs text-purple-600 hover:text-purple-800 transition-colors duration-200 ease-out"
+              >
+                Reset
+              </button>
+            )}
           </div>
+          <div className="relative mb-2">
+            <button
+              onClick={() => setDepartmentExpanded(!departmentExpanded)}
+              className="w-full appearance-none text-left bg-white border border-gray-300 rounded-md px-3 py-2 pr-9 text-sm text-gray-700"
+            >
+              {selectedDepartment.length === 0
+                ? "None"
+                : `${selectedDepartment.length} selected`}
+            </button>
+            {departmentExpanded ? (
+              <KeyboardArrowUpIcon
+                fontSize="small"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+              />
+            ) : (
+              <KeyboardArrowDownIcon
+                fontSize="small"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+              />
+            )}
+          </div>
+          {departmentExpanded && (
+            <div className="space-y-1 ml-1 max-h-48 overflow-y-auto pr-1 scrollbar-minimal">
+              {departmentOptions.map((opt) => (
+                <label key={opt.value} className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer py-1">
+                  <input
+                    type="checkbox"
+                    checked={selectedDepartment.includes(opt.value)}
+                    onChange={() => onDepartmentChange(toggleValue(selectedDepartment, opt.value))}
+                    className="w-4 h-4 rounded border-gray-300 text-purple-600 accent-purple-600 flex-shrink-0"
+                  />
+                  {opt.label}
+                </label>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Education */}
         <div className="mb-8">
           <h3 className="font-semibold text-sm text-gray-800 mb-2">Education</h3>
-          <div className="relative">
-            <select
-              value={selectedEducation}
-              onChange={(e) => onEducationChange(e.target.value)}
-              className="w-full appearance-none bg-white border border-gray-300 rounded-md px-3 py-2 pr-9 text-sm text-gray-700"
-            >
-              <option value="">None</option>
-              {educationOptions.map((opt) => (
-                <option key={opt} value={opt}>{opt}</option>
-              ))}
-            </select>
-            <KeyboardArrowDownIcon
-              fontSize="small"
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
-            />
+          <div className="space-y-1 ml-1">
+            {educationOptions.map((opt) => (
+              <label key={opt} className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer py-2">
+                <input
+                  type="checkbox"
+                  checked={selectedEducation.includes(opt)}
+                  onChange={() => onEducationChange(toggleValue(selectedEducation, opt))}
+                  className="w-4 h-4 rounded border-gray-300 text-purple-600 accent-purple-600"
+                />
+                {opt}
+              </label>
+            ))}
           </div>
         </div>
 
@@ -188,21 +219,18 @@ const FilterSection = ({
         {/* Semester */}
         <div className="mb-8">
           <h3 className="font-semibold text-sm text-gray-800 mb-2">Semester</h3>
-          <div className="relative">
-            <select
-              value={selectedSemester}
-              onChange={(e) => onSemesterChange(e.target.value)}
-              className="w-full appearance-none bg-white border border-gray-300 rounded-md px-3 py-2 pr-9 text-sm text-gray-700"
-            >
-              <option value="">None</option>
-              {semesterOptions.map((opt) => (
-                <option key={opt} value={opt}>{opt}</option>
-              ))}
-            </select>
-            <KeyboardArrowDownIcon
-              fontSize="small"
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
-            />
+          <div className="space-y-1 ml-1">
+            {semesterOptions.map((opt) => (
+              <label key={opt} className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer py-2">
+                <input
+                  type="checkbox"
+                  checked={selectedSemester.includes(opt)}
+                  onChange={() => onSemesterChange(toggleValue(selectedSemester, opt))}
+                  className="w-4 h-4 rounded border-gray-300 text-purple-600 accent-purple-600"
+                />
+                {opt}
+              </label>
+            ))}
           </div>
         </div>
 
