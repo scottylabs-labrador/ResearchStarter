@@ -44,6 +44,8 @@ const ProfilePage = () => {
   const { data: session, isPending } = useSession();
   const userId = session?.user?.id;
   const [profile, setProfile] = useState<StudentProfile>(emptyProfile);
+  const [loadFailed, setLoadFailed] = useState(false);
+  const [saveFailed, setSaveFailed] = useState(false);
 
   useEffect(() => {
     if (!session?.user) {
@@ -65,9 +67,10 @@ const ProfilePage = () => {
     const fetchProfile = async () => {
       try {
         const res = await fetch(`/api/users/${userId}`, { credentials: "include" });
-        if (!res.ok) return;
+        if (!res.ok) throw new Error(res.statusText);
 
         const data = await res.json();
+        setLoadFailed(false);
         setProfile((prev) => ({
           ...prev,
           class: data.class ?? prev.class,
@@ -78,8 +81,9 @@ const ProfilePage = () => {
           interests: Array.isArray(data.interests) ? data.interests : [],
           experiences: normalizeExperiences(data.experiences),
         }));
-      } catch {
-        console.log("Error fetching profile");
+      } catch (err) {
+        console.error("Error fetching profile", err);
+        setLoadFailed(true);
       }
     };
 
@@ -87,7 +91,11 @@ const ProfilePage = () => {
   }, [userId]);
 
   const saveProfile = async (updates: EditableFields) => {
+    const previous = Object.fromEntries(
+      Object.keys(updates).map((key) => [key, profile[key as keyof EditableFields]])
+    ) as EditableFields;
     setProfile((prev) => ({ ...prev, ...updates }));
+    setSaveFailed(false);
     if (!userId) return;
     try {
       const res = await fetch(`/api/users/${userId}`, {
@@ -96,9 +104,13 @@ const ProfilePage = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updates),
       });
-      if (!res.ok) console.error(`Error saving profile: ${res.statusText}`);
-    } catch {
-      console.error("Error saving profile");
+      // The server answers 200 with a null body when no user document matched.
+      const saved = res.ok ? await res.json() : null;
+      if (!saved) throw new Error(res.ok ? "No matching user" : res.statusText);
+    } catch (err) {
+      console.error("Error saving profile", err);
+      setProfile((prev) => ({ ...prev, ...previous }));
+      setSaveFailed(true);
     }
   };
 
@@ -121,6 +133,14 @@ const ProfilePage = () => {
         completedSteps={steps.filter(Boolean).length}
         totalSteps={steps.length}
       />
+
+      {saveFailed || loadFailed ? (
+        <p role="alert" className="mt-6 rounded-control border border-danger/20 bg-danger-bg px-4 py-3 text-small text-danger">
+          {saveFailed
+            ? "Couldn't save your last change, so it was undone. Check your connection and try again."
+            : "Couldn't load your saved profile. Refresh the page before making changes."}
+        </p>
+      ) : null}
 
       <AboutSection title="Details" className="mt-8">
         <ProfileDetails
