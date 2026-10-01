@@ -174,7 +174,7 @@ const ExperienceList = ({ experiences, onChange }: ExperienceListProps) => {
                         </MetaRow>
                       ) : null}
                       {exp.description ? (
-                        <p className="max-w-prose whitespace-pre-line text-body text-ink-secondary">{exp.description}</p>
+                        <p className="w-full whitespace-pre-line text-body text-ink-secondary">{exp.description}</p>
                       ) : (
                         <p className="text-body text-ink-muted">No description yet.</p>
                       )}

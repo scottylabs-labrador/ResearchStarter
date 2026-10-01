@@ -71,7 +71,7 @@ const BioBlurbSection: React.FC<BioBlurbSectionProps> = ({ initialBio = "", onSa
         </Surface>
       ) : initialBio ? (
         <Surface className="px-5 py-4">
-          <p className="max-w-prose whitespace-pre-wrap text-[15px] leading-7 text-ink-secondary">{initialBio}</p>
+          <p className="w-full whitespace-pre-wrap text-[15px] leading-7 text-ink-secondary">{initialBio}</p>
         </Surface>
       ) : canEdit ? (
         <Surface className="flex flex-col items-start gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
