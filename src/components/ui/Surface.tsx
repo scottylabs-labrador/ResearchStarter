@@ -13,7 +13,7 @@ const Surface = ({ as: Component = "div", interactive = false, className, ...res
     className={cx(
       "rounded-surface border border-hairline bg-surface",
       interactive &&
-        "transition-[border-color,box-shadow] duration-200 ease-out hover:border-hairline-strong hover:shadow-card-hover",
+        "transition-[border-color,box-shadow] duration-200 ease-out hover:border-accent/25 hover:shadow-card-hover",
       className
     )}
     {...rest}

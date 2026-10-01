@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { useSession, signOut } from "../lib/authClient";
+import { signOut } from "../lib/authClient";
+import { useEffectiveSession } from "../lib/useEffectiveSession";
 import NavButton from "./NavButton";
 import Logo from "./Logo";
 import Avatar from "./ui/Avatar";
@@ -13,7 +14,7 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
-const focusRing = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2";
+const focusRing = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2";
 
 const menuItemClass =
   "flex w-full items-center gap-2 px-4 py-2 text-body text-ink-secondary transition-colors duration-150 hover:bg-surface-muted hover:text-ink focus-visible:bg-surface-muted focus-visible:outline-none";
@@ -22,11 +23,11 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
   cx(
     "flex h-[36px] items-center gap-2 rounded-control px-3 text-body font-medium transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.98]",
     focusRing,
-    isActive ? "bg-accent text-white shadow-accent" : "text-ink-secondary hover:bg-surface-muted hover:text-ink"
+    isActive ? "bg-accent-bg text-accent-strong" : "text-ink-secondary hover:bg-accent-bg/50 hover:text-ink"
   );
 
 const NavBar = () => {
-  const { data: session } = useSession();
+  const { data: session } = useEffectiveSession();
   const name = session?.user?.name ?? "";
   const email = session?.user?.email ?? "";
   const image = session?.user?.image ?? undefined;
@@ -52,7 +53,7 @@ const NavBar = () => {
     <>
       <nav
         className={cx(
-          "fixed inset-x-0 top-0 z-20 h-nav border-b border-hairline bg-surface transition-transform duration-300 ease-out",
+          "fixed inset-x-0 top-0 z-20 h-nav border-b border-hairline bg-surface motion-reduce:transition-none",
           hidden ? "-translate-y-full" : "translate-y-0"
         )}
       >
@@ -84,7 +85,7 @@ const NavBar = () => {
               <KeyboardArrowDownIcon
                 sx={{ fontSize: 18 }}
                 className={cx(
-                  "text-ink-muted transition-transform duration-200 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)]",
+                  "text-ink-muted transition-transform duration-200 ease-out",
                   open && "rotate-180"
                 )}
               />
@@ -93,7 +94,7 @@ const NavBar = () => {
             {open && (
               <div
                 role="menu"
-                className="absolute right-0 top-[44px] z-50 w-64 origin-top-right animate-dropIn rounded-surface border border-hairline bg-surface py-1 shadow-popover"
+                className="absolute right-0 top-[44px] z-50 w-64 origin-top-right animate-dropIn rounded-surface border border-hairline bg-surface py-1 shadow-popover motion-reduce:animate-none"
               >
                 <div className="border-b border-hairline px-4 py-3">
                   <p className="truncate text-body font-medium text-ink">{name || "Signed in"}</p>

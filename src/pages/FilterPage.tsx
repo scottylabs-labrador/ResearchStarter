@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import SearchOffOutlinedIcon from "@mui/icons-material/SearchOffOutlined";
-import { FaSearch } from "react-icons/fa";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FilterSection from "../components/FilterSection";
 import Card from "../components/Card";
 import Tag from "../components/Tag";
@@ -49,15 +49,17 @@ const FilterPage = () => {
   const CARD_BATCH_LIMIT = 10;
   const [loadedBatches, setLoadedBatches] = useState(0);
   const [searchBarHidden, setSearchBarHidden] = useState(false);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
+  const [headerHeight, setHeaderHeight] = useState(0);
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
-    // Only show search bar when scrolled to the very top
-    setSearchBarHidden(scrollTop > 0);
-    if (scrollHeight - scrollTop <= clientHeight + 50) {
-      setLoadedBatches((prev) => prev + 1);
-    }
-  };
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+    const observer = new ResizeObserver(() => setHeaderHeight(header.offsetHeight));
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, []);
 
   // Fetch data
   useEffect(() => {
@@ -262,6 +264,18 @@ const FilterPage = () => {
     return results;
   }, [researches, collegeChecks, selectedDepartment, selectedEducation, selectedCompensation, selectedSemester, input, sortBy]);
 
+  const visibleCount = (loadedBatches + 1) * CARD_BATCH_LIMIT;
+  const hasMore = visibleCount < filteredData.length;
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
+    // Only show search bar when scrolled to the very top
+    setSearchBarHidden(scrollTop > 0);
+    if (hasMore && scrollHeight - scrollTop <= clientHeight + 50) {
+      setLoadedBatches((prev) => prev + 1);
+    }
+  };
+
   const resultLabel = `${filteredData.length} ${filteredData.length === 1 ? "result" : "results"}`;
 
   return (
@@ -284,37 +298,40 @@ const FilterPage = () => {
         onResetAll={handleResetAll}
       />
 
+      {/* Moves with transforms only; animating top or height here repaints the whole list every frame. */}
       <div
-        className="fixed bottom-0 right-0 flex flex-col overflow-hidden bg-canvas transition-[left,top] duration-300 ease-out"
+        className="fixed right-0 top-0 h-screen overflow-hidden bg-canvas transition-[left] duration-200 ease-out motion-reduce:transition-none"
         style={{
-          top: navHidden ? "0px" : "var(--nav-h)",
           left: sidebarVisible ? "280px" : "0px",
+          transform: navHidden ? "translateY(0)" : "translateY(var(--nav-h))",
         }}
       >
-        {/* Collapses on scroll like the navbar; grid-rows 1fr→0fr self-sizes the collapse. */}
         <div
-          className={`grid transition-[grid-template-rows] duration-300 ease-out ${
-            searchBarHidden ? "grid-rows-[0fr]" : "grid-rows-[1fr]"
+          ref={headerRef}
+          className={`absolute left-0 right-0 top-0 z-10 bg-canvas ${
+            searchBarHidden ? "pointer-events-none invisible -translate-y-full opacity-0" : "visible translate-y-0 opacity-100"
           }`}
         >
-          <div
-            className={`overflow-hidden transition-opacity duration-200 ease-out ${
-              searchBarHidden ? "opacity-0" : "opacity-100"
-            }`}
-          >
-            <div className="px-8 pb-4 pt-6">
-              <div className="mb-4 flex items-center gap-3">
-                {!sidebarVisible && (
-                  <Button
-                    size="sm"
-                    icon={<KeyboardArrowRightIcon sx={{ fontSize: 16 }} />}
-                    onClick={() => setSidebarVisible(true)}
-                  >
-                    Show filters
-                  </Button>
-                )}
+          <div className="px-8 pb-4 pt-6 [padding-right:calc(2rem+10px)]">
+            <div className="mb-4 flex items-center gap-3">
+              {!sidebarVisible && (
+                <Button
+                  size="sm"
+                  className="ps-2.5"
+                  icon={<KeyboardArrowRightIcon sx={{ fontSize: 16, mx: "-4px" }} />}
+                  onClick={() => setSidebarVisible(true)}
+                >
+                  Show filters
+                </Button>
+              )}
+              <div className="flex min-w-0 items-baseline gap-3">
                 <h1 className="text-title text-ink">Search</h1>
                 {!loading ? <span className="font-mono text-meta text-ink-muted">{resultLabel}</span> : null}
+              </div>
+              <div className="ml-auto flex shrink-0 items-center gap-2">
+                <span aria-hidden="true" className="font-mono text-meta font-medium text-ink-muted">
+                  Sort
+                </span>
                 <SegmentedControl
                   aria-label="Sort by"
                   value={sortBy}
@@ -323,42 +340,46 @@ const FilterPage = () => {
                     { value: "year", label: "Year" },
                     { value: "time", label: "Time" },
                   ]}
-                  className="ml-auto shrink-0"
                 />
               </div>
-
-              <Input
-                ref={searchRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onFocus={() => setSearchFocused(true)}
-                onBlur={() => setSearchFocused(false)}
-                placeholder="Search for research opportunities..."
-                aria-label="Search research opportunities"
-                icon={<FaSearch size={13} />}
-                trailing={!searchFocused && input === "" ? <Kbd>/</Kbd> : null}
-              />
-
-              {activeFilters.length > 0 ? (
-                <div className="mt-3 flex min-w-0 flex-wrap items-center gap-1.5">
-                  {activeFilters.map((filter) => (
-                    <Tag key={`${filter.type}-${filter.value}`} keyword={filter.label} onRemove={() => removeFilter(filter)} />
-                  ))}
-                  {activeFilters.length >= 2 ? (
-                    <Button size="sm" variant="ghost" onClick={handleResetAll}>
-                      Clear all
-                    </Button>
-                  ) : null}
-                </div>
-              ) : null}
             </div>
+
+            <Input
+              ref={searchRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onFocus={() => {
+                setSearchFocused(true);
+                if (searchBarHidden) resultsRef.current?.scrollTo({ top: 0 });
+              }}
+              onBlur={() => setSearchFocused(false)}
+              placeholder="Search for research opportunities..."
+              aria-label="Search research opportunities"
+              icon={<SearchOutlinedIcon sx={{ fontSize: 18 }} />}
+              trailing={!searchFocused && input === "" ? <Kbd>/</Kbd> : null}
+            />
+
+            {activeFilters.length > 0 ? (
+              <div className="mt-3 flex min-w-0 flex-wrap items-center gap-1.5">
+                {activeFilters.map((filter) => (
+                  <Tag key={`${filter.type}-${filter.value}`} keyword={filter.label} onRemove={() => removeFilter(filter)} />
+                ))}
+                {activeFilters.length >= 2 ? (
+                  <Button size="sm" variant="ghost" onClick={handleResetAll}>
+                    Clear all
+                  </Button>
+                ) : null}
+              </div>
+            ) : null}
           </div>
         </div>
 
         <div
+          ref={resultsRef}
           role="region"
           aria-label="Search results"
-          className="scrollbar-minimal flex-1 overflow-y-auto px-8 pb-8 pt-2"
+          className="scrollbar-minimal h-full overflow-y-auto px-8 pb-[calc(2rem+var(--nav-h))]"
+          style={{ paddingTop: headerHeight + 8 }}
           onScroll={handleScroll}
         >
           {loading ? (
@@ -381,7 +402,7 @@ const FilterPage = () => {
           ) : (
             <div className="flex flex-col gap-3">
               {filteredData
-                .slice(0, (loadedBatches + 1) * CARD_BATCH_LIMIT)
+                .slice(0, visibleCount)
                 .map((research) => (
                   <Card key={research._id} research={research} />
                 ))}

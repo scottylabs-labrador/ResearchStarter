@@ -1,10 +1,9 @@
-// Currently an unused feature for the student dashboard.
-
 import React, { useState, useEffect } from "react";
-import { FaPencil } from "react-icons/fa6";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import AboutSection from "./AboutSection";
 import Surface from "../ui/Surface";
 import Button from "../ui/Button";
-import IconButton from "../ui/IconButton";
 import { fieldClass } from "../ui/Input";
 import { cx } from "../ui/cx";
 
@@ -21,14 +20,8 @@ const BioBlurbSection: React.FC<BioBlurbSectionProps> = ({ initialBio = "", onSa
     setCurrentBio(initialBio);
   }, [initialBio]);
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
-
   const handleSaveBio = () => {
-    if (onSave) {
-      onSave(currentBio);
-    }
+    onSave?.(currentBio.trim());
     setIsEditing(false);
   };
 
@@ -37,45 +30,62 @@ const BioBlurbSection: React.FC<BioBlurbSectionProps> = ({ initialBio = "", onSa
     setIsEditing(false);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setCurrentBio(e.target.value);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Escape") handleCancel();
+    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleSaveBio();
   };
 
+  const canEdit = Boolean(onSave);
+  const editAction =
+    canEdit && !isEditing && initialBio ? (
+      <Button size="sm" variant="ghost" icon={<EditOutlinedIcon sx={{ fontSize: 15 }} />} onClick={() => setIsEditing(true)}>
+        Edit
+      </Button>
+    ) : null;
+
   return (
-    <section className="mb-8">
-      <div className="mb-3 flex items-center gap-1">
-        <h2 className="text-heading text-ink">Bio</h2>
-        {!isEditing ? (
-          <IconButton size="sm" aria-label="Edit bio" onClick={handleEditClick}>
-            <FaPencil size={13} />
-          </IconButton>
-        ) : null}
-      </div>
-      <Surface className="p-4">
-        {isEditing ? (
-          <>
-            <textarea
-              aria-label="Bio"
-              className={cx(fieldClass, "resize-none")}
-              rows={5}
-              value={currentBio}
-              onChange={handleChange}
-              autoFocus
-            />
-            <div className="mt-3 flex justify-end gap-2">
-              <Button onClick={handleCancel}>Cancel</Button>
-              <Button variant="primary" onClick={handleSaveBio}>
+    <AboutSection title="Bio" action={editAction}>
+      {isEditing ? (
+        <Surface className="p-4">
+          <textarea
+            aria-label="Bio"
+            className={cx(fieldClass, "resize-none text-[15px] leading-7")}
+            rows={5}
+            value={currentBio}
+            onChange={(e) => setCurrentBio(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="What do you want to research, and what have you worked on so far?"
+            autoFocus
+          />
+          <div className="mt-3 flex items-center justify-between gap-2">
+            <span className="hidden font-mono text-meta text-ink-muted sm:inline">Ctrl + Enter to save</span>
+            <div className="ml-auto flex gap-2">
+              <Button size="sm" onClick={handleCancel}>
+                Cancel
+              </Button>
+              <Button size="sm" variant="primary" onClick={handleSaveBio}>
                 Save
               </Button>
             </div>
-          </>
-        ) : (
-          <p className="whitespace-pre-wrap text-body text-ink-secondary">
-            {initialBio || "No bio yet. Click edit to add one."}
-          </p>
-        )}
-      </Surface>
-    </section>
+          </div>
+        </Surface>
+      ) : initialBio ? (
+        <Surface className="px-5 py-4">
+          <p className="max-w-prose whitespace-pre-wrap text-[15px] leading-7 text-ink-secondary">{initialBio}</p>
+        </Surface>
+      ) : canEdit ? (
+        <Surface className="flex flex-col items-start gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-body text-ink-muted">A few sentences on what you want to research helps professors say yes.</p>
+          <Button size="sm" icon={<AddOutlinedIcon sx={{ fontSize: 15 }} />} onClick={() => setIsEditing(true)}>
+            Add bio
+          </Button>
+        </Surface>
+      ) : (
+        <Surface className="px-5 py-4">
+          <p className="text-body text-ink-muted">No bio available.</p>
+        </Surface>
+      )}
+    </AboutSection>
   );
 };
 

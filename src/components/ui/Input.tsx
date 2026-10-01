@@ -2,7 +2,7 @@ import React from "react";
 import { cx } from "./cx";
 
 export const fieldClass =
-  "block w-full rounded-control border border-hairline-strong bg-surface px-3 py-2 text-body text-ink outline-none transition-[border-color,box-shadow] duration-150 ease-out placeholder:text-ink-muted focus:border-ink focus:ring-2 focus:ring-ink/10";
+  "block w-full rounded-control border border-hairline-strong bg-surface px-3 py-2 text-body text-ink outline-none transition-[border-color,box-shadow] duration-150 ease-out placeholder:text-ink-muted focus:border-accent focus:ring-2 focus:ring-accent/15";
 
 interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
   icon?: React.ReactNode;
@@ -15,7 +15,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ icon, trailing, inputSize = "md", className, containerClassName, ...rest }, ref) => (
     <div
       className={cx(
-        "flex items-center gap-2 rounded-control border border-hairline-strong bg-surface px-3 transition-[border-color,box-shadow] duration-150 ease-out focus-within:border-ink focus-within:ring-2 focus-within:ring-ink/10",
+        "flex items-center gap-2 rounded-control border border-hairline-strong bg-surface px-3 transition-[border-color,box-shadow] duration-150 ease-out focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/15",
         inputSize === "sm" ? "h-[32px]" : "h-[40px]",
         containerClassName
       )}

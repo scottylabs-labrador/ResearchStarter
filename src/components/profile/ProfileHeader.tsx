@@ -1,11 +1,8 @@
 import React, { useState, useRef } from "react";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
-import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
-import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
-import ProfileSummary from "./ProfileSummary";
-import IconButton from "../ui/IconButton";
-import Input from "../ui/Input";
+import PhotoCameraOutlinedIcon from "@mui/icons-material/PhotoCameraOutlined";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import Badge from "../ui/Badge";
 
 interface ProfileHeaderProps {
   profileImage?: string;
@@ -13,10 +10,26 @@ interface ProfileHeaderProps {
   major?: string;
   class?: string;
   email?: string;
+  /** Overrides the major/class summary line when set. */
+  summary?: string;
+  readOnly?: boolean;
+  completedSteps?: number;
+  totalSteps?: number;
   className?: string;
   onProfileImageChange?: (file: File) => void;
-  onMajorChange?: (major: string) => void;
 }
+
+const initialsOf = (name: string) =>
+  name
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part.charAt(0).toUpperCase())
+    .join("");
+
+const avatarShellClass =
+  "relative block h-[64px] w-[64px] rounded-[18px] border border-accent/20 bg-accent-bg/40 p-[3px] shadow-[0_1px_2px_rgb(72_107_132/0.08)]";
 
 const ProfileHeader = ({
   profileImage,
@@ -24,14 +37,15 @@ const ProfileHeader = ({
   major,
   class: userClass,
   email,
+  summary,
+  readOnly = false,
+  completedSteps,
+  totalSteps,
   className,
   onProfileImageChange,
-  onMajorChange,
 }: ProfileHeaderProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [editingMajor, setEditingMajor] = useState(false);
-  const [majorValue, setMajorValue] = useState(major || "");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -41,62 +55,76 @@ const ProfileHeader = ({
     }
   };
 
-  const handleMajorSave = () => {
-    setEditingMajor(false);
-    onMajorChange?.(majorValue);
-  };
-
-  const handleMajorKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") handleMajorSave();
-    if (e.key === "Escape") {
-      setMajorValue(major || "");
-      setEditingMajor(false);
-    }
-  };
-
   const displayImage = previewUrl || profileImage;
+  const displayName = name || "Your name";
+  const displaySummary =
+    summary ??
+    ([major, userClass].filter(Boolean).join(" · ") ||
+      email ||
+      "Add your major and class so professors know where you're coming from.");
+  const showProgress = completedSteps !== undefined && totalSteps !== undefined;
+  const isComplete = showProgress && completedSteps >= totalSteps;
 
-  const majorCell = editingMajor ? (
-    <Input
-      inputSize="sm"
-      aria-label="Major"
-      value={majorValue}
-      onChange={(e) => setMajorValue(e.target.value)}
-      onBlur={handleMajorSave}
-      onKeyDown={handleMajorKeyDown}
-      autoFocus
-      containerClassName="w-full max-w-[280px]"
-    />
-  ) : (
-    <span className="flex items-center gap-1">
-      {majorValue || "Not set"}
-      <IconButton size="sm" aria-label="Edit major" onClick={() => setEditingMajor(true)}>
-        <EditOutlinedIcon sx={{ fontSize: 16 }} />
-      </IconButton>
+  const avatarInner = (
+    <span className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-[14px] bg-surface-muted">
+      {displayImage ? (
+        <img src={displayImage} alt="" className="h-full w-full object-cover" />
+      ) : (
+        <span aria-hidden="true" className="text-[20px] font-semibold tracking-[-0.01em] text-ink-secondary">
+          {initialsOf(name ?? "") || "?"}
+        </span>
+      )}
+      {!readOnly ? (
+        <span
+          aria-hidden="true"
+          className="absolute inset-0 flex items-center justify-center bg-ink/45 text-white opacity-0 transition-opacity duration-150 ease-out group-hover:opacity-100 group-focus-visible:opacity-100"
+        >
+          <PhotoCameraOutlinedIcon sx={{ fontSize: 20 }} />
+        </span>
+      ) : null}
     </span>
   );
 
   return (
-    <ProfileSummary
-      className={className}
-      name={name ?? ""}
-      title={name || "Your Name"}
-      subtitle={email || undefined}
-      avatarSrc={displayImage}
-      avatarAction={
+    <header className={className}>
+      {readOnly ? (
+        <div className={avatarShellClass}>{avatarInner}</div>
+      ) : (
         <>
-          <IconButton size="sm" bordered aria-label="Edit profile picture" onClick={() => fileInputRef.current?.click()}>
-            <EditOutlinedIcon sx={{ fontSize: 16 }} />
-          </IconButton>
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            aria-label="Change profile photo"
+            className={`group ${avatarShellClass} transition-transform duration-150 ease-out active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas`}
+          >
+            {avatarInner}
+            <span
+              aria-hidden="true"
+              className="absolute -bottom-1.5 -right-1.5 flex h-[22px] w-[22px] items-center justify-center rounded-full border border-hairline-strong bg-surface text-ink-muted shadow-[0_1px_2px_rgb(24_24_27/0.08)]"
+            >
+              <EditOutlinedIcon sx={{ fontSize: 12 }} />
+            </span>
+          </button>
           <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
         </>
-      }
-      rows={[
-        { label: "Major", value: majorCell, icon: <SchoolOutlinedIcon sx={{ fontSize: 14 }} /> },
-        { label: "Class", value: userClass || "Not set", icon: <BadgeOutlinedIcon sx={{ fontSize: 14 }} /> },
-        { label: "Email", value: email ? <span className="font-mono">{email}</span> : "Not set", icon: <MailOutlinedIcon sx={{ fontSize: 14 }} /> },
-      ]}
-    />
+      )}
+
+      <div className="mt-5 flex flex-wrap items-center gap-x-2.5 gap-y-1">
+        <h1 className="break-words text-[24px] font-semibold leading-8 tracking-[-0.015em] text-ink">{displayName}</h1>
+        {showProgress ? (
+          isComplete ? (
+            <Badge tone="positive" icon={<CheckCircleRoundedIcon sx={{ fontSize: 13 }} />}>
+              Profile complete
+            </Badge>
+          ) : (
+            <Badge tone="accent">
+              {completedSteps} of {totalSteps} complete
+            </Badge>
+          )
+        ) : null}
+      </div>
+      <p className="mt-1 text-[15px] leading-6 text-ink-muted">{displaySummary}</p>
+    </header>
   );
 };
 

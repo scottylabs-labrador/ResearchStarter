@@ -19,20 +19,23 @@ interface MetaRowProps {
   className?: string;
 }
 
+// Every item carries a leading separator; the row is shifted back by one separator
+// width and clipped, so the separator that starts each wrapped line is hidden.
+// The clip keeps 4px of inline room so focus rings on links inside aren't cut off.
 export const MetaRow = ({ children, className }: MetaRowProps) => {
   const items = React.Children.toArray(children).filter((item) => item !== "");
   return (
-    <div className={cx("flex flex-wrap items-center gap-x-2 gap-y-1", className)}>
-      {items.map((item, i) => (
-        <React.Fragment key={i}>
-          {i > 0 ? (
-            <span aria-hidden="true" className="text-ink-muted">
+    <div className={cx("-mx-1 overflow-x-clip px-1", className)}>
+      <div className="-ms-5 flex flex-wrap items-center gap-y-1">
+        {items.map((item, i) => (
+          <span key={i} className="inline-flex min-w-0 max-w-full items-center">
+            <span aria-hidden="true" className="w-5 shrink-0 text-center text-ink-muted">
               ·
             </span>
-          ) : null}
-          {item}
-        </React.Fragment>
-      ))}
+            {item}
+          </span>
+        ))}
+      </div>
     </div>
   );
 };

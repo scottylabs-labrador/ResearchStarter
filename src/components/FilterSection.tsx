@@ -36,6 +36,7 @@ const colleges = [
   "CMU Qatar",
 ];
 
+const DEPARTMENT_PREVIEW_COUNT = 8;
 const educationOptions = ["Undergraduate", "Masters", "PhD"];
 const semesterOptions = ["Fall", "Spring", "Summer"];
 const compensationOptions = [
@@ -54,18 +55,15 @@ interface FilterCheckboxProps {
 }
 
 const FilterCheckbox = ({ label, checked, onChange }: FilterCheckboxProps) => (
-  <label
-    title={label}
-    className="flex h-[32px] cursor-pointer items-center gap-2.5 rounded-[8px] px-2 text-body text-ink-secondary transition-colors duration-150 hover:bg-surface-muted hover:text-ink"
-  >
+  <label className="flex min-h-[32px] cursor-pointer items-start gap-2.5 rounded-[8px] px-2 py-[5px] text-body text-ink-secondary transition-colors duration-150 hover:bg-surface-muted hover:text-ink">
     <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="peer sr-only" />
     <span
       aria-hidden="true"
-      className="flex h-[16px] w-[16px] shrink-0 items-center justify-center rounded-[4px] border border-hairline-strong bg-surface transition-colors duration-150 peer-checked:border-ink peer-checked:bg-ink peer-focus-visible:ring-2 peer-focus-visible:ring-ink peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-canvas"
+      className="mt-[3px] flex h-[16px] w-[16px] shrink-0 items-center justify-center rounded-[4px] border border-hairline-strong bg-surface transition-colors duration-150 peer-checked:border-accent peer-checked:bg-accent peer-focus-visible:ring-2 peer-focus-visible:ring-accent/35 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-canvas"
     >
       {checked ? <CheckIcon sx={{ fontSize: 12 }} className="text-white" /> : null}
     </span>
-    <span className="truncate">{label}</span>
+    <span className="min-w-0">{label}</span>
   </label>
 );
 
@@ -74,7 +72,7 @@ const ResetButton = ({ onClick, label }: { onClick: () => void; label: string })
     type="button"
     onClick={onClick}
     aria-label={label}
-    className="rounded px-1 text-meta font-medium text-ink-secondary underline-offset-2 transition-colors duration-150 hover:text-ink hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+    className="rounded px-1 text-meta font-medium text-accent underline-offset-2 transition-colors duration-150 hover:text-accent-strong hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35"
   >
     Reset
   </button>
@@ -122,6 +120,11 @@ const FilterSection = ({
     semester: true,
   });
   const toggle = (key: keyof typeof open) => setOpen((prev) => ({ ...prev, [key]: !prev[key] }));
+  const [showAllDepartments, setShowAllDepartments] = useState(false);
+  const hiddenDepartmentCount = departmentOptions.length - DEPARTMENT_PREVIEW_COUNT;
+  const visibleDepartments = showAllDepartments
+    ? departmentOptions
+    : departmentOptions.slice(0, DEPARTMENT_PREVIEW_COUNT);
 
   if (!visible) return null;
 
@@ -136,17 +139,18 @@ const FilterSection = ({
   return (
     <aside
       aria-label="Filters"
-      className="scrollbar-minimal fixed bottom-0 left-0 z-10 w-[280px] overflow-y-auto border-r border-hairline bg-canvas transition-[top] duration-300 ease-out"
-      style={{ top: navHidden ? "0px" : "var(--nav-h)" }}
+      className="scrollbar-minimal fixed left-0 top-0 z-10 h-screen w-[280px] overflow-y-auto border-r border-hairline bg-canvas motion-reduce:transition-none"
+      style={{ transform: navHidden ? "translateY(0)" : "translateY(var(--nav-h))" }}
     >
-      <div className="px-4 py-5">
+      <div className="px-4 pb-[calc(1.25rem+var(--nav-h))] pt-[26px]">
         <div className="mb-5 flex items-center justify-between px-2">
           <h2 className="text-heading text-ink">Filters</h2>
           <Button
             size="sm"
             variant="ghost"
             aria-label="Hide filters"
-            icon={<KeyboardArrowLeftIcon sx={{ fontSize: 16 }} />}
+            className="ps-2.5"
+            icon={<KeyboardArrowLeftIcon sx={{ fontSize: 16, mx: "-4px" }} />}
             onClick={onToggleVisible}
           >
             Hide
@@ -182,16 +186,24 @@ const FilterSection = ({
             ) : null
           }
         >
-          <div className="scrollbar-minimal max-h-[240px] overflow-y-auto pr-1">
-            {departmentOptions.map((opt) => (
-              <FilterCheckbox
-                key={opt.value}
-                label={opt.label}
-                checked={selectedDepartment.includes(opt.value)}
-                onChange={() => onDepartmentChange(toggleValue(selectedDepartment, opt.value))}
-              />
-            ))}
-          </div>
+          {visibleDepartments.map((opt) => (
+            <FilterCheckbox
+              key={opt.value}
+              label={opt.label}
+              checked={selectedDepartment.includes(opt.value)}
+              onChange={() => onDepartmentChange(toggleValue(selectedDepartment, opt.value))}
+            />
+          ))}
+          {hiddenDepartmentCount > 0 ? (
+            <button
+              type="button"
+              onClick={() => setShowAllDepartments((prev) => !prev)}
+              aria-expanded={showAllDepartments}
+              className="flex h-[32px] w-full items-center rounded-[8px] px-2 text-small font-medium text-ink-secondary transition-colors duration-150 hover:bg-surface-muted hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+            >
+              {showAllDepartments ? "Show fewer" : `Show ${hiddenDepartmentCount} more`}
+            </button>
+          ) : null}
         </FilterGroup>
 
         <FilterGroup label="Education" open={open.education} onToggle={() => toggle("education")}>

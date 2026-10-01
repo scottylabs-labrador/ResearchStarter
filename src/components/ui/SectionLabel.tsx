@@ -29,7 +29,7 @@ const SectionLabel = ({ children, as: Heading = "h3", collapsed = false, onToggl
           {children}
           <KeyboardArrowDownIcon
             sx={{ fontSize: 16 }}
-            className={cx("transition-transform duration-200 ease-out", collapsed && "-rotate-90")}
+            className={cx("transition-transform duration-200 ease-out motion-reduce:transition-none", collapsed && "-rotate-90")}
           />
         </button>
       ) : (

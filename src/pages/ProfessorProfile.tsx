@@ -1,17 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
-import ApartmentOutlinedIcon from "@mui/icons-material/ApartmentOutlined";
+import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
-import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
-import { FaHouse } from "react-icons/fa6";
 import { ProfessorType } from "../DataTypes";
 import { getDummyResearchForProfessor } from "../data/dummyProfessorResearch";
+import { getDevMockProfessor } from "../data/devMockProfessors";
 import { professorBioPlainText } from "../utils";
+import { useEffectiveSession } from "../lib/useEffectiveSession";
 import Card from "../components/Card";
-import ProfileSummary from "../components/profile/ProfileSummary";
-import Surface from "../components/ui/Surface";
-import SectionLabel from "../components/ui/SectionLabel";
-import Button from "../components/ui/Button";
+import ProfilePageShell from "../components/profile/ProfilePageShell";
+import ProfileHeader from "../components/profile/ProfileHeader";
+import AboutSection from "../components/profile/AboutSection";
+import ProfessorProfileDetails from "../components/profile/ProfessorProfileDetails";
+import BioBlurbSection from "../components/profile/BioBlurbSection";
+import ResearchAreasSection from "../components/profile/ResearchAreasSection";
+import { professorSummaryLine } from "../components/profile/professorSummary";
 import Spinner from "../components/ui/Spinner";
 import EmptyState from "../components/ui/EmptyState";
 import { Meta } from "../components/ui/Meta";
@@ -24,9 +27,19 @@ const professorProjectsApiUrl = (param: string) =>
 
 const ProfessorProfile = () => {
   const { andrewId } = useParams<{ andrewId: string }>();
+  const { data: session } = useEffectiveSession();
   const [professor, setProfessor] = useState<ProfessorType | null>(null);
+  const [bio, setBio] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+
+  const isOwnProfile = useMemo(() => {
+    if (!session?.user?.isProfessor || !andrewId) return false;
+    const param = andrewId.trim().toLowerCase();
+    const sessionId = session.user.andrewId?.trim().toLowerCase();
+    const emailId = session.user.email?.split("@")[0]?.trim().toLowerCase();
+    return param === sessionId || param === emailId;
+  }, [session, andrewId]);
 
   useEffect(() => {
     const id = andrewId?.trim();
@@ -40,11 +53,19 @@ const ProfessorProfile = () => {
       try {
         const res = await fetch(professorApiUrl(id));
         if (!res.ok) {
+          if (import.meta.env.DEV && import.meta.env.VITE_DEV_BYPASS_AUTH === "true") {
+            const mock = getDevMockProfessor(id);
+            if (mock) {
+              setProfessor(mock);
+              setBio(professorBioPlainText(mock.bio));
+              return;
+            }
+          }
           setError(true);
           return;
         }
         const data = await res.json();
-        setProfessor({
+        const nextProfessor: ProfessorType = {
           _id: data._id,
           name: data.Name ?? "",
           department: Array.isArray(data.Department)
@@ -64,13 +85,23 @@ const ProfessorProfile = () => {
           positions: data.Positions,
           tags: data.Tags,
           profilePicture: data["Profile Picture"],
-        });
+        };
+        setProfessor(nextProfessor);
+        setBio(professorBioPlainText(nextProfessor.bio));
 
-        let andrew_id = data.Email.split("@")[0];
+        const andrew_id = data.Email.split("@")[0];
         const resProjects = await fetch(professorProjectsApiUrl(andrew_id));
         const projects_data = await resProjects.json();
         console.log(projects_data);
       } catch {
+        if (import.meta.env.DEV && import.meta.env.VITE_DEV_BYPASS_AUTH === "true") {
+          const mock = getDevMockProfessor(id);
+          if (mock) {
+            setProfessor(mock);
+            setBio(professorBioPlainText(mock.bio));
+            return;
+          }
+        }
         setError(true);
       } finally {
         setLoading(false);
@@ -90,66 +121,43 @@ const ProfessorProfile = () => {
 
   if (error || !professor) {
     return (
-      <main className="mx-auto max-w-4xl px-8 pt-10">
+      <ProfilePageShell breadcrumbRoot="Professors" breadcrumbCurrent="Not found" breadcrumbIcon={<SchoolOutlinedIcon sx={{ fontSize: 16 }} />}>
         <EmptyState icon={<ErrorOutlineOutlinedIcon sx={{ fontSize: 20 }} />} title="Professor not found." />
-      </main>
+      </ProfilePageShell>
     );
   }
 
   const dummyResearch = getDummyResearchForProfessor(professor.name, andrewId ?? "");
 
-  const bioText = professorBioPlainText(professor.bio);
-
   return (
-    <main className="mx-auto max-w-4xl px-8 pb-16 pt-10">
-      <ProfileSummary
+    <ProfilePageShell
+      breadcrumbRoot={isOwnProfile ? "Account" : "Professors"}
+      breadcrumbCurrent={isOwnProfile ? "About you" : professor.name}
+      breadcrumbIcon={isOwnProfile ? undefined : <SchoolOutlinedIcon sx={{ fontSize: 16 }} />}
+    >
+      <ProfileHeader
+        profileImage={professor.profilePicture}
         name={professor.name}
-        title={`Professor ${professor.name}`}
-        subtitle={professor.email || undefined}
-        avatarSrc={professor.profilePicture}
-        rows={[
-          {
-            label: "College",
-            value: professor.college.length > 0 ? professor.college.join(", ") : "Not set",
-            icon: <FaHouse size={12} />,
-          },
-          {
-            label: "Department",
-            value: professor.department.length > 0 ? professor.department.join(", ") : "Not set",
-            icon: <ApartmentOutlinedIcon sx={{ fontSize: 14 }} />,
-          },
-          {
-            label: "Email",
-            value: <span className="font-mono">{professor.email}</span>,
-            icon: <MailOutlinedIcon sx={{ fontSize: 14 }} />,
-          },
-        ]}
+        summary={professorSummaryLine(professor)}
+        readOnly={!isOwnProfile}
       />
 
-      <section className="mt-10">
-        <SectionLabel as="h2" className="mb-2">
-          Bio
-        </SectionLabel>
-        <Surface className="p-5">
-          <p className="whitespace-pre-line text-body text-ink-secondary">{bioText || "No bio available."}</p>
-        </Surface>
-      </section>
+      <AboutSection title="Details" className="mt-8">
+        <ProfessorProfileDetails college={professor.college} department={professor.department} email={professor.email} />
+      </AboutSection>
 
-      <section className="mt-10">
-        <SectionLabel as="h2" className="mb-2" action={<Meta>{dummyResearch.length} listings</Meta>}>
-          Research listings
-        </SectionLabel>
+      <BioBlurbSection initialBio={bio} onSave={isOwnProfile ? setBio : undefined} />
+
+      <ResearchAreasSection tags={professor.tags ?? []} />
+
+      <AboutSection title="Research listings" action={<Meta>{dummyResearch.length} listings</Meta>}>
         <div className="flex flex-col gap-3">
           {dummyResearch.map((research) => (
-            <Card key={research._id} research={research} showApplyButton />
+            <Card key={research._id} research={research} showApplyButton={!isOwnProfile} />
           ))}
         </div>
-      </section>
-
-      <div className="mt-8 flex justify-center">
-        <Button>View all</Button>
-      </div>
-    </main>
+      </AboutSection>
+    </ProfilePageShell>
   );
 };
 

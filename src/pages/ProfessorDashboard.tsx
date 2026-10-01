@@ -1,15 +1,22 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import ApartmentOutlinedIcon from "@mui/icons-material/ApartmentOutlined";
-import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
-import { FaHouse } from "react-icons/fa6";
-import { useSession } from "../lib/authClient";
+import { useEffectiveSession } from "../lib/useEffectiveSession";
 import { ResearchOpportunity } from "../types/ResearchOpportunity";
+import { ProfessorType } from "../DataTypes";
+import { getDevMockProfessor } from "../data/devMockProfessors";
+import { professorBioPlainText } from "../utils";
 import OpportunityForm from "../components/professor/OpportunityForm";
-import ProfileSummary from "../components/profile/ProfileSummary";
+import ProfilePageShell from "../components/profile/ProfilePageShell";
+import ProfileHeader from "../components/profile/ProfileHeader";
+import AboutSection from "../components/profile/AboutSection";
+import ProfessorProfileDetails from "../components/profile/ProfessorProfileDetails";
+import BioBlurbSection from "../components/profile/BioBlurbSection";
+import ResearchAreasSection from "../components/profile/ResearchAreasSection";
+import { professorSummaryLine } from "../components/profile/professorSummary";
 import Button from "../components/ui/Button";
 import Modal from "../components/ui/Modal";
+import Surface from "../components/ui/Surface";
 
 type FormData = Omit<ResearchOpportunity, "source" | "timeAdded" | "enableApply">;
 
@@ -29,54 +36,66 @@ const emptyOpportunity: FormData = {
   colleges: [],
 };
 
-const isFormValid = (data: FormData): boolean => {
-  return (
-    data.projectTitle.trim() !== "" &&
-    Object.keys(data.contact).length > 0 &&
-    data.colleges.length > 0 &&
-    data.department.length > 0 &&
-    data.paidUnpaid !== "" &&
-    data.description.trim() !== "" &&
-    data.position.trim() !== "" &&
-    data.anticipatedEndDate.trim() !== ""
-  );
-};
+const isFormValid = (data: FormData): boolean =>
+  data.projectTitle.trim() !== "" &&
+  Object.keys(data.contact).length > 0 &&
+  data.colleges.length > 0 &&
+  data.department.length > 0 &&
+  data.paidUnpaid !== "" &&
+  data.description.trim() !== "" &&
+  data.position.trim() !== "" &&
+  data.anticipatedEndDate.trim() !== "";
 
-const isFormNonempty = (data: FormData): boolean => {
-  return (
-    data.projectTitle !== "" ||
-    Object.keys(data.contact).length > 0 ||
-    data.department.length > 0 ||
-    data.description !== "" ||
-    data.desiredSkillLevel !== "" ||
-    data.paidUnpaid !== "" ||
-    data.position !== "" ||
-    data.prereqs.length > 0 ||
-    data.relevantLinks.length > 0 ||
-    data.timeCommitment !== "" ||
-    data.anticipatedEndDate !== "" ||
-    data.keywords.length > 0 ||
-    data.colleges.length > 0
-  );
-};
+const isFormNonempty = (data: FormData): boolean =>
+  data.projectTitle !== "" ||
+  Object.keys(data.contact).length > 0 ||
+  data.department.length > 0 ||
+  data.description !== "" ||
+  data.desiredSkillLevel !== "" ||
+  data.paidUnpaid !== "" ||
+  data.position !== "" ||
+  data.prereqs.length > 0 ||
+  data.relevantLinks.length > 0 ||
+  data.timeCommitment !== "" ||
+  data.anticipatedEndDate !== "" ||
+  data.keywords.length > 0 ||
+  data.colleges.length > 0;
 
 const ProfessorDashboard = () => {
-  const navigate = useNavigate();
-  const { data: session } = useSession();
+  const { data: session } = useEffectiveSession();
   const name = session?.user?.name ?? "";
   const email = session?.user?.email ?? "";
-  const college = undefined;
-  const department = undefined;
+  const andrewId = session?.user?.andrewId || email.split("@")[0] || "";
+
+  const [professor, setProfessor] = useState<ProfessorType | null>(null);
+  const [bio, setBio] = useState("");
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [newOpportunity, setNewOpportunity] = useState<FormData>(() => ({
+    ...emptyOpportunity,
+    contact: name || email ? { [name || email]: email } : {},
+  }));
+  const [showConfirmDiscard, setShowConfirmDiscard] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+
+  useEffect(() => {
+    if (!andrewId) return;
+    const mock = getDevMockProfessor(andrewId);
+    if (mock) {
+      setProfessor(mock);
+      setBio(professorBioPlainText(mock.bio));
+    }
+  }, [andrewId]);
+
+  const college = professor?.college ?? [];
+  const department = professor?.department ?? [];
+  const tags = professor?.tags ?? [];
 
   const defaultOpportunity = (): FormData => ({
     ...emptyOpportunity,
     contact: name || email ? { [name || email]: email } : {},
+    department,
+    colleges: college,
   });
-
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const [newOpportunity, setNewOpportunity] = useState<FormData>(defaultOpportunity);
-  const [showConfirmDiscard, setShowConfirmDiscard] = useState(false);
-  const [submitError, setSubmitError] = useState("");
 
   const handleAdd = async () => {
     if (!isFormValid(newOpportunity)) return;
@@ -90,7 +109,6 @@ const ProfessorDashboard = () => {
       enableApply: false,
     };
 
-    // Attempts to add the opportunity to the database
     try {
       const res = await fetch("http://localhost:5050/opportunities", {
         method: "POST",
@@ -123,42 +141,59 @@ const ProfessorDashboard = () => {
     setShowCreateForm(false);
   };
 
+  const summary = professor
+    ? professorSummaryLine(professor)
+    : department.length > 0 || college.length > 0
+      ? [...department, ...college].join(" · ")
+      : email;
+
   return (
-    <main className="mx-auto max-w-4xl px-8 pb-16 pt-10">
-      <ProfileSummary
+    <ProfilePageShell
+      breadcrumbRoot="Account"
+      breadcrumbCurrent="Dashboard"
+      breadcrumbIcon={<DashboardOutlinedIcon sx={{ fontSize: 16 }} />}
+    >
+      <ProfileHeader
+        profileImage={professor?.profilePicture}
         name={name}
-        title={name || "Your Name"}
-        subtitle={email || undefined}
-        rows={[
-          { label: "College", value: college ?? "Not set", icon: <FaHouse size={12} /> },
-          { label: "Department", value: department ?? "Not set", icon: <ApartmentOutlinedIcon sx={{ fontSize: 14 }} /> },
-          { label: "Email", value: email ? <span className="font-mono">{email}</span> : "Not set", icon: <MailOutlinedIcon sx={{ fontSize: 14 }} /> },
-        ]}
+        summary={summary}
       />
 
-      {!showCreateForm ? (
-        <div className="mt-8 flex justify-center">
-          <Button variant="primary" icon={<AddOutlinedIcon sx={{ fontSize: 16 }} />} onClick={() => setShowCreateForm(true)}>
-            Add research opportunity
-          </Button>
-        </div>
-      ) : (
-        <section className="mt-10">
-          <h2 className="mb-5 text-heading text-ink">Create new opportunity</h2>
-          <OpportunityForm initialData={newOpportunity} onChange={(data) => setNewOpportunity(data)} />
-          {submitError ? (
-            <p role="alert" className="mt-6 text-small text-danger">
-              {submitError}
-            </p>
-          ) : null}
-          <div className="mt-8 flex justify-end gap-2">
-            <Button onClick={handleDiscard}>Discard</Button>
-            <Button variant="primary" onClick={handleAdd} disabled={!isFormValid(newOpportunity)}>
+      <AboutSection title="Details" className="mt-8">
+        <ProfessorProfileDetails college={college} department={department} email={email} />
+      </AboutSection>
+
+      <BioBlurbSection initialBio={bio} onSave={setBio} />
+
+      {tags.length > 0 ? <ResearchAreasSection tags={tags} /> : null}
+
+      <AboutSection title="Opportunities">
+        {showCreateForm ? (
+          <Surface className="p-5">
+            <OpportunityForm initialData={newOpportunity} onChange={(data) => setNewOpportunity(data)} />
+            {submitError ? (
+              <p role="alert" className="mt-6 text-small text-danger">
+                {submitError}
+              </p>
+            ) : null}
+            <div className="mt-6 flex justify-end gap-2">
+              <Button size="sm" onClick={handleDiscard}>
+                Discard
+              </Button>
+              <Button size="sm" variant="primary" onClick={handleAdd} disabled={!isFormValid(newOpportunity)}>
+                Add opportunity
+              </Button>
+            </div>
+          </Surface>
+        ) : (
+          <Surface className="flex flex-col items-start gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-body text-ink-muted">Post a new research opportunity for students to discover.</p>
+            <Button size="sm" variant="primary" icon={<AddOutlinedIcon sx={{ fontSize: 15 }} />} onClick={() => setShowCreateForm(true)}>
               Add opportunity
             </Button>
-          </div>
-        </section>
-      )}
+          </Surface>
+        )}
+      </AboutSection>
 
       {showConfirmDiscard ? (
         <Modal
@@ -175,7 +210,7 @@ const ProfessorDashboard = () => {
           The form has unsaved changes. Discarding clears everything you&rsquo;ve entered.
         </Modal>
       ) : null}
-    </main>
+    </ProfilePageShell>
   );
 };
 

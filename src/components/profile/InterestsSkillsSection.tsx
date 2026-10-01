@@ -1,12 +1,9 @@
-// Currently an unused feature for the student dashboard.
-
-import { useState } from "react";
+import React, { useState } from "react";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import AboutSection from "./AboutSection";
 import Tag from "../Tag";
 import Surface from "../ui/Surface";
-import Button from "../ui/Button";
-import Input from "../ui/Input";
-import Modal from "../ui/Modal";
+import { Meta } from "../ui/Meta";
 
 interface InterestsSkillsSectionProps {
   items?: string[];
@@ -14,53 +11,68 @@ interface InterestsSkillsSectionProps {
   onRemoveItem?: (item: string) => void;
 }
 
-const InterestsSkillsSection = ({ items = [], onAddItem }: InterestsSkillsSectionProps) => {
-  const [newItem, setNewItem] = useState(""); // Single state for new item
-  const [showPopup, setShowPopup] = useState(false); // Single state for popup
+const chipButton =
+  "inline-flex h-[26px] items-center gap-1 rounded-chip border border-dashed border-accent/30 px-2 text-small text-accent-strong transition-[background-color,color,border-color,transform] duration-150 ease-out hover:border-accent/50 hover:bg-accent-bg/60 hover:text-accent active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35";
 
-  const handleAddItem = () => {
-    if (newItem.trim() !== "" && onAddItem) {
-      onAddItem(newItem.trim());
+const InterestsSkillsSection = ({ items = [], onAddItem, onRemoveItem }: InterestsSkillsSectionProps) => {
+  const [adding, setAdding] = useState(false);
+  const [newItem, setNewItem] = useState("");
+
+  const commit = () => {
+    const value = newItem.trim();
+    if (value && !items.some((item) => item.toLowerCase() === value.toLowerCase())) {
+      onAddItem?.(value);
+    }
+    setNewItem("");
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      commit();
+    }
+    if (e.key === "Escape") {
       setNewItem("");
-      setShowPopup(false);
+      setAdding(false);
     }
   };
 
   return (
-    <section className="relative mb-8">
-      <h2 className="mb-3 text-heading text-ink">Interests &amp; Skills</h2>
-
-      <Surface className="scrollbar-minimal flex max-h-72 flex-wrap items-center gap-1.5 overflow-y-auto p-4">
+    <AboutSection
+      title="Interests & skills"
+      action={items.length > 0 ? <Meta>{items.length} added</Meta> : null}
+    >
+      <Surface className="flex flex-wrap items-center gap-1.5 p-4">
         {items.map((item) => (
-          <Tag key={item} keyword={item} />
+          <Tag
+            key={item}
+            keyword={item}
+            className="h-[26px]"
+            onRemove={onRemoveItem ? () => onRemoveItem(item) : undefined}
+          />
         ))}
-        <Button size="sm" icon={<AddOutlinedIcon sx={{ fontSize: 14 }} />} onClick={() => setShowPopup(true)}>
-          Add item
-        </Button>
-      </Surface>
-
-      {showPopup ? (
-        <Modal
-          title="Add a new interest or skill"
-          footer={
-            <>
-              <Button onClick={() => setShowPopup(false)}>Cancel</Button>
-              <Button variant="primary" onClick={handleAddItem}>
-                Add
-              </Button>
-            </>
-          }
-        >
-          <Input
+        {adding ? (
+          <input
+            aria-label="New interest or skill"
             value={newItem}
             onChange={(e) => setNewItem(e.target.value)}
-            placeholder="Enter new interest or skill..."
-            aria-label="New interest or skill"
+            onKeyDown={handleKeyDown}
+            onBlur={() => {
+              commit();
+              setAdding(false);
+            }}
+            placeholder="Type and press Enter"
             autoFocus
+            className="h-[26px] w-[180px] rounded-chip border border-accent bg-surface px-2 text-small text-ink outline-none ring-2 ring-accent/15 placeholder:text-ink-muted"
           />
-        </Modal>
-      ) : null}
-    </section>
+        ) : (
+          <button type="button" className={chipButton} onClick={() => setAdding(true)}>
+            <AddOutlinedIcon sx={{ fontSize: 14 }} />
+            {items.length > 0 ? "Add" : "Add an interest or skill"}
+          </button>
+        )}
+      </Surface>
+    </AboutSection>
   );
 };
 

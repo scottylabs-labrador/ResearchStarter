@@ -5,9 +5,10 @@ import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import { Experience } from "../../types/Experience";
 import ExperienceForm from "./ExperienceForm";
 import { FaPencil } from "react-icons/fa6";
-import { BsEyeglasses } from "react-icons/bs";
-import { FaHouse, FaBook } from "react-icons/fa6";
-import { CiCalendar } from "react-icons/ci";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
+import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
+import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import Tag from "../Tag";
 import Surface from "../ui/Surface";
 import Button from "../ui/Button";
@@ -121,25 +122,25 @@ const PreviousExperiencesSection = ({
                   <MetaRow className="mb-2 text-small text-ink-secondary">
                     {experience.professorOrCompany ? (
                       <span className="inline-flex items-center gap-1.5">
-                        <BsEyeglasses size={16} className={iconClass} />
+                        <PersonOutlineOutlinedIcon sx={{ fontSize: 15 }} className={iconClass} />
                         {experience.professorOrCompany}
                       </span>
                     ) : null}
                     {experience.topic ? (
                       <span className="inline-flex items-center gap-1.5">
-                        <FaHouse size={13} className={iconClass} />
+                        <AccountBalanceOutlinedIcon sx={{ fontSize: 15 }} className={iconClass} />
                         {experience.topic}
                       </span>
                     ) : null}
                     {experience.level ? (
                       <span className="inline-flex items-center gap-1.5">
-                        <FaBook size={13} className={iconClass} />
+                        <MenuBookOutlinedIcon sx={{ fontSize: 15 }} className={iconClass} />
                         {experience.level}
                       </span>
                     ) : null}
                   </MetaRow>
                   {experience.date ? (
-                    <Meta icon={<CiCalendar size={15} />} className="mb-3">
+                    <Meta icon={<CalendarTodayOutlinedIcon sx={{ fontSize: 14 }} />} className="mb-3">
                       {experience.date}
                       {experience.endDate ? ` – ${experience.endDate}` : ""}
                     </Meta>

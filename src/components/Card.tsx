@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkIconUnfilled from "@mui/icons-material/BookmarkBorderOutlined";
-import { BsEyeglasses } from "react-icons/bs";
-import { FaHouse, FaBook } from "react-icons/fa6";
-import { CiCalendar } from "react-icons/ci";
-import { TbCoin } from "react-icons/tb";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
+import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
+import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
+import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import { ResearchType } from "../DataTypes";
 import { matchesCompensation } from "../utils";
 import { useSession } from "../lib/authClient";
@@ -51,6 +52,7 @@ const Card = ({ research, showApplyButton, onApply }: CardProps) => {
 
   // Fetch bookmark status
   useEffect(() => {
+    if (!id) return;
     async function fetchBookmark() {
       const response = await fetch(`/api/users/${id}`);
       if (!response.ok) {
@@ -63,8 +65,7 @@ const Card = ({ research, showApplyButton, onApply }: CardProps) => {
     }
 
     fetchBookmark();
-    return;
-  }, []);
+  }, [id, research._id]);
 
   function bookmarkOpportunity() {
     if (id != undefined) {
@@ -84,11 +85,11 @@ const Card = ({ research, showApplyButton, onApply }: CardProps) => {
 
   return (
     <Surface as="article" interactive className="relative p-[20px]">
-      <div className="mb-2 flex items-start justify-between gap-4">
+      <div className={`mb-1 flex justify-between gap-4 ${research.timeAdded ? "items-baseline" : "items-start"}`}>
         <h3 className="min-w-0 break-words text-card-title text-ink">
           <Link
             to={`/info/${research._id}`}
-            className="after:absolute after:inset-0 after:rounded-surface focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-ink"
+            className="after:absolute after:inset-0 after:rounded-surface focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-accent/35"
           >
             {research.projectTitle}
           </Link>
@@ -97,6 +98,7 @@ const Card = ({ research, showApplyButton, onApply }: CardProps) => {
           {research.timeAdded ? <Meta>Posted {research.timeAdded}</Meta> : null}
           <IconButton
             size="sm"
+            className="-my-1 -me-1.5"
             aria-label={bookmark ? "Remove bookmark" : "Bookmark"}
             pressed={bookmark}
             onClick={bookmarkOpportunity}
@@ -107,22 +109,22 @@ const Card = ({ research, showApplyButton, onApply }: CardProps) => {
       </div>
 
       {professorName || college || research.position ? (
-        <MetaRow className="mb-2 text-small text-ink-secondary">
+        <MetaRow className="mb-1.5 text-small text-ink-secondary">
           {professorName ? (
             <span className="inline-flex min-w-0 items-center gap-1.5">
-              <BsEyeglasses size={16} className={iconClass} />
+              <PersonOutlineOutlinedIcon sx={{ fontSize: 15 }} className={iconClass} />
               {professorName}
             </span>
           ) : null}
           {college ? (
             <span className="inline-flex min-w-0 items-center gap-1.5">
-              <FaHouse size={13} className={iconClass} />
+              <AccountBalanceOutlinedIcon sx={{ fontSize: 15 }} className={iconClass} />
               {college}
             </span>
           ) : null}
           {research.position ? (
             <span className="inline-flex min-w-0 items-center gap-1.5">
-              <FaBook size={13} className={iconClass} />
+              <MenuBookOutlinedIcon sx={{ fontSize: 15 }} className={iconClass} />
               {research.position}
             </span>
           ) : null}
@@ -131,17 +133,23 @@ const Card = ({ research, showApplyButton, onApply }: CardProps) => {
 
       {research.anticipatedEndDate || research.paidUnpaid ? (
         <div className="mb-3 flex flex-wrap items-center gap-2">
-          {research.anticipatedEndDate ? <Meta icon={<CiCalendar size={15} />}>{research.anticipatedEndDate}</Meta> : null}
+          {research.anticipatedEndDate ? (
+            <Meta icon={<CalendarTodayOutlinedIcon sx={{ fontSize: 14 }} />}>{research.anticipatedEndDate}</Meta>
+          ) : null}
           {research.paidUnpaid ? (
-            <Badge tone={matchesCompensation(research.paidUnpaid, "Paid") ? "positive" : "neutral"} icon={<TbCoin size={13} />}>
-              {research.paidUnpaid}
-            </Badge>
+            matchesCompensation(research.paidUnpaid, "Paid") ? (
+              <Badge tone="positive" icon={<PaidOutlinedIcon sx={{ fontSize: 14 }} />}>
+                {research.paidUnpaid}
+              </Badge>
+            ) : (
+              <Meta icon={<PaidOutlinedIcon sx={{ fontSize: 14 }} />}>{research.paidUnpaid}</Meta>
+            )
           ) : null}
         </div>
       ) : null}
 
       {research.description ? (
-        <p className="mb-4 line-clamp-3 text-body text-ink-secondary">{research.description}</p>
+        <p className="mb-3 line-clamp-3 max-w-[80ch] text-body text-ink-secondary">{research.description}</p>
       ) : null}
 
       {allKeywords.length > 0 || showApplyButton ? (
@@ -167,4 +175,4 @@ const Card = ({ research, showApplyButton, onApply }: CardProps) => {
   );
 };
 
-export default Card;
+export default React.memo(Card);

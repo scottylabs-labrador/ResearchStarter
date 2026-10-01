@@ -1,9 +1,9 @@
 import React from "react";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkIconUnfilled from "@mui/icons-material/BookmarkBorderOutlined";
-import { BsEyeglasses } from "react-icons/bs";
-import { FaBook } from "react-icons/fa6";
-import { CiCalendar } from "react-icons/ci";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
+import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import Tag from "../Tag";
 import Surface from "../ui/Surface";
 import IconButton from "../ui/IconButton";
@@ -52,13 +52,13 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({
         <MetaRow className="mb-2 text-small text-ink-secondary">
           {professorName ? (
             <span className="inline-flex items-center gap-1.5">
-              <BsEyeglasses size={16} className={iconClass} />
+              <PersonOutlineOutlinedIcon sx={{ fontSize: 15 }} className={iconClass} />
               {professorName}
             </span>
           ) : null}
           {department ? (
             <span className="inline-flex items-center gap-1.5">
-              <FaBook size={13} className={iconClass} />
+              <MenuBookOutlinedIcon sx={{ fontSize: 15 }} className={iconClass} />
               {department}
             </span>
           ) : null}
@@ -66,7 +66,7 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({
       ) : null}
 
       {dateLine ? (
-        <Meta icon={<CiCalendar size={15} />} className="mb-4">
+        <Meta icon={<CalendarTodayOutlinedIcon sx={{ fontSize: 14 }} />} className="mb-4">
           {dateLine}
         </Meta>
       ) : null}

@@ -13,6 +13,10 @@
   --ink: 24 24 27;
   --ink-secondary: 82 82 91;
   --ink-muted: 107 107 115;
+  --accent: 98 132 158;
+  --accent-strong: 72 107 132;
+  --accent-muted: 164 186 204;
+  --accent-bg: 236 243 249;
   --positive: 21 128 61;
   --positive-bg: 236 253 243;
   --warning: 180 83 9;
@@ -20,6 +24,9 @@
   --danger: 185 28 28;
   --danger-bg: 254 242 242;
   --nav-h: 56px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 html {
@@ -55,7 +62,8 @@ html {
 
 .scrollbar-minimal {
   scrollbar-width: thin;
-  scrollbar-color: rgb(var(--hairline-strong)) transparent;
+  scrollbar-color: rgb(var(--accent-muted)) transparent;
+  scrollbar-gutter: stable;
 }
 
 .scrollbar-minimal::-webkit-scrollbar {
@@ -67,6 +75,6 @@ html {
 }
 
 .scrollbar-minimal::-webkit-scrollbar-thumb {
-  background-color: rgb(var(--hairline-strong));
+  background-color: rgb(var(--accent-muted));
   border-radius: 9999px;
 }

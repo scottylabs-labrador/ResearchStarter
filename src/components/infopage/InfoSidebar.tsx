@@ -5,9 +5,9 @@ import InfoIcon from "@mui/icons-material/Info";
 import OpenInNewOutlinedIcon from "@mui/icons-material/OpenInNewOutlined";
 import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
-import { FaBook } from "react-icons/fa6";
-import { TbCoin } from "react-icons/tb";
-import { CiCalendar } from "react-icons/ci";
+import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
+import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
+import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import { ResearchType } from "../../DataTypes";
 import Surface from "../ui/Surface";
 import SectionLabel from "../ui/SectionLabel";
@@ -19,14 +19,14 @@ interface InfoSidebarProps {
 
 const InfoSidebar: React.FC<InfoSidebarProps> = ({ info }) => {
   const detailRows: DetailRow[] = [];
-  if (info.position) detailRows.push({ label: "Position", value: info.position, icon: <FaBook size={12} /> });
-  if (info.paidUnpaid) detailRows.push({ label: "Compensation", value: info.paidUnpaid, icon: <TbCoin size={14} /> });
+  if (info.position) detailRows.push({ label: "Position", value: info.position, icon: <MenuBookOutlinedIcon sx={{ fontSize: 14 }} /> });
+  if (info.paidUnpaid) detailRows.push({ label: "Compensation", value: info.paidUnpaid, icon: <PaidOutlinedIcon sx={{ fontSize: 14 }} /> });
   if (info.timeCommitment)
     detailRows.push({ label: "Time commitment", value: `${info.timeCommitment} hrs / week`, icon: <ScheduleOutlinedIcon sx={{ fontSize: 14 }} /> });
   if (info.desiredSkillLevel)
     detailRows.push({ label: "Skill level", value: info.desiredSkillLevel, icon: <SchoolOutlinedIcon sx={{ fontSize: 14 }} /> });
   if (info.anticipatedEndDate)
-    detailRows.push({ label: "Anticipated end", value: info.anticipatedEndDate, icon: <CiCalendar size={14} /> });
+    detailRows.push({ label: "Anticipated end", value: info.anticipatedEndDate, icon: <CalendarTodayOutlinedIcon sx={{ fontSize: 14 }} /> });
 
   const prereqs = info.prereqs ?? [];
   const contacts = Object.entries(info.contact ?? {});
