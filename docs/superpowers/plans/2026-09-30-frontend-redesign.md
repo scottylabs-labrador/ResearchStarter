@@ -162,7 +162,7 @@ status=0
 
 tsc_src() {
   rm -rf dist
-  npx tsc --noEmit -p . --ignoreDeprecations 6.0 2>&1 | grep "^src/" | grep -v "\.stories\.tsx" | sed -E 's/\([0-9]+,[0-9]+\)//' | sort
+  npx tsc --noEmit -p . --ignoreDeprecations 6.0 --incremental false 2>&1 | grep "^src/" | grep -v "\.stories\.tsx" | sed -E 's/\([0-9]+,[0-9]+\)//' | sort
 }
 
 lint_errors() {
@@ -201,7 +201,7 @@ if npm run build > "$DIR/build-now.txt" 2>&1; then echo "build OK"; else echo "B
 exit $status
 ```
 
-(`rm -rf dist` deletes only Vite's git-ignored build output. The build step recreates it. Without it, `tsc` would also type-check the huge bundled JS and take minutes.)
+(`rm -rf dist` deletes only Vite's git-ignored build output. The build step recreates it. Without it, `tsc` would also type-check the huge bundled JS and take minutes. `--incremental false` stops `tsc` from rewriting the tracked `tsconfig.tsbuildinfo`.)
 
 - [ ] **Step 6: Write `$CHECKS/shoot.cjs`**
 
