@@ -1,39 +1,72 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Jersey+25&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Jersey+25&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --canvas: 247 246 244;
+  --surface: 255 255 255;
+  --surface-muted: 241 240 237;
+  --hairline: 231 229 225;
+  --hairline-strong: 214 211 206;
+  --ink: 24 24 27;
+  --ink-secondary: 82 82 91;
+  --ink-muted: 107 107 115;
+  --positive: 21 128 61;
+  --positive-bg: 236 253 243;
+  --warning: 180 83 9;
+  --warning-bg: 255 247 237;
+  --danger: 185 28 28;
+  --danger-bg: 254 242 242;
+  --nav-h: 56px;
+}
+
 html {
   font-size: 14px;
 }
 
+@layer base {
+  body {
+    @apply bg-canvas font-sans text-ink antialiased;
+  }
+}
+
+@layer utilities {
+  .bg-hairline-texture {
+    background-image: repeating-linear-gradient(
+      135deg,
+      rgb(24 24 27 / 0.035) 0 1px,
+      transparent 1px 12px
+    );
+  }
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-/* Minimal scrollbar */
 .scrollbar-minimal {
-    scrollbar-width: thin;
-    scrollbar-color: #d8b4fe transparent;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--hairline-strong)) transparent;
 }
 
 .scrollbar-minimal::-webkit-scrollbar {
-    width: 4px;
+  width: 4px;
 }
 
 .scrollbar-minimal::-webkit-scrollbar-track {
-    background: transparent;
+  background: transparent;
 }
 
 .scrollbar-minimal::-webkit-scrollbar-thumb {
-    background-color: #d8b4fe;
-    border-radius: 9999px;
+  background-color: rgb(var(--hairline-strong));
+  border-radius: 9999px;
 }
