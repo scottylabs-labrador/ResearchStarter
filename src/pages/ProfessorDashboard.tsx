@@ -157,13 +157,14 @@ const ProfessorDashboard = () => {
         profileImage={professor?.profilePicture}
         name={name}
         summary={summary}
+        readOnly
       />
 
       <AboutSection title="Details" className="mt-8">
         <ProfessorProfileDetails college={college} department={department} email={email} />
       </AboutSection>
 
-      <BioBlurbSection initialBio={bio} onSave={setBio} />
+      <BioBlurbSection initialBio={bio} />
 
       {tags.length > 0 ? <ResearchAreasSection tags={tags} /> : null}
 

@@ -139,14 +139,14 @@ const ProfessorProfile = () => {
         profileImage={professor.profilePicture}
         name={professor.name}
         summary={professorSummaryLine(professor)}
-        readOnly={!isOwnProfile}
+        readOnly
       />
 
       <AboutSection title="Details" className="mt-8">
         <ProfessorProfileDetails college={professor.college} department={professor.department} email={professor.email} />
       </AboutSection>
 
-      <BioBlurbSection initialBio={bio} onSave={isOwnProfile ? setBio : undefined} />
+      <BioBlurbSection initialBio={bio} />
 
       <ResearchAreasSection tags={professor.tags ?? []} />
 

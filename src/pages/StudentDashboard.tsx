@@ -102,8 +102,8 @@ const ProfilePage = () => {
     }
   };
 
+  // Only fields that are actually saved count; photo uploads are preview-only.
   const steps = [
-    Boolean(profile.image),
     Boolean(profile.major),
     Boolean(profile.bio),
     profile.interests.length > 0,
