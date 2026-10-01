@@ -1,5 +1,4 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
-import { flushSync } from "react-dom";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import SearchOffOutlinedIcon from "@mui/icons-material/SearchOffOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
@@ -53,10 +52,7 @@ const FilterPage = () => {
   const resultsRef = useRef<HTMLDivElement>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
 
-  useSlashToFocus(searchRef, () => {
-    flushSync(() => setSearchBarHidden(false));
-    resultsRef.current?.scrollTo({ top: 0 });
-  });
+  useSlashToFocus(searchRef);
 
   useEffect(() => {
     const header = headerRef.current;
@@ -314,7 +310,10 @@ const FilterPage = () => {
         <div
           ref={headerRef}
           className={`absolute left-0 right-0 top-0 z-10 bg-canvas ${
-            searchBarHidden ? "pointer-events-none invisible -translate-y-full opacity-0" : "visible translate-y-0 opacity-100"
+            // Hidden visually only, so its controls stay in the tab order; focus inside brings it back.
+            searchBarHidden
+              ? "pointer-events-none -translate-y-full opacity-0 focus-within:pointer-events-auto focus-within:translate-y-0 focus-within:opacity-100"
+              : "translate-y-0 opacity-100"
           }`}
         >
           <div className="px-8 pb-4 pt-6 [padding-right:calc(2rem+10px)]">
