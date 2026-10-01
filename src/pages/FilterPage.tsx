@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
+import { flushSync } from "react-dom";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import SearchOffOutlinedIcon from "@mui/icons-material/SearchOffOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
@@ -31,7 +32,6 @@ const FilterPage = () => {
   const [searchFocused, setSearchFocused] = useState(false);
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const searchRef = useRef<HTMLInputElement>(null);
-  useSlashToFocus(searchRef);
 
   // College checkboxes
   const [collegeChecks, setCollegeChecks] = useState<Record<string, boolean>>({});
@@ -52,6 +52,11 @@ const FilterPage = () => {
   const headerRef = useRef<HTMLDivElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
+
+  useSlashToFocus(searchRef, () => {
+    flushSync(() => setSearchBarHidden(false));
+    resultsRef.current?.scrollTo({ top: 0 });
+  });
 
   useEffect(() => {
     const header = headerRef.current;
