@@ -1,7 +1,12 @@
 // Currently an unused feature for the student dashboard.
 
-import React, { useState } from "react";
+import { useState } from "react";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import Tag from "../Tag";
+import Surface from "../ui/Surface";
+import Button from "../ui/Button";
+import Input from "../ui/Input";
+import Modal from "../ui/Modal";
 
 interface InterestsSkillsSectionProps {
   items?: string[];
@@ -9,11 +14,7 @@ interface InterestsSkillsSectionProps {
   onRemoveItem?: (item: string) => void;
 }
 
-const InterestsSkillsSection = ({
-  items = [],
-  onAddItem,
-  onRemoveItem,
-}: InterestsSkillsSectionProps) => {
+const InterestsSkillsSection = ({ items = [], onAddItem }: InterestsSkillsSectionProps) => {
   const [newItem, setNewItem] = useState(""); // Single state for new item
   const [showPopup, setShowPopup] = useState(false); // Single state for popup
 
@@ -26,49 +27,39 @@ const InterestsSkillsSection = ({
   };
 
   return (
-    <section className="mb-8 relative">
-      <h2 className="font-jersey text-3xl font-bold mb-4">Interests & Skills</h2>
+    <section className="relative mb-8">
+      <h2 className="mb-3 text-heading text-ink">Interests &amp; Skills</h2>
 
-      <div className="grid grid-cols-5 gap-2 mb-4 max-h-72 overflow-y-auto bg-magenta-100 p-4 rounded-md">
+      <Surface className="scrollbar-minimal flex max-h-72 flex-wrap items-center gap-1.5 overflow-y-auto p-4">
         {items.map((item) => (
-          <Tag key={item} keyword={item} className="w-64 h-16 flex items-center justify-center overflow-hidden whitespace-nowrap text-ellipsis" />
+          <Tag key={item} keyword={item} />
         ))}
-        <button
-          onClick={() => setShowPopup(true)}
-          className="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 flex items-center justify-center w-48 h-16 overflow-hidden whitespace-nowrap text-ellipsis"
-        >
-          + Add Item
-        </button>
-      </div>
+        <Button size="sm" icon={<AddOutlinedIcon sx={{ fontSize: 14 }} />} onClick={() => setShowPopup(true)}>
+          Add item
+        </Button>
+      </Surface>
 
-      {showPopup && ( /* Single Add Item Popup */
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl w-96">
-            <h3 className="text-xl font-bold mb-4">Add New Interest or Skill</h3>
-            <input
-              type="text"
-              value={newItem}
-              onChange={(e) => setNewItem(e.target.value)}
-              placeholder="Enter new interest or skill..."
-              className="w-full border border-gray-300 p-2 rounded-lg mb-4 focus:ring-2 focus:ring-blue-500"
-            />
-            <div className="flex justify-end space-x-2">
-              <button
-                onClick={() => setShowPopup(false)}
-                className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleAddItem}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-              >
+      {showPopup ? (
+        <Modal
+          title="Add a new interest or skill"
+          footer={
+            <>
+              <Button onClick={() => setShowPopup(false)}>Cancel</Button>
+              <Button variant="primary" onClick={handleAddItem}>
                 Add
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+              </Button>
+            </>
+          }
+        >
+          <Input
+            value={newItem}
+            onChange={(e) => setNewItem(e.target.value)}
+            placeholder="Enter new interest or skill..."
+            aria-label="New interest or skill"
+            autoFocus
+          />
+        </Modal>
+      ) : null}
     </section>
   );
 };

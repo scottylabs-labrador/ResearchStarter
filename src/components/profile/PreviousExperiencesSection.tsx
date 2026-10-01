@@ -1,12 +1,19 @@
 // Currently an unused feature for the student dashboard.
 
 import React, { useState } from "react";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import { Experience } from "../../types/Experience";
 import ExperienceForm from "./ExperienceForm";
 import { FaPencil } from "react-icons/fa6";
 import { BsEyeglasses } from "react-icons/bs";
 import { FaHouse, FaBook } from "react-icons/fa6";
 import { CiCalendar } from "react-icons/ci";
+import Tag from "../Tag";
+import Surface from "../ui/Surface";
+import Button from "../ui/Button";
+import IconButton from "../ui/IconButton";
+import Modal from "../ui/Modal";
+import { Meta, MetaRow } from "../ui/Meta";
 
 interface PreviousExperiencesSectionProps {
   initialExperiences?: Experience[];
@@ -18,6 +25,9 @@ interface PreviousExperiencesSectionProps {
   onCancelAddExperienceClick: () => void;
   isAddingNewExperience: boolean;
 }
+
+const iconClass = "shrink-0 text-ink-muted";
+const fieldLabel = "font-medium text-ink";
 
 const PreviousExperiencesSection = ({
   initialExperiences = [],
@@ -95,190 +105,151 @@ const PreviousExperiencesSection = ({
     <section className="mb-8">
       {!isEditingAllExperiences && !isAddingNewExperience ? (
         <>
-          <div className="flex items-center gap-2 mb-4">
-            <h2 className="font-jersey text-3xl font-bold">Previous Experiences</h2>
-            <button
-              onClick={onEditExperiencesClick}
-              className="text-black hover:text-gray-600 transition-colors"
-              aria-label="Edit experiences"
-            >
-              <FaPencil size={18} />
-            </button>
+          <div className="mb-3 flex items-center gap-1">
+            <h2 className="text-heading text-ink">Previous Experiences</h2>
+            <IconButton size="sm" aria-label="Edit experiences" onClick={onEditExperiencesClick}>
+              <FaPencil size={13} />
+            </IconButton>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {experiences.length === 0 ? (
-              <p className="text-gray-700">No previous experiences added yet.</p>
+              <p className="text-body text-ink-muted">No previous experiences added yet.</p>
             ) : (
               experiences.map((experience) => (
-                <div key={experience.id} className="w-full bg-light-color rounded-xl p-10 relative flex items-start border border-card-highlight overflow-hidden
-                            transition-all duration-300 ease-in-out hover:shadow-[0_4px_20px_#E2CFFF]">
-                  <div className="w-full overflow-hidden">
-                    <h3 className="font-bold text-3xl mb-3 overflow-hidden text-ellipsis whitespace-nowrap">{experience.title}</h3>
-                    <div className="mb-3">
-                      <div className="flex flex-row items-center gap-2">
-                        <BsEyeglasses/>
-                        <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{experience.professorOrCompany} | </h3>
-                        <FaHouse/>
-                        <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{experience.topic} | </h3>
-                        <FaBook/>
-                        <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{experience.level}</h3>
-                      </div>
-                      <div className="flex flex-row items-center gap-2">
-                        <CiCalendar/>
-                        <h3 className="text-lg overflow-hidden text-ellipsis whitespace-nowrap">{experience.date}{experience.endDate ? ` - ${experience.endDate}` : ""}</h3>
-                      </div>
-                    </div>
-                    <div className="flex flex-wrap mb-3">
+                <Surface key={experience.id} as="article" interactive className="p-[20px]">
+                  <h3 className="mb-2 truncate text-card-title text-ink">{experience.title}</h3>
+                  <MetaRow className="mb-2 text-small text-ink-secondary">
+                    {experience.professorOrCompany ? (
+                      <span className="inline-flex items-center gap-1.5">
+                        <BsEyeglasses size={16} className={iconClass} />
+                        {experience.professorOrCompany}
+                      </span>
+                    ) : null}
+                    {experience.topic ? (
+                      <span className="inline-flex items-center gap-1.5">
+                        <FaHouse size={13} className={iconClass} />
+                        {experience.topic}
+                      </span>
+                    ) : null}
+                    {experience.level ? (
+                      <span className="inline-flex items-center gap-1.5">
+                        <FaBook size={13} className={iconClass} />
+                        {experience.level}
+                      </span>
+                    ) : null}
+                  </MetaRow>
+                  {experience.date ? (
+                    <Meta icon={<CiCalendar size={15} />} className="mb-3">
+                      {experience.date}
+                      {experience.endDate ? ` – ${experience.endDate}` : ""}
+                    </Meta>
+                  ) : null}
+                  {experience.associatedTags.length > 0 ? (
+                    <div className="mb-3 flex flex-wrap gap-1.5">
                       {experience.associatedTags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="bg-blue-200 text-blue-800 text-sm font-medium mr-2 mb-2 px-2.5 py-0.5 rounded"
-                        >
-                          {tag}
-                        </span>
+                        <Tag key={tag} keyword={tag} />
                       ))}
                     </div>
-                    <div className="overflow-hidden">
-                      <p className="text-lg flex-grow overflow-hidden text-ellipsis line-clamp-3">
-                        {experience.description?.substring(0, 300)}
-                        {experience.description?.length > 200 && "..."}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                  ) : null}
+                  <p className="line-clamp-3 text-body text-ink-secondary">
+                    {experience.description?.substring(0, 300)}
+                    {experience.description?.length > 200 && "..."}
+                  </p>
+                </Surface>
               ))
             )}
           </div>
         </>
       ) : isEditingAllExperiences ? (
         <div>
-          <h3 className="text-xl font-semibold mb-4">Edit All Experiences</h3>
-          {experiences.map((experience) => (
-            <div key={experience.id} className="mb-4 p-4 border rounded-md bg-pink-hippo">
-              {editingExperienceId === experience.id ? (
-                <>
-                  <ExperienceForm
-                    initialData={currentEditText!}
-                    onChange={(data) => setCurrentEditText({ ...data, id: experience.id })}
-                  />
-                  <div className="flex justify-end space-x-2 mt-2">
-                    <button
-                      onClick={handleCancelEdit}
-                      className="px-3 py-1 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg transition-colors duration-150 ease-out hover:bg-gray-50 active:scale-[0.97]"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={() => {
-                        setExperienceToDelete(experience.id);
-                        setShowConfirmDeleteModal(true);
-                      }}
-                      className="px-3 py-1 bg-red-500 text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
-                    >
-                      Delete
-                    </button>
-                    <button
-                      onClick={() => handleSaveEdit(experience.id)}
-                      className="px-3 py-1 bg-card-highlight text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
-                    >
-                      Save
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h3 className="text-lg font-bold">{experience.title}</h3>
-                    <p className="text-gray-700"><span className="font-semibold">Professor/Company:</span> {experience.professorOrCompany}</p>
-                    <p className="text-gray-700"><span className="font-semibold">Topic:</span> {experience.topic}</p>
-                    <p className="text-gray-700"><span className="font-semibold">Date:</span> {experience.date}</p>
-                    <p className="text-gray-700"><span className="font-semibold">Level:</span> {experience.level}</p>
-                    <div className="flex flex-wrap mt-2">
-                      {experience.associatedTags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="bg-blue-200 text-blue-800 text-sm font-medium mr-2 mb-2 px-2.5 py-0.5 rounded"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+          <h3 className="mb-4 text-heading text-ink">Edit all experiences</h3>
+          <div className="space-y-3">
+            {experiences.map((experience) => (
+              <Surface key={experience.id} className="p-4">
+                {editingExperienceId === experience.id ? (
+                  <>
+                    <ExperienceForm
+                      initialData={currentEditText!}
+                      onChange={(data) => setCurrentEditText({ ...data, id: experience.id })}
+                    />
+                    <div className="mt-4 flex justify-end gap-2">
+                      <Button size="sm" onClick={handleCancelEdit}>
+                        Cancel
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="danger"
+                        onClick={() => {
+                          setExperienceToDelete(experience.id);
+                          setShowConfirmDeleteModal(true);
+                        }}
+                      >
+                        Delete
+                      </Button>
+                      <Button size="sm" variant="primary" onClick={() => handleSaveEdit(experience.id)}>
+                        Save
+                      </Button>
                     </div>
-                    <p className="text-gray-700 leading-relaxed mt-2">
-                      {experience.description}
-                    </p>
+                  </>
+                ) : (
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0 space-y-1 text-small text-ink-secondary">
+                      <h4 className="text-body font-semibold text-ink">{experience.title}</h4>
+                      <p><span className={fieldLabel}>Professor/Company:</span> {experience.professorOrCompany}</p>
+                      <p><span className={fieldLabel}>Topic:</span> {experience.topic}</p>
+                      <p><span className={fieldLabel}>Date:</span> {experience.date}</p>
+                      <p><span className={fieldLabel}>Level:</span> {experience.level}</p>
+                      {experience.associatedTags.length > 0 ? (
+                        <div className="flex flex-wrap gap-1.5 pt-1">
+                          {experience.associatedTags.map((tag) => (
+                            <Tag key={tag} keyword={tag} />
+                          ))}
+                        </div>
+                      ) : null}
+                      <p className="pt-1 leading-relaxed">{experience.description}</p>
+                    </div>
+                    <Button size="sm" variant="ghost" onClick={() => handleEditClick(experience)}>
+                      Edit
+                    </Button>
                   </div>
-                  <button
-                    onClick={() => handleEditClick(experience)}
-                    className="text-sm text-purple-600 hover:text-purple-800 transition-colors duration-200 ease-out"
-                  >
-                    Edit
-                  </button>
-                </div>
-              )}
-            </div>
-          ))}
-          <button
-            onClick={onBackToProfileClick}
-            className="mt-4 ml-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg transition-colors duration-150 ease-out hover:bg-gray-50 active:scale-[0.97]"
-          >
-            Back to Profile
-          </button>
-          <button
-            onClick={onAddExperienceClick}
-            className="mt-4 ml-2 px-4 py-2 bg-card-highlight text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
-          >
-            + Add New Experience
-          </button>
+                )}
+              </Surface>
+            ))}
+          </div>
+          <div className="mt-4 flex gap-2">
+            <Button onClick={onBackToProfileClick}>Back to profile</Button>
+            <Button variant="primary" icon={<AddOutlinedIcon sx={{ fontSize: 16 }} />} onClick={onAddExperienceClick}>
+              Add new experience
+            </Button>
+          </div>
         </div>
       ) : (
-        // New Add Experience Form Section
         <div className="mt-8">
-          <h3 className="font-jersey text-3xl font-bold mb-4">Create New Experience</h3>
-          {/* Input fields for new experience */}
-          <>
-            <ExperienceForm
-              initialData={newExperienceText}
-              onChange={(data) => setNewExperienceText(data)}
-            />
-            <div className="flex justify-end space-x-2 mt-4">
-              <button
-                onClick={onCancelAddExperienceClick}
-                className="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg transition-colors duration-150 ease-out hover:bg-gray-50 active:scale-[0.97]"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleAddExperience}
-                className="px-4 py-2 bg-card-highlight text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
-              >
-                Save
-              </button>
-            </div>
-          </>
-        </div>
-      )}
-      {showConfirmDeleteModal && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl w-96">
-            <h3 className="text-xl font-bold mb-4">Confirm Deletion</h3>
-            <p className="mb-4">Are you sure you want to delete this experience?</p>
-            <div className="flex justify-end space-x-2">
-              <button
-                onClick={() => setShowConfirmDeleteModal(false)}
-                className="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg transition-colors duration-150 ease-out hover:bg-gray-50 active:scale-[0.97]"
-              >
-                No
-              </button>
-              <button
-                onClick={() => experienceToDelete && handleDelete(experienceToDelete)}
-                className="px-4 py-2 bg-red-500 text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
-              >
-                Yes, Delete
-              </button>
-            </div>
+          <h3 className="mb-4 text-heading text-ink">Create new experience</h3>
+          <ExperienceForm initialData={newExperienceText} onChange={(data) => setNewExperienceText(data)} />
+          <div className="mt-4 flex justify-end gap-2">
+            <Button onClick={onCancelAddExperienceClick}>Cancel</Button>
+            <Button variant="primary" onClick={handleAddExperience}>
+              Save
+            </Button>
           </div>
         </div>
       )}
+      {showConfirmDeleteModal ? (
+        <Modal
+          title="Delete this experience?"
+          footer={
+            <>
+              <Button onClick={() => setShowConfirmDeleteModal(false)}>No</Button>
+              <Button variant="danger" onClick={() => experienceToDelete && handleDelete(experienceToDelete)}>
+                Yes, delete
+              </Button>
+            </>
+          }
+        >
+          Are you sure you want to delete this experience?
+        </Modal>
+      ) : null}
     </section>
   );
 };

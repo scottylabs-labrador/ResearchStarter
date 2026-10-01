@@ -1,17 +1,19 @@
 // Currently an unused feature for the student dashboard.
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { FaPencil } from "react-icons/fa6";
+import Surface from "../ui/Surface";
+import Button from "../ui/Button";
+import IconButton from "../ui/IconButton";
+import { fieldClass } from "../ui/Input";
+import { cx } from "../ui/cx";
 
 interface BioBlurbSectionProps {
   initialBio?: string;
   onSave?: (bio: string) => void;
 }
 
-const BioBlurbSection: React.FC<BioBlurbSectionProps> = ({
-  initialBio = "",
-  onSave,
-}) => {
+const BioBlurbSection: React.FC<BioBlurbSectionProps> = ({ initialBio = "", onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentBio, setCurrentBio] = useState(initialBio);
 
@@ -40,50 +42,39 @@ const BioBlurbSection: React.FC<BioBlurbSectionProps> = ({
   };
 
   return (
-    <section className="mb-6">
-      <div className="flex items-center gap-2 mb-4">
-        <h2 className="font-jersey text-3xl font-semibold text-gray-800">Bio</h2>
-        {!isEditing && (
-          <button
-            onClick={handleEditClick}
-            className="text-black hover:text-gray-600 transition-colors"
-            aria-label="Edit bio"
-          >
-            <FaPencil size={18} />
-          </button>
-        )}
+    <section className="mb-8">
+      <div className="mb-3 flex items-center gap-1">
+        <h2 className="text-heading text-ink">Bio</h2>
+        {!isEditing ? (
+          <IconButton size="sm" aria-label="Edit bio" onClick={handleEditClick}>
+            <FaPencil size={13} />
+          </IconButton>
+        ) : null}
       </div>
-      <div className="bg-magenta-100 p-4 rounded-md">
+      <Surface className="p-4">
         {isEditing ? (
           <>
             <textarea
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none bg-white"
+              aria-label="Bio"
+              className={cx(fieldClass, "resize-none")}
               rows={5}
               value={currentBio}
               onChange={handleChange}
               autoFocus
-            ></textarea>
-            <div className="flex justify-end space-x-2 mt-3">
-              <button
-                onClick={handleCancel}
-                className="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg transition-colors duration-150 ease-out hover:bg-gray-50 active:scale-[0.97]"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSaveBio}
-                className="px-4 py-2 bg-card-highlight text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
-              >
+            />
+            <div className="mt-3 flex justify-end gap-2">
+              <Button onClick={handleCancel}>Cancel</Button>
+              <Button variant="primary" onClick={handleSaveBio}>
                 Save
-              </button>
+              </Button>
             </div>
           </>
         ) : (
-          <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+          <p className="whitespace-pre-wrap text-body text-ink-secondary">
             {initialBio || "No bio yet. Click edit to add one."}
           </p>
         )}
-      </div>
+      </Surface>
     </section>
   );
 };

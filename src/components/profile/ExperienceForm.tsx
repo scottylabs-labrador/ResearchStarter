@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Experience } from "../../types/Experience";
+import Tag from "../Tag";
+import { fieldClass } from "../ui/Input";
+import { cx } from "../ui/cx";
 
 interface ExperienceFormProps {
   initialData: Omit<Experience, "id">;
   onChange: (data: Omit<Experience, "id">) => void;
 }
+
+const labelClass = "mb-1.5 block text-small font-medium text-ink";
 
 const ExperienceForm: React.FC<ExperienceFormProps> = ({ initialData, onChange }) => {
   const [formData, setFormData] = useState<Omit<Experience, "id">>(initialData);
@@ -38,47 +43,21 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({ initialData, onChange }
   return (
     <div className="space-y-4">
       <div>
-        <label htmlFor="title" className="block text-lg font-medium text-gray-700">Title</label>
-        <input
-          type="text"
-          id="title"
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Enter Position Name/Title"
-          value={formData.title}
-          onChange={handleChange}
-        />
+        <label htmlFor="title" className={labelClass}>Title</label>
+        <input type="text" id="title" className={fieldClass} placeholder="Enter position name/title" value={formData.title} onChange={handleChange} />
       </div>
       <div>
-        <label htmlFor="professorOrCompany" className="block text-lg font-medium text-gray-700">Professor/Advisor Name</label>
-        <input
-          type="text"
-          id="professorOrCompany"
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Enter Professor/Advisor Name"
-          value={formData.professorOrCompany}
-          onChange={handleChange}
-        />
+        <label htmlFor="professorOrCompany" className={labelClass}>Professor/Advisor name</label>
+        <input type="text" id="professorOrCompany" className={fieldClass} placeholder="Enter professor/advisor name" value={formData.professorOrCompany} onChange={handleChange} />
       </div>
       <div>
-        <label htmlFor="topic" className="block text-lg font-medium text-gray-700">Department/Area</label>
-        <input
-          type="text"
-          id="topic"
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Enter Department/Area"
-          value={formData.topic}
-          onChange={handleChange}
-        />
+        <label htmlFor="topic" className={labelClass}>Department/Area</label>
+        <input type="text" id="topic" className={fieldClass} placeholder="Enter department/area" value={formData.topic} onChange={handleChange} />
       </div>
       <div>
-        <label htmlFor="level" className="block text-lg font-medium text-gray-700">Education Level</label>
-        <select
-          id="level"
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          value={formData.level}
-          onChange={handleChange}
-        >
-          <option value="">Select Education Level</option>
+        <label htmlFor="level" className={labelClass}>Education level</label>
+        <select id="level" className={fieldClass} value={formData.level} onChange={handleChange}>
+          <option value="">Select education level</option>
           <option value="Undergraduate">Undergraduate</option>
           <option value="Graduate">Graduate</option>
           <option value="Industry">Industry</option>
@@ -86,53 +65,24 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({ initialData, onChange }
         </select>
       </div>
       <div>
-        <label htmlFor="date" className="block text-lg font-medium text-gray-700">Start Time</label>
-        <input
-          type="date"
-          id="date"
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          value={formData.date}
-          onChange={handleChange}
-        />
+        <label htmlFor="date" className={labelClass}>Start time</label>
+        <input type="date" id="date" className={fieldClass} value={formData.date} onChange={handleChange} />
       </div>
       <div>
-        <label htmlFor="endDate" className="block text-lg font-medium text-gray-700">End Time</label>
-        <input
-          type="date"
-          id="endDate"
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          value={formData.endDate}
-          onChange={handleChange}
-        />
+        <label htmlFor="endDate" className={labelClass}>End time</label>
+        <input type="date" id="endDate" className={fieldClass} value={formData.endDate} onChange={handleChange} />
       </div>
       <div>
-        <label htmlFor="description" className="block text-lg font-medium text-gray-700">Description</label>
-        <textarea
-          id="description"
-          rows={4}
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Enter Description"
-          value={formData.description}
-          onChange={handleChange}
-        ></textarea>
+        <label htmlFor="description" className={labelClass}>Description</label>
+        <textarea id="description" rows={4} className={cx(fieldClass, "resize-y")} placeholder="Enter description" value={formData.description} onChange={handleChange} />
       </div>
       <div>
-        <label htmlFor="skills" className="block text-lg font-medium text-gray-700">Skills</label>
-        <div className="flex flex-wrap gap-2 mt-1">
+        <label htmlFor="skills" className={labelClass}>Skills</label>
+        <div className="flex flex-wrap items-center gap-1.5">
           {formData.associatedTags.map((tag) => (
-            <span
-              key={tag}
-              className="bg-blue-200 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded"
-            >
-              {tag}
-            </span>
+            <Tag key={tag} keyword={tag} />
           ))}
-          <input
-            type="text"
-            className="p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            placeholder="+ Add Skills"
-            onKeyDown={handleTagsChange}
-          />
+          <input id="skills" type="text" className={cx(fieldClass, "h-[32px] w-auto py-1")} placeholder="+ Add skills" onKeyDown={handleTagsChange} />
         </div>
       </div>
     </div>
