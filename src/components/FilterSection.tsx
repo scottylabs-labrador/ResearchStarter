@@ -139,10 +139,10 @@ const FilterSection = ({
   return (
     <aside
       aria-label="Filters"
-      className="scrollbar-minimal fixed left-0 top-0 z-10 h-screen w-[280px] overflow-y-auto border-r border-hairline bg-canvas motion-reduce:transition-none"
+      className="scrollbar-minimal fixed left-0 top-0 z-10 h-screen w-[296px] overflow-y-auto border-r border-hairline bg-canvas motion-reduce:transition-none"
       style={{ transform: navHidden ? "translateY(0)" : "translateY(var(--nav-h))" }}
     >
-      <div className="px-4 pb-[calc(1.25rem+var(--nav-h))] pt-[26px]">
+      <div className="px-6 pb-[calc(1.25rem+var(--nav-h))] pt-[26px]">
         <div className="mb-5 flex items-center justify-between px-2">
           <h2 className="text-heading text-ink">Filters</h2>
           <Button

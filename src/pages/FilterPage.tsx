@@ -306,7 +306,7 @@ const FilterPage = () => {
       <div
         className="fixed right-0 top-0 h-screen overflow-hidden bg-canvas transition-[left] duration-200 ease-out motion-reduce:transition-none"
         style={{
-          left: sidebarVisible ? "280px" : "0px",
+          left: sidebarVisible ? "296px" : "0px",
           transform: navHidden ? "translateY(0)" : "translateY(var(--nav-h))",
         }}
       >

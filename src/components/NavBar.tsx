@@ -57,7 +57,7 @@ const NavBar = () => {
           hidden ? "-translate-y-full" : "translate-y-0"
         )}
       >
-        <div className="grid h-full grid-cols-[1fr_auto_1fr] items-center px-6">
+        <div className="grid h-full grid-cols-[1fr_auto_1fr] items-center px-8">
           <NavLink to="/" aria-label="CMU Research home" className={cx("flex items-center justify-self-start rounded-[6px]", focusRing)}>
             <Logo />
           </NavLink>
