@@ -1,14 +1,21 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import SearchOffOutlinedIcon from "@mui/icons-material/SearchOffOutlined";
+import { FaSearch } from "react-icons/fa";
 import FilterSection from "../components/FilterSection";
 import Card from "../components/Card";
-import Spinner from "../components/Spinner";
-import SearchBar from "../components/SearchBar";
+import Tag from "../components/Tag";
+import Button from "../components/ui/Button";
+import Input from "../components/ui/Input";
+import Kbd from "../components/ui/Kbd";
+import Spinner from "../components/ui/Spinner";
+import EmptyState from "../components/ui/EmptyState";
+import SegmentedControl from "../components/ui/SegmentedControl";
+import { useSlashToFocus } from "../components/ui/useSlashToFocus";
 import { ResearchType } from "../DataTypes";
-import { parseContact, toArray } from "../utils";
+import { matchesCompensation, parseContact, toArray } from "../utils";
 import { useNavBarHidden } from "../contexts/NavBarContext";
 import DEV_MOCK_RESEARCHES from "../data/devMockResearches";
-
-type FilterKeysType = { [key: string]: boolean };
 
 interface ActiveFilter {
   label: string;
@@ -21,7 +28,10 @@ const FilterPage = () => {
   const [researches, setResearches] = useState<ResearchType[]>([]);
   const [loading, setLoading] = useState(true);
   const [input, setInput] = useState("");
+  const [searchFocused, setSearchFocused] = useState(false);
   const [sidebarVisible, setSidebarVisible] = useState(true);
+  const searchRef = useRef<HTMLInputElement>(null);
+  useSlashToFocus(searchRef);
 
   // College checkboxes
   const [collegeChecks, setCollegeChecks] = useState<Record<string, boolean>>({});
@@ -206,10 +216,8 @@ const FilterPage = () => {
     }
 
     // Compensation filter
-    if (selectedCompensation) {
-      results = results.filter((r) =>
-        r.paidUnpaid?.toLowerCase().includes(selectedCompensation.toLowerCase())
-      );
+    if (selectedCompensation === "Paid" || selectedCompensation === "Unpaid") {
+      results = results.filter((r) => matchesCompensation(r.paidUnpaid, selectedCompensation));
     }
 
     // Semester filter
@@ -254,7 +262,7 @@ const FilterPage = () => {
     return results;
   }, [researches, collegeChecks, selectedDepartment, selectedEducation, selectedCompensation, selectedSemester, input, sortBy]);
 
-  const contentLeft = sidebarVisible ? "280px" : "0px";
+  const resultLabel = `${filteredData.length} ${filteredData.length === 1 ? "result" : "results"}`;
 
   return (
     <>
@@ -276,18 +284,14 @@ const FilterPage = () => {
         onResetAll={handleResetAll}
       />
 
-      {/* Main content area */}
       <div
-        className="fixed right-0 bg-white transition-[left,top,height] duration-300 ease-out overflow-hidden flex flex-col"
+        className="fixed bottom-0 right-0 flex flex-col overflow-hidden bg-canvas transition-[left,top] duration-300 ease-out"
         style={{
-          top: navHidden ? 0 : "var(--nav-h)",
-          left: contentLeft,
-          height: navHidden ? "100vh" : "calc(100vh - var(--nav-h))",
+          top: navHidden ? "0px" : "var(--nav-h)",
+          left: sidebarVisible ? "280px" : "0px",
         }}
       >
-        {/* Header: search bar + filters + sort — collapses on scroll like the navbar.
-            grid-rows-[1fr]→[0fr] gives a clean, self-sizing collapse without the
-            magic max-h-[300px] clip (which used to truncate wrapped filter chips). */}
+        {/* Collapses on scroll like the navbar; grid-rows 1fr→0fr self-sizes the collapse. */}
         <div
           className={`grid transition-[grid-template-rows] duration-300 ease-out ${
             searchBarHidden ? "grid-rows-[0fr]" : "grid-rows-[1fr]"
@@ -298,87 +302,91 @@ const FilterPage = () => {
               searchBarHidden ? "opacity-0" : "opacity-100"
             }`}
           >
-            <div className="px-8 py-6">
-              {/* Show sidebar button when hidden */}
-              <div className="flex items-center gap-4 mb-4">
+            <div className="px-8 pb-4 pt-6">
+              <div className="mb-4 flex items-center gap-3">
                 {!sidebarVisible && (
-                  <button
+                  <Button
+                    size="sm"
+                    icon={<KeyboardArrowRightIcon sx={{ fontSize: 16 }} />}
                     onClick={() => setSidebarVisible(true)}
-                    className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full border border-gray-300 transition-colors duration-200 ease-out"
                   >
-                    <span className="text-xs">›</span> Filter
-                  </button>
+                    Show filters
+                  </Button>
                 )}
-                <h1 className="text-2xl font-semibold text-gray-800">Search</h1>
+                <h1 className="text-title text-ink">Search</h1>
+                {!loading ? <span className="font-mono text-meta text-ink-muted">{resultLabel}</span> : null}
+                <SegmentedControl
+                  aria-label="Sort by"
+                  value={sortBy}
+                  onChange={setSortBy}
+                  options={[
+                    { value: "year", label: "Year" },
+                    { value: "time", label: "Time" },
+                  ]}
+                  className="ml-auto shrink-0"
+                />
               </div>
 
-              <div className="w-full mb-6">
-                <SearchBar input={input} handleChange={setInput} />
-              </div>
+              <Input
+                ref={searchRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)}
+                placeholder="Search for research opportunities..."
+                aria-label="Search research opportunities"
+                icon={<FaSearch size={13} />}
+                trailing={!searchFocused && input === "" ? <Kbd>/</Kbd> : null}
+              />
 
-              {/* Active filter chips + sort */}
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex flex-wrap gap-2">
+              {activeFilters.length > 0 ? (
+                <div className="mt-3 flex min-w-0 flex-wrap items-center gap-1.5">
                   {activeFilters.map((filter) => (
-                    <button
-                      key={`${filter.type}-${filter.value}`}
-                      onClick={() => removeFilter(filter)}
-                      className="flex items-center gap-1 px-3 py-1 bg-brand-50 border border-purple-300 rounded-full text-sm text-purple-700 transition-colors duration-200 ease-out hover:bg-purple-100 active:scale-[0.97]"
-                    >
-                      {filter.label}
-                      <span className="ml-1 text-xs font-bold">×</span>
-                    </button>
+                    <Tag key={`${filter.type}-${filter.value}`} keyword={filter.label} onRemove={() => removeFilter(filter)} />
                   ))}
+                  {activeFilters.length >= 2 ? (
+                    <Button size="sm" variant="ghost" onClick={handleResetAll}>
+                      Clear all
+                    </Button>
+                  ) : null}
                 </div>
-                {/* Sort: segmented control. Active option lifts to white over the
-                    gray track — same "active vs hover have different shapes"
-                    discipline used in the navbar underline. */}
-                <div className="inline-flex items-center bg-gray-100 rounded-md p-0.5 text-sm flex-shrink-0">
-                  <button
-                    onClick={() => setSortBy("year")}
-                    className={`px-3 py-1 rounded transition-colors duration-200 ease-out ${
-                      sortBy === "year"
-                        ? "bg-white text-gray-900 font-medium"
-                        : "text-gray-600 hover:text-gray-900"
-                    }`}
-                  >
-                    Year
-                  </button>
-                  <button
-                    onClick={() => setSortBy("time")}
-                    className={`px-3 py-1 rounded transition-colors duration-200 ease-out ${
-                      sortBy === "time"
-                        ? "bg-white text-gray-900 font-medium"
-                        : "text-gray-600 hover:text-gray-900"
-                    }`}
-                  >
-                    Time
-                  </button>
-                </div>
-              </div>
+              ) : null}
             </div>
           </div>
         </div>
 
-        {/* Cards */}
         <div
-          className="px-8 pb-6 overflow-y-auto flex-1"
+          role="region"
+          aria-label="Search results"
+          className="scrollbar-minimal flex-1 overflow-y-auto px-8 pb-8 pt-2"
           onScroll={handleScroll}
         >
-          <div className="flex flex-col gap-4">
-            {loading ? (
-              <div className="flex flex-col items-center pt-10">
-                <h2>Loading...</h2>
-                <Spinner />
-              </div>
-            ) : filteredData.length === 0 ? (
-              <p className="text-gray-500 text-center pt-10">No research opportunities found.</p>
-            ) : (
-              filteredData
+          {loading ? (
+            <div className="flex justify-center pt-16">
+              <Spinner label="Loading opportunities" />
+            </div>
+          ) : filteredData.length === 0 ? (
+            <EmptyState
+              icon={<SearchOffOutlinedIcon sx={{ fontSize: 20 }} />}
+              title="No opportunities match"
+              message={activeFilters.length > 0 ? "Try removing a filter" : undefined}
+              action={
+                activeFilters.length > 0 ? (
+                  <Button size="sm" onClick={handleResetAll}>
+                    Clear filters
+                  </Button>
+                ) : undefined
+              }
+            />
+          ) : (
+            <div className="flex flex-col gap-3">
+              {filteredData
                 .slice(0, (loadedBatches + 1) * CARD_BATCH_LIMIT)
-                .map((research) => <Card key={research._id} research={research} />)
-            )}
-          </div>
+                .map((research) => (
+                  <Card key={research._id} research={research} />
+                ))}
+            </div>
+          )}
         </div>
       </div>
     </>

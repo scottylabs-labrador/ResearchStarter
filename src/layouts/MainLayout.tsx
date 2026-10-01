@@ -15,6 +15,12 @@ function readVerticalScrollY(target: EventTarget): number {
   return window.scrollY;
 }
 
+function isScrolledToEnd(target: EventTarget): boolean {
+  const el =
+    target instanceof Element && target !== document.documentElement ? target : document.documentElement;
+  return el.scrollHeight - el.clientHeight - el.scrollTop < 1;
+}
+
 const SCROLL_HIDE_GRACE_MS = 200;
 
 const MainLayout = () => {
@@ -61,7 +67,9 @@ const MainLayout = () => {
       }
       if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
         setNavHidden(true);
-      } else {
+      } else if (!isScrolledToEnd(e.target ?? document)) {
+        // A short list that grows taller (nav hiding, header collapsing) gets its
+        // scrollTop clamped back down; that clamp is not the user scrolling up.
         setNavHidden(false);
       }
       lastScrollY.current = currentScrollY;

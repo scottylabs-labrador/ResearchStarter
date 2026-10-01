@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import CheckIcon from "@mui/icons-material/Check";
 import { departmentOptions } from "../FilterData";
+import Button from "./ui/Button";
+import SectionLabel from "./ui/SectionLabel";
+import SegmentedControl from "./ui/SegmentedControl";
 
 interface FilterSectionProps {
   navHidden?: boolean;
@@ -34,11 +37,65 @@ const colleges = [
 ];
 
 const educationOptions = ["Undergraduate", "Masters", "PhD"];
-const compensationOptions = ["Paid", "Unpaid"];
 const semesterOptions = ["Fall", "Spring", "Summer"];
+const compensationOptions = [
+  { value: "", label: "Any" },
+  { value: "Paid", label: "Paid" },
+  { value: "Unpaid", label: "Unpaid" },
+];
 
 const toggleValue = (arr: string[], value: string): string[] =>
   arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value];
+
+interface FilterCheckboxProps {
+  label: string;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+}
+
+const FilterCheckbox = ({ label, checked, onChange }: FilterCheckboxProps) => (
+  <label
+    title={label}
+    className="flex h-[32px] cursor-pointer items-center gap-2.5 rounded-[8px] px-2 text-body text-ink-secondary transition-colors duration-150 hover:bg-surface-muted hover:text-ink"
+  >
+    <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="peer sr-only" />
+    <span
+      aria-hidden="true"
+      className="flex h-[16px] w-[16px] shrink-0 items-center justify-center rounded-[4px] border border-hairline-strong bg-surface transition-colors duration-150 peer-checked:border-ink peer-checked:bg-ink peer-focus-visible:ring-2 peer-focus-visible:ring-ink peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-canvas"
+    >
+      {checked ? <CheckIcon sx={{ fontSize: 12 }} className="text-white" /> : null}
+    </span>
+    <span className="truncate">{label}</span>
+  </label>
+);
+
+const ResetButton = ({ onClick, label }: { onClick: () => void; label: string }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    aria-label={label}
+    className="rounded px-1 text-meta font-medium text-ink-secondary underline-offset-2 transition-colors duration-150 hover:text-ink hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+  >
+    Reset
+  </button>
+);
+
+interface FilterGroupProps {
+  label: string;
+  open: boolean;
+  onToggle: () => void;
+  action?: React.ReactNode;
+  children: React.ReactNode;
+}
+
+const FilterGroup = ({ label, open, onToggle, action, children }: FilterGroupProps) => (
+  <div className="mb-5">
+    <SectionLabel collapsed={!open} onToggle={onToggle} action={action} className="mb-1.5 px-2">
+      {label}
+    </SectionLabel>
+    {open ? <div>{children}</div> : null}
+  </div>
+);
 
 const FilterSection = ({
   navHidden,
@@ -57,197 +114,124 @@ const FilterSection = ({
   onSemesterChange,
   onResetAll,
 }: FilterSectionProps) => {
-  const [collegeExpanded, setCollegeExpanded] = useState(true);
-  const [departmentExpanded, setDepartmentExpanded] = useState(false);
+  const [open, setOpen] = useState({
+    college: true,
+    department: false,
+    education: true,
+    compensation: true,
+    semester: true,
+  });
+  const toggle = (key: keyof typeof open) => setOpen((prev) => ({ ...prev, [key]: !prev[key] }));
 
   if (!visible) return null;
 
+  const anyCollege = Object.entries(collegeChecks).some(([name, checked]) => checked && name !== "All");
+  const anyActive =
+    anyCollege ||
+    selectedDepartment.length > 0 ||
+    selectedEducation.length > 0 ||
+    selectedCompensation !== "" ||
+    selectedSemester.length > 0;
+
   return (
-    <div
-      className="fixed bottom-0 left-0 w-[280px] bg-[#F3EAFF] border-r border-gray-200 overflow-y-auto transition-all duration-300 z-10"
-      style={{ top: navHidden ? 0 : "var(--nav-h)", height: navHidden ? "100vh" : "calc(100vh - var(--nav-h))" }}
+    <aside
+      aria-label="Filters"
+      className="scrollbar-minimal fixed bottom-0 left-0 z-10 w-[280px] overflow-y-auto border-r border-hairline bg-canvas transition-[top] duration-300 ease-out"
+      style={{ top: navHidden ? "0px" : "var(--nav-h)" }}
     >
-      <div className="px-8 py-6">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold text-gray-900">Filter</h2>
-          <button
+      <div className="px-4 py-5">
+        <div className="mb-5 flex items-center justify-between px-2">
+          <h2 className="text-heading text-ink">Filters</h2>
+          <Button
+            size="sm"
+            variant="ghost"
+            aria-label="Hide filters"
+            icon={<KeyboardArrowLeftIcon sx={{ fontSize: 16 }} />}
             onClick={onToggleVisible}
-            className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 bg-white px-3 py-1 rounded-full border border-gray-300"
           >
-            Hide <span className="text-xs">‹</span>
-          </button>
+            Hide
+          </Button>
         </div>
 
-        {/* College */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-semibold text-sm text-gray-800">College</h3>
-            <button
-              onClick={onCollegeReset}
-              className="text-xs text-purple-600 hover:text-purple-800 transition-colors duration-200 ease-out"
-            >
-              Reset
-            </button>
-          </div>
-          <div className="relative mb-2">
-            <button
-              onClick={() => setCollegeExpanded(!collegeExpanded)}
-              className="w-full appearance-none text-left bg-white border border-gray-300 rounded-md px-3 py-2 pr-9 text-sm text-gray-700"
-            >
-              None
-            </button>
-            {collegeExpanded ? (
-              <KeyboardArrowUpIcon
-                fontSize="small"
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
-              />
-            ) : (
-              <KeyboardArrowDownIcon
-                fontSize="small"
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
-              />
-            )}
-          </div>
-          {collegeExpanded && (
-            <div className="space-y-1 ml-1">
-              {colleges.map((college) => (
-                <label key={college} className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer py-2">
-                  <input
-                    type="checkbox"
-                    checked={collegeChecks[college] ?? false}
-                    onChange={(e) => onCollegeCheck(college, e.target.checked)}
-                    className="w-4 h-4 rounded border-gray-300 text-purple-600 accent-purple-600"
-                  />
-                  {college}
-                </label>
-              ))}
-            </div>
-          )}
-        </div>
+        <FilterGroup
+          label="College"
+          open={open.college}
+          onToggle={() => toggle("college")}
+          action={anyCollege ? <ResetButton label="Reset college filters" onClick={onCollegeReset} /> : null}
+        >
+          {colleges.map((college) => (
+            <FilterCheckbox
+              key={college}
+              label={college}
+              checked={collegeChecks[college] ?? false}
+              onChange={(checked) => onCollegeCheck(college, checked)}
+            />
+          ))}
+        </FilterGroup>
 
-        {/* Department */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-semibold text-sm text-gray-800">Department</h3>
-            {selectedDepartment.length > 0 && (
-              <button
-                onClick={() => onDepartmentChange([])}
-                className="text-xs text-purple-600 hover:text-purple-800 transition-colors duration-200 ease-out"
-              >
-                Reset
-              </button>
-            )}
-          </div>
-          <div className="relative mb-2">
-            <button
-              onClick={() => setDepartmentExpanded(!departmentExpanded)}
-              className="w-full appearance-none text-left bg-white border border-gray-300 rounded-md px-3 py-2 pr-9 text-sm text-gray-700"
-            >
-              {selectedDepartment.length === 0
-                ? "None"
-                : `${selectedDepartment.length} selected`}
-            </button>
-            {departmentExpanded ? (
-              <KeyboardArrowUpIcon
-                fontSize="small"
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+        <FilterGroup
+          label="Department"
+          open={open.department}
+          onToggle={() => toggle("department")}
+          action={
+            selectedDepartment.length > 0 ? (
+              <span className="flex items-center gap-2">
+                <span className="font-mono text-meta text-ink-muted">{selectedDepartment.length} selected</span>
+                <ResetButton label="Reset department filters" onClick={() => onDepartmentChange([])} />
+              </span>
+            ) : null
+          }
+        >
+          <div className="scrollbar-minimal max-h-[240px] overflow-y-auto pr-1">
+            {departmentOptions.map((opt) => (
+              <FilterCheckbox
+                key={opt.value}
+                label={opt.label}
+                checked={selectedDepartment.includes(opt.value)}
+                onChange={() => onDepartmentChange(toggleValue(selectedDepartment, opt.value))}
               />
-            ) : (
-              <KeyboardArrowDownIcon
-                fontSize="small"
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
-              />
-            )}
-          </div>
-          {departmentExpanded && (
-            <div className="space-y-1 ml-1 max-h-48 overflow-y-auto pr-1 scrollbar-minimal">
-              {departmentOptions.map((opt) => (
-                <label key={opt.value} className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer py-1">
-                  <input
-                    type="checkbox"
-                    checked={selectedDepartment.includes(opt.value)}
-                    onChange={() => onDepartmentChange(toggleValue(selectedDepartment, opt.value))}
-                    className="w-4 h-4 rounded border-gray-300 text-purple-600 accent-purple-600 flex-shrink-0"
-                  />
-                  {opt.label}
-                </label>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Education */}
-        <div className="mb-8">
-          <h3 className="font-semibold text-sm text-gray-800 mb-2">Education</h3>
-          <div className="space-y-1 ml-1">
-            {educationOptions.map((opt) => (
-              <label key={opt} className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer py-2">
-                <input
-                  type="checkbox"
-                  checked={selectedEducation.includes(opt)}
-                  onChange={() => onEducationChange(toggleValue(selectedEducation, opt))}
-                  className="w-4 h-4 rounded border-gray-300 text-purple-600 accent-purple-600"
-                />
-                {opt}
-              </label>
             ))}
           </div>
-        </div>
+        </FilterGroup>
 
-        {/* Compensation Type */}
-        <div className="mb-8">
-          <h3 className="font-semibold text-sm text-gray-800 mb-2">Compensation Type</h3>
-          <div className="relative">
-            <select
+        <FilterGroup label="Education" open={open.education} onToggle={() => toggle("education")}>
+          {educationOptions.map((opt) => (
+            <FilterCheckbox
+              key={opt}
+              label={opt}
+              checked={selectedEducation.includes(opt)}
+              onChange={() => onEducationChange(toggleValue(selectedEducation, opt))}
+            />
+          ))}
+        </FilterGroup>
+
+        <FilterGroup label="Compensation" open={open.compensation} onToggle={() => toggle("compensation")}>
+          <div className="px-2">
+            <SegmentedControl
+              aria-label="Compensation"
               value={selectedCompensation}
-              onChange={(e) => onCompensationChange(e.target.value)}
-              className="w-full appearance-none bg-white border border-gray-300 rounded-md px-3 py-2 pr-9 text-sm text-gray-700"
-            >
-              <option value="">None</option>
-              {compensationOptions.map((opt) => (
-                <option key={opt} value={opt}>{opt}</option>
-              ))}
-            </select>
-            <KeyboardArrowDownIcon
-              fontSize="small"
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+              onChange={onCompensationChange}
+              options={compensationOptions}
             />
           </div>
-        </div>
+        </FilterGroup>
 
-        {/* Semester */}
-        <div className="mb-8">
-          <h3 className="font-semibold text-sm text-gray-800 mb-2">Semester</h3>
-          <div className="space-y-1 ml-1">
-            {semesterOptions.map((opt) => (
-              <label key={opt} className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer py-2">
-                <input
-                  type="checkbox"
-                  checked={selectedSemester.includes(opt)}
-                  onChange={() => onSemesterChange(toggleValue(selectedSemester, opt))}
-                  className="w-4 h-4 rounded border-gray-300 text-purple-600 accent-purple-600"
-                />
-                {opt}
-              </label>
-            ))}
-          </div>
-        </div>
+        <FilterGroup label="Semester" open={open.semester} onToggle={() => toggle("semester")}>
+          {semesterOptions.map((opt) => (
+            <FilterCheckbox
+              key={opt}
+              label={opt}
+              checked={selectedSemester.includes(opt)}
+              onChange={() => onSemesterChange(toggleValue(selectedSemester, opt))}
+            />
+          ))}
+        </FilterGroup>
 
-        {/* Reset All */}
-        <button
-          onClick={onResetAll}
-          className="w-full text-center text-sm text-purple-600 border border-purple-300 rounded-md py-2 transition-colors duration-200 ease-out hover:bg-purple-50 mb-8"
-        >
-          Reset
-        </button>
-
-        {/* Legend */}
-        <div>
-          <h3 className="font-semibold text-sm text-gray-800 mb-2">Legend</h3>
-        </div>
+        <Button className="mt-2 w-full" onClick={onResetAll} disabled={!anyActive}>
+          Reset all filters
+        </Button>
       </div>
-    </div>
+    </aside>
   );
 };
 
