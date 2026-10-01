@@ -15,10 +15,10 @@ interface DetailsTableProps {
 
 const DetailsTable = ({ rows, className }: DetailsTableProps) => (
   <Surface className={cx("overflow-hidden", className)}>
-    <dl className="m-0 divide-y divide-hairline">
+    <dl className="m-0 grid grid-cols-[minmax(max-content,32%)_1fr]">
       {rows.map((row) => (
-        <div key={row.label} className="grid grid-cols-[minmax(140px,36%)_1fr]">
-          <dt className="flex items-center gap-2 border-r border-hairline px-4 py-3 text-small text-ink-muted">
+        <div key={row.label} className="contents [&:not(:first-child)>*]:border-t [&>*]:border-hairline">
+          <dt className="flex items-center gap-2 whitespace-nowrap border-r px-4 py-3 text-small text-ink-muted">
             {row.icon ? <span className="flex shrink-0">{row.icon}</span> : null}
             {row.label}
           </dt>

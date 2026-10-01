@@ -1,6 +1,7 @@
-import React from 'react';
-import ContactCard from './ContactCard';
-import PersonIcon from '@mui/icons-material/Person';
+import React from "react";
+import PersonIcon from "@mui/icons-material/Person";
+import ContactCard from "./ContactCard";
+import SectionLabel from "../ui/SectionLabel";
 
 interface Contact {
   headshotUrl: string;
@@ -14,21 +15,18 @@ interface ContactsSectionProps {
   contacts: Contact[];
 }
 
-const ContactsSection: React.FC<ContactsSectionProps> = ({ contacts }) => {
-  return (
-    <div className="bg-white px-6 lg:px-8 py-8 mb-8">
-      <div className="flex items-center gap-2 mb-6">
-        <PersonIcon className="text-gray-700 text-3xl" />
-        <h2 className="text-2xl font-bold text-gray-900">Contacts</h2>
-      </div>
-      <div className="flex w-full overflow-x-auto gap-4 pb-4">
-        {contacts.map((contact, index) => (
-          <ContactCard key={index} {...contact} />
-        ))}
-      </div>
+const ContactsSection: React.FC<ContactsSectionProps> = ({ contacts }) => (
+  <section className="mt-14">
+    <SectionLabel as="h2" className="mb-3">
+      <PersonIcon sx={{ fontSize: 14 }} />
+      Contacts
+    </SectionLabel>
+    <div className="scrollbar-minimal flex w-full gap-3 overflow-x-auto pb-2">
+      {contacts.map((contact, index) => (
+        <ContactCard key={index} {...contact} />
+      ))}
     </div>
-  );
-};
+  </section>
+);
 
 export default ContactsSection;
-

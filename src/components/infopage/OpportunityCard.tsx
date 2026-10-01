@@ -1,11 +1,13 @@
-import React from 'react';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import BookmarkIconUnfilled from '@mui/icons-material/BookmarkBorderOutlined';
-import { BsEyeglasses } from 'react-icons/bs';
-import { FaBook } from 'react-icons/fa6';
-import { CiCalendar } from 'react-icons/ci';
-import Tag from '../Tag';
-import { v4 as uuidv4 } from 'uuid';
+import React from "react";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import BookmarkIconUnfilled from "@mui/icons-material/BookmarkBorderOutlined";
+import { BsEyeglasses } from "react-icons/bs";
+import { FaBook } from "react-icons/fa6";
+import { CiCalendar } from "react-icons/ci";
+import Tag from "../Tag";
+import Surface from "../ui/Surface";
+import IconButton from "../ui/IconButton";
+import { Meta, MetaRow } from "../ui/Meta";
 
 interface OpportunityCardProps {
   opportunityName: string;
@@ -18,6 +20,8 @@ interface OpportunityCardProps {
   tags: string[];
 }
 
+const iconClass = "shrink-0 text-ink-muted";
+
 const OpportunityCard: React.FC<OpportunityCardProps> = ({
   opportunityName,
   isBookmarked,
@@ -28,75 +32,53 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({
   semester,
   tags,
 }) => {
-  const metaItems: React.ReactNode[] = [];
-  if (professorName) {
-    metaItems.push(
-      <span key="prof" className="flex items-center gap-1">
-        <BsEyeglasses className="text-base flex-shrink-0" />
-        {professorName}
-      </span>
-    );
-  }
-  if (department) {
-    metaItems.push(
-      <span key="dept" className="flex items-center gap-1">
-        <FaBook className="text-base flex-shrink-0" />
-        {department}
-      </span>
-    );
-  }
-
-  const dateLine = [semester, date].filter(Boolean).join(' · ');
+  const dateLine = [semester, date].filter(Boolean).join(" · ");
 
   return (
-    <div className="w-[26rem] flex-shrink-0 bg-white rounded-xl p-6 border border-violet-300 hover:shadow-[0_4px_20px_#E2CFFF] transition-all duration-300 flex flex-col">
-      {/* Title + bookmark */}
-      <div className="flex items-start justify-between gap-3 mb-3">
-        <h3 className="font-bold text-lg text-gray-900 leading-snug flex-1">
-          {opportunityName}
-        </h3>
-        <button
+    <Surface as="article" interactive className="flex flex-col p-[20px]">
+      <div className="mb-2 flex items-start justify-between gap-3">
+        <h3 className="flex-1 text-card-title text-ink">{opportunityName}</h3>
+        <IconButton
+          size="sm"
+          aria-label={isBookmarked ? "Remove bookmark" : "Bookmark"}
+          pressed={isBookmarked}
           onClick={onBookmarkToggle}
-          className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"
-          aria-label={isBookmarked ? 'Remove bookmark' : 'Bookmark'}
         >
-          {isBookmarked ? (
-            <BookmarkIcon className="text-card-highlight" />
-          ) : (
-            <BookmarkIconUnfilled />
-          )}
-        </button>
+          {isBookmarked ? <BookmarkIcon sx={{ fontSize: 20 }} /> : <BookmarkIconUnfilled sx={{ fontSize: 20 }} />}
+        </IconButton>
       </div>
 
-      {/* Professor | Department */}
-      {metaItems.length > 0 && (
-        <div className="flex flex-wrap items-center gap-x-1 text-sm text-gray-600 mb-2">
-          {metaItems.map((item, i) => (
-            <React.Fragment key={i}>
-              {i > 0 && <span className="mx-1 text-gray-400">|</span>}
-              {item}
-            </React.Fragment>
+      {professorName || department ? (
+        <MetaRow className="mb-2 text-small text-ink-secondary">
+          {professorName ? (
+            <span className="inline-flex items-center gap-1.5">
+              <BsEyeglasses size={16} className={iconClass} />
+              {professorName}
+            </span>
+          ) : null}
+          {department ? (
+            <span className="inline-flex items-center gap-1.5">
+              <FaBook size={13} className={iconClass} />
+              {department}
+            </span>
+          ) : null}
+        </MetaRow>
+      ) : null}
+
+      {dateLine ? (
+        <Meta icon={<CiCalendar size={15} />} className="mb-4">
+          {dateLine}
+        </Meta>
+      ) : null}
+
+      {tags.length > 0 ? (
+        <div className="mt-auto flex flex-wrap gap-1.5 pt-2">
+          {tags.slice(0, 3).map((tag, i) => (
+            <Tag key={`${tag}-${i}`} keyword={tag} />
           ))}
         </div>
-      )}
-
-      {/* Date */}
-      {dateLine && (
-        <div className="flex items-center gap-1 text-sm text-gray-600 mb-4">
-          <CiCalendar className="text-base flex-shrink-0" />
-          <span>{dateLine}</span>
-        </div>
-      )}
-
-      {/* Tags */}
-      {tags.length > 0 && (
-        <div className="mt-auto flex flex-wrap gap-2 pt-2">
-          {tags.slice(0, 3).map((tag) => (
-            <Tag key={uuidv4()} keyword={tag} />
-          ))}
-        </div>
-      )}
-    </div>
+      ) : null}
+    </Surface>
   );
 };
 

@@ -1,5 +1,6 @@
-import React from 'react';
-import PersonIcon from '@mui/icons-material/Person';
+import React from "react";
+import Surface from "../ui/Surface";
+import Avatar from "../ui/Avatar";
 
 interface ContactCardProps {
   headshotUrl: string;
@@ -9,35 +10,23 @@ interface ContactCardProps {
   email: string;
 }
 
-const ContactCard: React.FC<ContactCardProps> = ({
-  headshotUrl,
-  title,
-  department,
-  officeLocation,
-  email,
-}) => {
-  return (
-    <div className="w-[13rem] h-[21rem] bg-white rounded-lg shadow-md overflow-hidden flex flex-col justify-between">
-      {headshotUrl ? (
-        <img src={headshotUrl} alt={title} className="w-full h-48 object-cover" />
-      ) : (
-        <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-          <PersonIcon className="text-gray-400" style={{ fontSize: '5rem' }} />
-        </div>
-      )}
-      <div className="p-3 flex-grow">
-        <h3 className="text-md font-semibold text-gray-900 leading-tight">{title}</h3>
-        <p className="text-gray-600 text-sm mt-1">{department}</p>
-        <p className="text-gray-600 text-sm">{officeLocation}</p>
-      </div>
-      <div className="p-3 bg-gray-50 border-t border-gray-100">
-        <a href={`mailto:${email}`} className="text-blue-500 hover:underline text-sm truncate block">
-          {email}
-        </a>
+const ContactCard: React.FC<ContactCardProps> = ({ headshotUrl, title, department, officeLocation, email }) => (
+  <Surface className="flex w-[260px] shrink-0 flex-col gap-3 p-4">
+    <div className="flex items-center gap-3">
+      <Avatar src={headshotUrl || undefined} name={title} size="md" />
+      <div className="min-w-0">
+        <p className="truncate text-body font-medium text-ink">{title}</p>
+        {department ? <p className="truncate text-small text-ink-secondary">{department}</p> : null}
+        {officeLocation ? <p className="truncate text-small text-ink-muted">{officeLocation}</p> : null}
       </div>
     </div>
-  );
-};
+    <a
+      href={`mailto:${email}`}
+      className="truncate border-t border-hairline pt-3 font-mono text-meta text-ink-secondary hover:text-ink hover:underline"
+    >
+      {email}
+    </a>
+  </Surface>
+);
 
 export default ContactCard;
-

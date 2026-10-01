@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import Modal from "../ui/Modal";
+import Button from "../ui/Button";
 
 interface ResumeUploadPopupProps {
   isOpen: boolean;
@@ -26,40 +28,26 @@ const ResumeUploadPopup: React.FC<ResumeUploadPopupProps> = ({ isOpen, onClose, 
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-8 rounded-lg shadow-xl max-w-sm w-full">
-        <h2 className="text-2xl font-bold mb-4">Upload Resume</h2>
-        <input
-          type="file"
-          accept=".pdf,.doc,.docx"
-          onChange={handleFileChange}
-          className="block w-full text-sm text-gray-500
-            file:mr-4 file:py-2 file:px-4
-            file:rounded-full file:border-0
-            file:text-sm file:font-semibold
-            file:bg-brand-50 file:text-purple-700
-            hover:file:bg-purple-100 mb-4"
-        />
-        {selectedFile && (
-          <p className="text-sm text-gray-700 mb-4">Selected file: {selectedFile.name}</p>
-        )}
-        <div className="flex justify-end space-x-4">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg transition-colors duration-150 ease-out hover:bg-gray-50 active:scale-[0.97]"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSubmit}
-            disabled={!selectedFile}
-            className="px-4 py-2 bg-card-highlight text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed"
-          >
+    <Modal
+      title="Upload resume"
+      footer={
+        <>
+          <Button onClick={onClose}>Cancel</Button>
+          <Button variant="primary" onClick={handleSubmit} disabled={!selectedFile}>
             Upload
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </>
+      }
+    >
+      <input
+        type="file"
+        accept=".pdf,.doc,.docx"
+        aria-label="Resume file"
+        onChange={handleFileChange}
+        className="block w-full text-small text-ink-secondary file:mr-3 file:h-[32px] file:cursor-pointer file:rounded-control file:border file:border-solid file:border-hairline-strong file:bg-surface file:px-3 file:text-small file:font-medium file:text-ink hover:file:bg-surface-muted"
+      />
+      {selectedFile ? <p className="mt-3 font-mono text-meta text-ink-muted">Selected: {selectedFile.name}</p> : null}
+    </Modal>
   );
 };
 
