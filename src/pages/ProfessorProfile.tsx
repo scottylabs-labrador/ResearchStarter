@@ -124,6 +124,13 @@ const ProfessorProfile = () => {
         name={professor.name}
         summary={professorSummaryLine(professor)}
         readOnly
+        action={
+          isOwnProfile ? (
+            <ButtonLink size="sm" to="/professor-dashboard">
+              Manage listings
+            </ButtonLink>
+          ) : null
+        }
       />
 
       <AboutSection title="Details" className="mt-8">
@@ -136,16 +143,7 @@ const ProfessorProfile = () => {
 
       <AboutSection
         title="Research listings"
-        action={
-          <span className="flex items-center gap-3">
-            {listings ? <Meta>{listingCount === 1 ? "1 listing" : `${listingCount} listings`}</Meta> : null}
-            {isOwnProfile ? (
-              <ButtonLink size="sm" to="/professor-dashboard">
-                Manage listings
-              </ButtonLink>
-            ) : null}
-          </span>
-        }
+        action={listings ? <Meta>{listingCount === 1 ? "1 listing" : `${listingCount} listings`}</Meta> : null}
       >
         {listingsFailed ? (
           <p role="alert" className="rounded-control border border-danger/20 bg-danger-bg px-4 py-3 text-small text-danger">

@@ -106,7 +106,7 @@ const ProfessorDashboard = () => {
     void loadListings();
   }, [loadListings]);
 
-  // Add opportunity hides while the form is open, and a deleted card takes its button with it, so focus is moved by hand.
+  // Closing the form or deleting a card removes the focused button, so focus is moved by hand.
   useEffect(() => {
     if (showCreateForm) formRef.current?.querySelector<HTMLElement>("input, select, textarea")?.focus();
   }, [showCreateForm]);
@@ -121,6 +121,10 @@ const ProfessorDashboard = () => {
   const department = professor?.department ?? [];
 
   const openCreateForm = () => {
+    if (showCreateForm) {
+      formRef.current?.querySelector<HTMLElement>("input, select, textarea")?.focus();
+      return;
+    }
     const draft: FormData = {
       ...emptyOpportunity,
       contact: name || email ? { [name || email]: email } : {},
@@ -203,33 +207,29 @@ const ProfessorDashboard = () => {
         summary={summary}
         readOnly
         action={
-          andrewId ? (
-            <ButtonLink size="sm" to={`/professor/${encodeURIComponent(andrewId)}`}>
-              View public profile
-            </ButtonLink>
-          ) : null
+          <>
+            {andrewId ? (
+              <ButtonLink size="sm" to={`/professor/${encodeURIComponent(andrewId)}`}>
+                View public profile
+              </ButtonLink>
+            ) : null}
+            <Button
+              ref={addButtonRef}
+              size="sm"
+              variant="primary"
+              icon={<AddOutlinedIcon sx={{ fontSize: 15 }} />}
+              onClick={openCreateForm}
+            >
+              Add opportunity
+            </Button>
+          </>
         }
       />
 
       <AboutSection
         title="Your listings"
         className="mt-8"
-        action={
-          <span className="flex items-center gap-3">
-            {listings ? <Meta>{listingCount === 1 ? "1 listing" : `${listingCount} listings`}</Meta> : null}
-            {!showCreateForm ? (
-              <Button
-                ref={addButtonRef}
-                size="sm"
-                variant="primary"
-                icon={<AddOutlinedIcon sx={{ fontSize: 15 }} />}
-                onClick={openCreateForm}
-              >
-                Add opportunity
-              </Button>
-            ) : null}
-          </span>
-        }
+        action={listings ? <Meta>{listingCount === 1 ? "1 listing" : `${listingCount} listings`}</Meta> : null}
       >
         <div className="flex flex-col gap-3">
           {deleteError ? (
@@ -241,6 +241,7 @@ const ProfessorDashboard = () => {
           {showCreateForm ? (
             <div ref={formRef}>
               <Surface className="p-5">
+                <h3 className="mb-5 text-heading text-ink">New opportunity</h3>
                 <OpportunityForm initialData={newOpportunity} onChange={(data) => setNewOpportunity(data)} />
                 {submitError ? (
                   <p role="alert" className={`mt-6 ${alertClass}`}>
@@ -252,7 +253,7 @@ const ProfessorDashboard = () => {
                     Discard
                   </Button>
                   <Button size="sm" variant="primary" onClick={handleAdd} disabled={!isFormValid(newOpportunity) || submitting}>
-                    Add opportunity
+                    Post opportunity
                   </Button>
                 </div>
               </Surface>

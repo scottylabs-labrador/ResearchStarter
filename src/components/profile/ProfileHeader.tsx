@@ -17,7 +17,7 @@ interface ProfileHeaderProps {
   totalSteps?: number;
   className?: string;
   onProfileImageChange?: (file: File) => void;
-  /** Sits beside the avatar, at the header's top right. */
+  /** Page actions, on the name's row at the right; below the summary on phones. */
   action?: React.ReactNode;
 }
 
@@ -90,46 +90,47 @@ const ProfileHeader = ({
 
   return (
     <header className={className}>
-      <div className="flex items-start justify-between gap-4">
-        {readOnly ? (
-          <div className={avatarShellClass}>{avatarInner}</div>
-        ) : (
-          <>
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              aria-label="Change profile photo"
-              className={`group ${avatarShellClass} transition-transform duration-150 ease-out active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-canvas`}
+      {readOnly ? (
+        <div className={avatarShellClass}>{avatarInner}</div>
+      ) : (
+        <>
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            aria-label="Change profile photo"
+            className={`group ${avatarShellClass} transition-transform duration-150 ease-out active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-canvas`}
+          >
+            {avatarInner}
+            <span
+              aria-hidden="true"
+              className="absolute -bottom-1.5 -right-1.5 flex h-[22px] w-[22px] items-center justify-center rounded-full border border-hairline-strong bg-surface text-ink-muted shadow-[0_1px_2px_rgb(24_24_27/0.08)]"
             >
-              {avatarInner}
-              <span
-                aria-hidden="true"
-                className="absolute -bottom-1.5 -right-1.5 flex h-[22px] w-[22px] items-center justify-center rounded-full border border-hairline-strong bg-surface text-ink-muted shadow-[0_1px_2px_rgb(24_24_27/0.08)]"
-              >
-                <EditOutlinedIcon sx={{ fontSize: 12 }} />
-              </span>
-            </button>
-            <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
-          </>
-        )}
-        {action ? <div className="shrink-0">{action}</div> : null}
-      </div>
+              <EditOutlinedIcon sx={{ fontSize: 12 }} />
+            </span>
+          </button>
+          <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
+        </>
+      )}
 
-      <div className="mt-5 flex flex-wrap items-center gap-x-2.5 gap-y-1">
-        <h1 className="break-words text-[24px] font-semibold leading-8 tracking-[-0.015em] text-ink">{displayName}</h1>
-        {showProgress ? (
-          isComplete ? (
-            <Badge tone="positive" icon={<CheckCircleRoundedIcon sx={{ fontSize: 13 }} />}>
-              Profile complete
-            </Badge>
-          ) : (
-            <Badge tone="accent">
-              {completedSteps} of {totalSteps} complete
-            </Badge>
-          )
-        ) : null}
+      {/* The 32px name line and sm buttons share a row; the summary runs full width below. Phones put the actions last. */}
+      <div className="mt-5 grid sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-x-6">
+        <div className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1">
+          <h1 className="break-words text-[24px] font-semibold leading-8 tracking-[-0.015em] text-ink">{displayName}</h1>
+          {showProgress ? (
+            isComplete ? (
+              <Badge tone="positive" icon={<CheckCircleRoundedIcon sx={{ fontSize: 13 }} />}>
+                Profile complete
+              </Badge>
+            ) : (
+              <Badge tone="accent">
+                {completedSteps} of {totalSteps} complete
+              </Badge>
+            )
+          ) : null}
+        </div>
+        {action ? <div className="order-last mt-4 flex flex-wrap items-center gap-2 sm:order-none sm:mt-0">{action}</div> : null}
+        <p className="mt-1 text-[15px] leading-6 text-ink-muted sm:col-span-2">{displaySummary}</p>
       </div>
-      <p className="mt-1 text-[15px] leading-6 text-ink-muted">{displaySummary}</p>
     </header>
   );
 };
