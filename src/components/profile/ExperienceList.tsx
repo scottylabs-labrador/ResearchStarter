@@ -132,7 +132,7 @@ const ExperienceList = ({ experiences, onChange }: ExperienceListProps) => {
                   aria-expanded={expanded}
                   aria-controls={panelId}
                   onClick={() => setExpandedId(expanded ? null : exp.id)}
-                  className="flex w-full items-center gap-3 rounded-[10px] px-3 py-3 text-left transition-colors duration-150 ease-out hover:bg-accent-bg/70 focus-visible:bg-accent-bg/70 focus-visible:outline-none"
+                  className="flex w-full items-center gap-3 rounded-[10px] px-3 py-3 text-left transition-colors duration-150 ease-out hover:bg-accent-bg/70 focus-visible:bg-accent-bg/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
                 >
                   <span
                     aria-hidden="true"
@@ -220,6 +220,7 @@ const ExperienceList = ({ experiences, onChange }: ExperienceListProps) => {
         <Modal
           title={editor.mode === "add" ? "Add experience" : "Edit experience"}
           size="lg"
+          onClose={() => setEditor(null)}
           className="scrollbar-minimal max-h-[85vh] overflow-y-auto"
           footer={
             <>
@@ -237,6 +238,7 @@ const ExperienceList = ({ experiences, onChange }: ExperienceListProps) => {
       {deleteId ? (
         <Modal
           title="Delete this experience?"
+          onClose={() => setDeleteId(null)}
           footer={
             <>
               <Button onClick={() => setDeleteId(null)}>Cancel</Button>

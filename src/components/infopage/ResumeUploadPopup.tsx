@@ -30,6 +30,7 @@ const ResumeUploadPopup: React.FC<ResumeUploadPopupProps> = ({ isOpen, onClose, 
   return (
     <Modal
       title="Upload resume"
+      onClose={onClose}
       footer={
         <>
           <Button onClick={onClose}>Cancel</Button>

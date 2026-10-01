@@ -19,7 +19,8 @@ interface OpportunityFormProps {
 const paidOptions = ["Paid", "Unpaid"];
 
 const labelClass = "mb-1.5 block text-small font-medium text-ink";
-const boxClass = "rounded-control border border-hairline-strong bg-surface p-3";
+const boxClass =
+  "rounded-control border border-hairline-strong bg-surface p-3 transition-[border-color,box-shadow] duration-150 ease-out focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/15";
 
 const Required = () => (
   <span aria-hidden="true" className="mr-1 text-ink-muted">

@@ -199,6 +199,7 @@ const ProfessorDashboard = () => {
       {showConfirmDiscard ? (
         <Modal
           title="Discard this opportunity?"
+          onClose={() => setShowConfirmDiscard(false)}
           footer={
             <>
               <Button onClick={() => setShowConfirmDiscard(false)}>Keep editing</Button>

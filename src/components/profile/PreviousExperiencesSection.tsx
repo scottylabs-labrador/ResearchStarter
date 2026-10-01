@@ -239,6 +239,7 @@ const PreviousExperiencesSection = ({
       {showConfirmDeleteModal ? (
         <Modal
           title="Delete this experience?"
+          onClose={() => setShowConfirmDeleteModal(false)}
           footer={
             <>
               <Button onClick={() => setShowConfirmDeleteModal(false)}>No</Button>
