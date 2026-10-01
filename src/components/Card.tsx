@@ -21,11 +21,15 @@ interface CardProps {
   research: ResearchType;
   showApplyButton?: boolean;
   onApply?: (researchId: string) => void;
+  /** Off for the listing's own professor, who manages it rather than saves it. */
+  showBookmark?: boolean;
+  /** Controls placed where the bookmark sits, above the card's link. */
+  actions?: React.ReactNode;
 }
 
 const iconClass = "shrink-0 text-ink-muted";
 
-const Card = ({ research, showApplyButton, onApply }: CardProps) => {
+const Card = ({ research, showApplyButton, onApply, showBookmark = true, actions }: CardProps) => {
   const { data: session } = useSession();
   const id = session?.user?.id ?? undefined;
 
@@ -52,7 +56,7 @@ const Card = ({ research, showApplyButton, onApply }: CardProps) => {
 
   // Fetch bookmark status
   useEffect(() => {
-    if (!id) return;
+    if (!id || !showBookmark) return;
     async function fetchBookmark() {
       const response = await fetch(`/api/users/${id}`);
       if (!response.ok) {
@@ -65,7 +69,7 @@ const Card = ({ research, showApplyButton, onApply }: CardProps) => {
     }
 
     fetchBookmark();
-  }, [id, research._id]);
+  }, [id, research._id, showBookmark]);
 
   function bookmarkOpportunity() {
     if (id != undefined) {
@@ -96,15 +100,18 @@ const Card = ({ research, showApplyButton, onApply }: CardProps) => {
         </h3>
         <div className="relative z-10 flex shrink-0 items-center gap-1">
           {research.timeAdded ? <Meta>Posted {research.timeAdded}</Meta> : null}
-          <IconButton
-            size="sm"
-            className="-my-1 -me-1.5"
-            aria-label={bookmark ? "Remove bookmark" : "Bookmark"}
-            pressed={bookmark}
-            onClick={bookmarkOpportunity}
-          >
-            {bookmark ? <BookmarkIcon sx={{ fontSize: 20 }} /> : <BookmarkIconUnfilled sx={{ fontSize: 20 }} />}
-          </IconButton>
+          {showBookmark ? (
+            <IconButton
+              size="sm"
+              className="-my-1 -me-1.5"
+              aria-label={bookmark ? "Remove bookmark" : "Bookmark"}
+              pressed={bookmark}
+              onClick={bookmarkOpportunity}
+            >
+              {bookmark ? <BookmarkIcon sx={{ fontSize: 20 }} /> : <BookmarkIconUnfilled sx={{ fontSize: 20 }} />}
+            </IconButton>
+          ) : null}
+          {actions}
         </div>
       </div>
 

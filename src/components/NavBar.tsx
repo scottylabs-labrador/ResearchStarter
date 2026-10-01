@@ -33,6 +33,12 @@ const NavBar = () => {
   const image = session?.user?.image ?? undefined;
   const isProfessor = session?.user?.isProfessor ?? false;
   const dashboardLink = isProfessor ? "/professor-dashboard" : "/dashboard";
+  const andrewId = session?.user?.andrewId || email.split("@")[0] || "";
+  // Professors manage listings on their dashboard and can't edit their profile, so the menu shows the page students see.
+  const profileLink =
+    isProfessor && andrewId
+      ? { to: `/professor/${encodeURIComponent(andrewId)}`, label: "View public profile" }
+      : { to: "/profile", label: "Manage account" };
 
   const [open, setOpen] = useState(false);
   const hidden = useNavBarHidden();
@@ -100,9 +106,9 @@ const NavBar = () => {
                   <p className="truncate text-body font-medium text-ink">{name || "Signed in"}</p>
                   {email ? <p className="truncate font-mono text-meta text-ink-muted">{email}</p> : null}
                 </div>
-                <NavLink role="menuitem" to="/profile" onClick={() => setOpen(false)} className={menuItemClass}>
+                <NavLink role="menuitem" to={profileLink.to} onClick={() => setOpen(false)} className={menuItemClass}>
                   <AccountCircleOutlinedIcon sx={{ fontSize: 16 }} />
-                  Manage account
+                  {profileLink.label}
                 </NavLink>
                 <button
                   type="button"

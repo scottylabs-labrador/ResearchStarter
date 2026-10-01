@@ -2,11 +2,12 @@ import { useState, useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
-import { ProfessorType } from "../DataTypes";
-import { getDummyResearchForProfessor } from "../data/dummyProfessorResearch";
-import { getDevMockProfessor } from "../data/devMockProfessors";
+import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
+import { ProfessorType, ResearchType } from "../DataTypes";
 import { professorBioPlainText } from "../utils";
 import { useEffectiveSession } from "../lib/useEffectiveSession";
+import { fetchOpportunities, listingsBy } from "../lib/opportunities";
+import { fetchProfessor } from "../lib/professors";
 import Card from "../components/Card";
 import ProfilePageShell from "../components/profile/ProfilePageShell";
 import ProfileHeader from "../components/profile/ProfileHeader";
@@ -15,15 +16,10 @@ import ProfessorProfileDetails from "../components/profile/ProfessorProfileDetai
 import BioBlurbSection from "../components/profile/BioBlurbSection";
 import ResearchAreasSection from "../components/profile/ResearchAreasSection";
 import { professorSummaryLine } from "../components/profile/professorSummary";
+import { ButtonLink } from "../components/ui/Button";
 import Spinner from "../components/ui/Spinner";
 import EmptyState from "../components/ui/EmptyState";
 import { Meta } from "../components/ui/Meta";
-
-const professorApiUrl = (param: string) =>
-  `http://localhost:5050/professors/${encodeURIComponent(param.trim())}`;
-
-const professorProjectsApiUrl = (param: string) =>
-  `http://localhost:5050/opportunities/professor/${encodeURIComponent(param.trim())}`;
 
 const ProfessorProfile = () => {
   const { andrewId } = useParams<{ andrewId: string }>();
@@ -32,6 +28,8 @@ const ProfessorProfile = () => {
   const [bio, setBio] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [opportunities, setOpportunities] = useState<ResearchType[] | null>(null);
+  const [listingsFailed, setListingsFailed] = useState(false);
 
   const isOwnProfile = useMemo(() => {
     if (!session?.user?.isProfessor || !andrewId) return false;
@@ -49,67 +47,53 @@ const ProfessorProfile = () => {
       return;
     }
 
-    const fetchProfessor = async () => {
-      try {
-        const res = await fetch(professorApiUrl(id));
-        if (!res.ok) {
-          if (import.meta.env.DEV && import.meta.env.VITE_DEV_BYPASS_AUTH === "true") {
-            const mock = getDevMockProfessor(id);
-            if (mock) {
-              setProfessor(mock);
-              setBio(professorBioPlainText(mock.bio));
-              return;
-            }
-          }
+    let cancelled = false;
+    setLoading(true);
+    setError(false);
+    fetchProfessor(id)
+      .then((record) => {
+        if (cancelled) return;
+        if (!record) {
           setError(true);
           return;
         }
-        const data = await res.json();
-        const nextProfessor: ProfessorType = {
-          _id: data._id,
-          name: data.Name ?? "",
-          department: Array.isArray(data.Department)
-            ? data.Department
-            : data.Department
-              ? [data.Department]
-              : [],
-          college: Array.isArray(data.College)
-            ? data.College
-            : data.College
-              ? [data.College]
-              : [],
-          email: data.Email ?? data.email ?? "",
-          phoneNumber: data["Phone Number"],
-          bio: data.Bio,
-          media: data.Media,
-          positions: data.Positions,
-          tags: data.Tags,
-          profilePicture: data["Profile Picture"],
-        };
-        setProfessor(nextProfessor);
-        setBio(professorBioPlainText(nextProfessor.bio));
-
-        const andrew_id = data.Email.split("@")[0];
-        const resProjects = await fetch(professorProjectsApiUrl(andrew_id));
-        const projects_data = await resProjects.json();
-        console.log(projects_data);
-      } catch {
-        if (import.meta.env.DEV && import.meta.env.VITE_DEV_BYPASS_AUTH === "true") {
-          const mock = getDevMockProfessor(id);
-          if (mock) {
-            setProfessor(mock);
-            setBio(professorBioPlainText(mock.bio));
-            return;
-          }
-        }
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
+        setProfessor(record);
+        setBio(professorBioPlainText(record.bio));
+      })
+      .catch((err) => {
+        console.error("Error fetching professor", err);
+        if (!cancelled) setError(true);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
     };
-
-    void fetchProfessor();
   }, [andrewId]);
+
+  // Fetched alongside the professor rather than after; filtered once both have arrived.
+  useEffect(() => {
+    let cancelled = false;
+    fetchOpportunities()
+      .then((result) => {
+        if (!cancelled) setOpportunities(result);
+      })
+      .catch((err) => {
+        console.error("Error fetching listings", err);
+        if (!cancelled) setListingsFailed(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // The record's email is canonical; the URL may hold an email or a record id instead of an Andrew ID.
+  const owner = professor ? professor.email.split("@")[0] || andrewId || "" : "";
+  const listings = useMemo(
+    () => (professor && opportunities ? listingsBy(opportunities, owner) : null),
+    [professor, opportunities, owner]
+  );
 
   if (loading) {
     return (
@@ -127,12 +111,12 @@ const ProfessorProfile = () => {
     );
   }
 
-  const dummyResearch = getDummyResearchForProfessor(professor.name, andrewId ?? "");
+  const listingCount = listings?.length ?? 0;
 
   return (
     <ProfilePageShell
       breadcrumbRoot={isOwnProfile ? "Account" : "Professors"}
-      breadcrumbCurrent={isOwnProfile ? "About you" : professor.name}
+      breadcrumbCurrent={isOwnProfile ? "Public profile" : professor.name}
       breadcrumbIcon={isOwnProfile ? undefined : <SchoolOutlinedIcon sx={{ fontSize: 16 }} />}
     >
       <ProfileHeader
@@ -150,12 +134,36 @@ const ProfessorProfile = () => {
 
       <ResearchAreasSection tags={professor.tags ?? []} />
 
-      <AboutSection title="Research listings" action={<Meta>{dummyResearch.length} listings</Meta>}>
-        <div className="flex flex-col gap-3">
-          {dummyResearch.map((research) => (
-            <Card key={research._id} research={research} showApplyButton={!isOwnProfile} />
-          ))}
-        </div>
+      <AboutSection
+        title="Research listings"
+        action={
+          <span className="flex items-center gap-3">
+            {listings ? <Meta>{listingCount === 1 ? "1 listing" : `${listingCount} listings`}</Meta> : null}
+            {isOwnProfile ? (
+              <ButtonLink size="sm" to="/professor-dashboard">
+                Manage listings
+              </ButtonLink>
+            ) : null}
+          </span>
+        }
+      >
+        {listingsFailed ? (
+          <p role="alert" className="rounded-control border border-danger/20 bg-danger-bg px-4 py-3 text-small text-danger">
+            Couldn&rsquo;t load research listings. Refresh the page to try again.
+          </p>
+        ) : listings === null ? (
+          <div className="flex justify-center py-10">
+            <Spinner label="Loading research listings" />
+          </div>
+        ) : listings.length === 0 ? (
+          <EmptyState icon={<PostAddOutlinedIcon sx={{ fontSize: 20 }} />} title="No open listings right now" />
+        ) : (
+          <div className="flex flex-col gap-3">
+            {listings.map((research) => (
+              <Card key={research._id} research={research} showApplyButton={!isOwnProfile} showBookmark={!isOwnProfile} />
+            ))}
+          </div>
+        )}
       </AboutSection>
     </ProfilePageShell>
   );

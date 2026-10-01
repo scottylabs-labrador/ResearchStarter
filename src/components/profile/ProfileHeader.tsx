@@ -17,6 +17,8 @@ interface ProfileHeaderProps {
   totalSteps?: number;
   className?: string;
   onProfileImageChange?: (file: File) => void;
+  /** Sits beside the avatar, at the header's top right. */
+  action?: React.ReactNode;
 }
 
 const initialsOf = (name: string) =>
@@ -43,6 +45,7 @@ const ProfileHeader = ({
   totalSteps,
   className,
   onProfileImageChange,
+  action,
 }: ProfileHeaderProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -87,27 +90,30 @@ const ProfileHeader = ({
 
   return (
     <header className={className}>
-      {readOnly ? (
-        <div className={avatarShellClass}>{avatarInner}</div>
-      ) : (
-        <>
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            aria-label="Change profile photo"
-            className={`group ${avatarShellClass} transition-transform duration-150 ease-out active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-canvas`}
-          >
-            {avatarInner}
-            <span
-              aria-hidden="true"
-              className="absolute -bottom-1.5 -right-1.5 flex h-[22px] w-[22px] items-center justify-center rounded-full border border-hairline-strong bg-surface text-ink-muted shadow-[0_1px_2px_rgb(24_24_27/0.08)]"
+      <div className="flex items-start justify-between gap-4">
+        {readOnly ? (
+          <div className={avatarShellClass}>{avatarInner}</div>
+        ) : (
+          <>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              aria-label="Change profile photo"
+              className={`group ${avatarShellClass} transition-transform duration-150 ease-out active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-canvas`}
             >
-              <EditOutlinedIcon sx={{ fontSize: 12 }} />
-            </span>
-          </button>
-          <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
-        </>
-      )}
+              {avatarInner}
+              <span
+                aria-hidden="true"
+                className="absolute -bottom-1.5 -right-1.5 flex h-[22px] w-[22px] items-center justify-center rounded-full border border-hairline-strong bg-surface text-ink-muted shadow-[0_1px_2px_rgb(24_24_27/0.08)]"
+              >
+                <EditOutlinedIcon sx={{ fontSize: 12 }} />
+              </span>
+            </button>
+            <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
+          </>
+        )}
+        {action ? <div className="shrink-0">{action}</div> : null}
+      </div>
 
       <div className="mt-5 flex flex-wrap items-center gap-x-2.5 gap-y-1">
         <h1 className="break-words text-[24px] font-semibold leading-8 tracking-[-0.015em] text-ink">{displayName}</h1>

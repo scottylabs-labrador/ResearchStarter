@@ -320,3 +320,12 @@ These record direction changes made after the plan was executed (commit 4be5908,
 15. **Professor bio and photo are read-only** on the professor's own profile and dashboard, because no professor save endpoint exists.
 16. **`Modal` is a native `<dialog>` opened with `showModal()`.** It takes an `onClose` prop for Escape, makes the rest of the page inert, and returns focus to whatever opened it.
 17. **Dev mock data is gated on `import.meta.env.DEV && VITE_DEV_BYPASS_AUTH === "true"` and stripped from production builds.** `VITE_DEV_MOCK_ROLE=professor|student` picks the mock session.
+18. **Search uses a capped, centred column.** The header and results share an 80rem column, so wide screens keep side margins. The gutter is 2rem, rising to 3rem from the `xl` breakpoint. The filter sidebar is 296px with 1.5rem padding, and the nav matches that padding so the logo lines up with the Filters heading.
+19. **"Show filters" opens the search row.** With the sidebar hidden, the toggle sits before the search input at the input's height, uses a filter icon and counts active filters. The page heading keeps the column's left edge. Hiding or showing the sidebar moves focus to the other toggle.
+20. **The professor pages do what the backend supports.**
+    - **The dashboard is the professor's workspace.** It shows their listings and lets them add and delete them. Delete asks for confirmation, and a failed delete keeps the listing and says so. The dashboard no longer repeats the public profile's bio and research areas; a "View public profile" link replaces them.
+    - **No listing editing.** `PATCH /opportunities/:id` only writes `name`, `position` and `level`, which no listing field uses, so the app offers no edit.
+    - **The public profile shows the professor's real listings.** The placeholder (lorem ipsum) listings are gone. On your own profile, the breadcrumb reads "Public profile" and a "Manage listings" link leads to the dashboard.
+    - **The avatar menu:** professors see "View public profile". Students keep "Manage account".
+    - **Listings come from `GET /opportunities`, filtered by contact value.** `GET /opportunities/professor/:andrewId` matches contact keys, but contacts are stored as `{ name: andrewId-or-email }`. Professor records come from `GET /professors/:id`. Both are fetched in parallel.
+    - **Two read fixes.** Contacts saved as a full email are no longer given a second `@andrew.cmu.edu`. Listings saved under `Colleges` (the documented schema, and what the form posts) show their college in search.
