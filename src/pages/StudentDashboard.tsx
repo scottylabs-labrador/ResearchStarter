@@ -41,16 +41,14 @@ const ProfilePage = () => {
   }, [session?.user?.id]);
 
   return (
-    <main className="min-h-screen max-w-7xl mx-auto pt-32 px-4 sm:px-6 lg:px-8">
+    <main className="mx-auto max-w-7xl px-8 pb-16 pt-10">
       <ProfileHeader
         profileImage={profileImage}
         name={userName}
         major={userMajor}
         class={userClass}
         email={userEmail}
-        className="mb-20"
       />
-      <div className="p-8" />
     </main>
   );
 };

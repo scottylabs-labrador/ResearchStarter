@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import ProfessorPlaceholderImg from "../assets/professor_dashboard_placeholder.png";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import ApartmentOutlinedIcon from "@mui/icons-material/ApartmentOutlined";
+import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
+import { FaHouse } from "react-icons/fa6";
 import { useSession } from "../lib/authClient";
 import { ResearchOpportunity } from "../types/ResearchOpportunity";
 import OpportunityForm from "../components/professor/OpportunityForm";
+import ProfileSummary from "../components/profile/ProfileSummary";
+import Button from "../components/ui/Button";
+import Modal from "../components/ui/Modal";
 
 type FormData = Omit<ResearchOpportunity, "source" | "timeAdded" | "enableApply">;
 
@@ -86,7 +92,6 @@ const ProfessorDashboard = () => {
 
     // Attempts to add the opportunity to the database
     try {
-
       const res = await fetch("http://localhost:5050/opportunities", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -119,104 +124,58 @@ const ProfessorDashboard = () => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-white pt-32 px-8 pb-16">
-      <div className="flex flex-row items-start gap-24 max-w-4xl w-full">
+    <main className="mx-auto max-w-4xl px-8 pb-16 pt-10">
+      <ProfileSummary
+        name={name}
+        title={name || "Your Name"}
+        subtitle={email || undefined}
+        rows={[
+          { label: "College", value: college ?? "Not set", icon: <FaHouse size={12} /> },
+          { label: "Department", value: department ?? "Not set", icon: <ApartmentOutlinedIcon sx={{ fontSize: 14 }} /> },
+          { label: "Email", value: email ? <span className="font-mono">{email}</span> : "Not set", icon: <MailOutlinedIcon sx={{ fontSize: 14 }} /> },
+        ]}
+      />
 
-        {/* Professor image */}
-        <div className="w-48 h-48 flex-shrink-0">
-          <img
-            src={ProfessorPlaceholderImg}
-            alt="Professor John Doe"
-            className="w-full h-full object-contain"
-          />
+      {!showCreateForm ? (
+        <div className="mt-8 flex justify-center">
+          <Button variant="primary" icon={<AddOutlinedIcon sx={{ fontSize: 16 }} />} onClick={() => setShowCreateForm(true)}>
+            Add research opportunity
+          </Button>
         </div>
-
-        {/* Professor info */}
-        <div className="flex flex-col pt-2 pb-16">
-          <h1 className="text-5xl font-extrabold text-black mb-8 tracking-tight">
-            {name}
-          </h1>
-
-          <div className="grid grid-cols-[140px_1fr] gap-y-4 text-xl">
-            <span className="font-bold text-gray-900">College</span>
-            <span className="text-gray-800">{college ?? "Not set"}</span>
-
-            <span className="font-bold text-gray-900">Department</span>
-            <span className="text-gray-800">{department ?? "Not set"}</span>
-
-            <span className="font-bold text-gray-900">Email</span>
-            <span className="text-gray-700">{email}</span>
+      ) : (
+        <section className="mt-10">
+          <h2 className="mb-5 text-heading text-ink">Create new opportunity</h2>
+          <OpportunityForm initialData={newOpportunity} onChange={(data) => setNewOpportunity(data)} />
+          {submitError ? (
+            <p role="alert" className="mt-6 text-small text-danger">
+              {submitError}
+            </p>
+          ) : null}
+          <div className="mt-8 flex justify-end gap-2">
+            <Button onClick={handleDiscard}>Discard</Button>
+            <Button variant="primary" onClick={handleAdd} disabled={!isFormValid(newOpportunity)}>
+              Add opportunity
+            </Button>
           </div>
-        </div>
-      </div>
-
-      <hr className="border-gray-300 w-full" />
-
-      {/* Create new research opportunity button */}
-      <div className="max-w-4xl w-full mt-8 flex justify-center">
-        {!showCreateForm && (
-          <button
-            onClick={() => setShowCreateForm(true)}
-            className="px-4 py-2 bg-card-highlight text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
-          >
-            + Add Research Opportunity
-          </button>
-        )}
-      </div>
-
-      {/* Inline create form */}
-      {showCreateForm && (
-        <div className="max-w-4xl w-full mt-8">
-          <h3 className="font-roboto text-3xl font-bold mb-4">Create New Opportunity</h3>
-          <OpportunityForm
-            initialData={newOpportunity}
-            onChange={(data) => setNewOpportunity(data)}
-          />
-          <div className="flex flex-col gap-3 mt-8">
-            {submitError && (
-              <p className="text-red-500 text-sm text-center">{submitError}</p>
-            )}
-            <button
-              onClick={handleAdd}
-              disabled={!isFormValid(newOpportunity)}
-              className="w-full py-3 bg-card-highlight text-white font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Add
-            </button>
-            <button
-              onClick={handleDiscard}
-              className="w-full py-3 bg-red-500 text-white font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
-            >
-              Discard
-            </button>
-          </div>
-        </div>
+        </section>
       )}
 
-      {/* Confirm discard modal */}
-      {showConfirmDiscard && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl w-96">
-            <h3 className="text-xl font-bold mb-4">Discard Changes</h3>
-            <p className="mb-4">You have non-empty form data. Are you sure you want to discard this opportunity?</p>
-            <div className="flex justify-center space-x-2">
-              <button
-                onClick={() => setShowConfirmDiscard(false)}
-                className="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg transition-colors duration-150 ease-out hover:bg-gray-50 active:scale-[0.97]"
-              >
-                No
-              </button>
-              <button
-                onClick={confirmDiscard}
-                className="px-4 py-2 bg-red-500 text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
-              >
+      {showConfirmDiscard ? (
+        <Modal
+          title="Discard this opportunity?"
+          footer={
+            <>
+              <Button onClick={() => setShowConfirmDiscard(false)}>Keep editing</Button>
+              <Button variant="danger" onClick={confirmDiscard}>
                 Discard
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+              </Button>
+            </>
+          }
+        >
+          The form has unsaved changes. Discarding clears everything you&rsquo;ve entered.
+        </Modal>
+      ) : null}
+    </main>
   );
 };
 

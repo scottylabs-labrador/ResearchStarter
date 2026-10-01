@@ -1,10 +1,20 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import ApartmentOutlinedIcon from "@mui/icons-material/ApartmentOutlined";
+import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
+import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
+import { FaHouse } from "react-icons/fa6";
 import { ProfessorType } from "../DataTypes";
 import { getDummyResearchForProfessor } from "../data/dummyProfessorResearch";
 import { professorBioPlainText } from "../utils";
 import Card from "../components/Card";
-import ProfessorPlaceholderImg from "../assets/professor_dashboard_placeholder.png";
+import ProfileSummary from "../components/profile/ProfileSummary";
+import Surface from "../components/ui/Surface";
+import SectionLabel from "../components/ui/SectionLabel";
+import Button from "../components/ui/Button";
+import Spinner from "../components/ui/Spinner";
+import EmptyState from "../components/ui/EmptyState";
+import { Meta } from "../components/ui/Meta";
 
 const professorApiUrl = (param: string) =>
   `http://localhost:5050/professors/${encodeURIComponent(param.trim())}`;
@@ -72,111 +82,74 @@ const ProfessorProfile = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p className="text-gray-500 text-lg">Loading...</p>
-      </div>
+      <main className="flex min-h-[60vh] items-center justify-center">
+        <Spinner label="Loading professor" />
+      </main>
     );
   }
 
   if (error || !professor) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p className="text-gray-500 text-lg">Professor not found.</p>
-      </div>
+      <main className="mx-auto max-w-4xl px-8 pt-10">
+        <EmptyState icon={<ErrorOutlineOutlinedIcon sx={{ fontSize: 20 }} />} title="Professor not found." />
+      </main>
     );
   }
 
-  const dummyResearch = getDummyResearchForProfessor(
-    professor.name,
-    andrewId ?? ""
-  );
+  const dummyResearch = getDummyResearchForProfessor(professor.name, andrewId ?? "");
 
   const bioText = professorBioPlainText(professor.bio);
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-white pt-32 px-8">
-      {/* Header: profile picture + info */}
-      <div className="flex flex-row items-start gap-24 max-w-4xl w-full">
-        <div className="w-48 h-48 flex-shrink-0">
-          <img
-            src={professor.profilePicture || ProfessorPlaceholderImg}
-            alt={professor.name}
-            className="w-full h-full object-cover rounded-full"
-          />
-        </div>
+    <main className="mx-auto max-w-4xl px-8 pb-16 pt-10">
+      <ProfileSummary
+        name={professor.name}
+        title={`Professor ${professor.name}`}
+        subtitle={professor.email || undefined}
+        avatarSrc={professor.profilePicture}
+        rows={[
+          {
+            label: "College",
+            value: professor.college.length > 0 ? professor.college.join(", ") : "Not set",
+            icon: <FaHouse size={12} />,
+          },
+          {
+            label: "Department",
+            value: professor.department.length > 0 ? professor.department.join(", ") : "Not set",
+            icon: <ApartmentOutlinedIcon sx={{ fontSize: 14 }} />,
+          },
+          {
+            label: "Email",
+            value: <span className="font-mono">{professor.email}</span>,
+            icon: <MailOutlinedIcon sx={{ fontSize: 14 }} />,
+          },
+        ]}
+      />
 
-        <div className="flex flex-col pt-2 pb-16">
-          <h1 className="text-5xl font-extrabold text-black mb-8 tracking-tight">
-            Professor {professor.name}
-          </h1>
+      <section className="mt-10">
+        <SectionLabel as="h2" className="mb-2">
+          Bio
+        </SectionLabel>
+        <Surface className="p-5">
+          <p className="whitespace-pre-line text-body text-ink-secondary">{bioText || "No bio available."}</p>
+        </Surface>
+      </section>
 
-          <div className="grid grid-cols-[140px_1fr] gap-y-4 text-xl">
-            <span className="font-bold text-gray-900 text-right pr-6">
-              College
-            </span>
-            <span className="text-gray-800">
-              {professor.college.length > 0
-                ? professor.college.join(", ")
-                : "Not set"}
-            </span>
-
-            <span className="font-bold text-gray-900 text-right pr-6">
-              Department
-            </span>
-            <span className="text-gray-800">
-              {professor.department.length > 0
-                ? professor.department.join(", ")
-                : "Not set"}
-            </span>
-
-            <span className="font-bold text-gray-900 text-right pr-6">
-              Email
-            </span>
-            <span className="text-gray-700">{professor.email}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Tab bar */}
-      <div className="max-w-4xl w-full border-b border-gray-300 flex justify-center">
-        <button className="px-6 py-3 text-gray-900 border-b-2 border-card-highlight font-medium">
-          Research Listing
-        </button>
-      </div>
-
-      {/* Bio section */}
-      <div className="max-w-4xl w-full mt-8">
-        <h2 className="text-3xl font-extrabold text-black mb-4">Bio</h2>
-        <div className="bg-violet-100 rounded-lg p-6">
-          <p className="text-gray-800 leading-relaxed whitespace-pre-line">
-            {bioText || "No bio available."}
-          </p>
-        </div>
-      </div>
-
-      {/* Research Listings */}
-      <div className="max-w-4xl w-full mt-10">
-        <h2 className="text-3xl font-extrabold text-black mb-6">
-          Research Listings
-        </h2>
-        <div className="flex flex-col gap-5">
+      <section className="mt-10">
+        <SectionLabel as="h2" className="mb-2" action={<Meta>{dummyResearch.length} listings</Meta>}>
+          Research listings
+        </SectionLabel>
+        <div className="flex flex-col gap-3">
           {dummyResearch.map((research) => (
-            <Card
-              key={research._id}
-              research={research}
-              showApplyButton={true}
-            />
+            <Card key={research._id} research={research} showApplyButton />
           ))}
         </div>
-      </div>
+      </section>
 
-      {/* View All button */}
-      <div className="max-w-4xl w-full my-10">
-        <button className="w-full py-3 bg-card-highlight text-white text-lg font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]">
-          View All
-        </button>
+      <div className="mt-8 flex justify-center">
+        <Button>View all</Button>
       </div>
-    </div>
+    </main>
   );
 };
 

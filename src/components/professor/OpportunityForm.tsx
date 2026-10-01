@@ -1,6 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useId } from "react";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { ResearchOpportunity } from "../../types/ResearchOpportunity";
 import { collegeOptions, departmentOptions } from "../../FilterData";
+import Tag from "../Tag";
+import Button from "../ui/Button";
+import IconButton from "../ui/IconButton";
+import { fieldClass } from "../ui/Input";
+import { cx } from "../ui/cx";
 
 type FormData = Omit<ResearchOpportunity, "source" | "timeAdded" | "enableApply">;
 
@@ -9,12 +16,16 @@ interface OpportunityFormProps {
   onChange: (data: FormData) => void;
 }
 
-
 const paidOptions = ["Paid", "Unpaid"];
 
-const inputClass =
-  "block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500";
-const labelClass = "block text-sm font-bold text-gray-900 mb-1";
+const labelClass = "mb-1.5 block text-small font-medium text-ink";
+const boxClass = "rounded-control border border-hairline-strong bg-surface p-3";
+
+const Required = () => (
+  <span aria-hidden="true" className="mr-1 text-ink-muted">
+    *
+  </span>
+);
 
 interface TagsFieldProps {
   label: string;
@@ -27,48 +38,39 @@ interface TagsFieldProps {
   placeholder: string;
 }
 
-const TagsField: React.FC<TagsFieldProps> = ({
-  label,
-  tags,
-  input,
-  onInputChange,
-  onAdd,
-  onRemove,
-  onKeyDown,
-  placeholder,
-}) => (
-  <div>
-    <label className={labelClass}>{label}</label>
-    <div className="border border-gray-300 rounded-lg p-3">
-      <div className="flex flex-wrap gap-2 items-center">
-        {tags.map((tag) => (
-          <span
-            key={tag}
-            onClick={() => onRemove(tag)}
-            className="bg-purple-200 text-purple-800 text-sm font-medium px-3 py-1 rounded-full cursor-pointer hover:bg-purple-300"
-          >
-            {tag} ×
-          </span>
-        ))}
-        <button
-          type="button"
-          onClick={onAdd}
-          className="bg-card-highlight text-white text-sm font-medium px-3 py-1 rounded-full transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
-        >
-          + Add
-        </button>
+const TagsField: React.FC<TagsFieldProps> = ({ label, tags, input, onInputChange, onAdd, onRemove, onKeyDown, placeholder }) => {
+  const inputId = useId();
+  return (
+    <div>
+      <label htmlFor={inputId} className={labelClass}>
+        {label}
+      </label>
+      <div className={boxClass}>
+        {tags.length > 0 ? (
+          <div className="mb-2 flex flex-wrap gap-1.5">
+            {tags.map((tag) => (
+              <Tag key={tag} keyword={tag} onRemove={() => onRemove(tag)} />
+            ))}
+          </div>
+        ) : null}
+        <div className="flex items-center gap-2">
+          <input
+            id={inputId}
+            type="text"
+            className="block w-full border-none bg-transparent p-0 text-body text-ink outline-none placeholder:text-ink-muted"
+            placeholder={placeholder}
+            value={input}
+            onChange={(e) => onInputChange(e.target.value)}
+            onKeyDown={onKeyDown}
+          />
+          <Button size="sm" icon={<AddOutlinedIcon sx={{ fontSize: 14 }} />} onClick={onAdd}>
+            Add
+          </Button>
+        </div>
       </div>
-      <input
-        type="text"
-        className="mt-2 block w-full p-2 border-0 focus:ring-0 text-sm"
-        placeholder={placeholder}
-        value={input}
-        onChange={(e) => onInputChange(e.target.value)}
-        onKeyDown={onKeyDown}
-      />
     </div>
-  </div>
-);
+  );
+};
 
 const OpportunityForm: React.FC<OpportunityFormProps> = ({ initialData, onChange }) => {
   const [formData, setFormData] = useState<FormData>(initialData);
@@ -98,18 +100,12 @@ const OpportunityForm: React.FC<OpportunityFormProps> = ({ initialData, onChange
     });
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
     update({ [id]: value } as Partial<FormData>);
   };
 
-  const addTag = (
-    field: "prereqs" | "relevantLinks" | "keywords",
-    value: string,
-    clear: () => void
-  ) => {
+  const addTag = (field: "prereqs" | "relevantLinks" | "keywords", value: string, clear: () => void) => {
     if (!value.trim()) return;
     update({ [field]: [...formData[field], value.trim()] });
     clear();
@@ -148,54 +144,53 @@ const OpportunityForm: React.FC<OpportunityFormProps> = ({ initialData, onChange
 
   return (
     <div className="space-y-5">
-      {/* Project Title */}
       <div>
         <label htmlFor="projectTitle" className={labelClass}>
-          <span className="text-red-500">*</span> Project Title
+          <Required />
+          Project title
         </label>
         <input
           type="text"
           id="projectTitle"
-          className={inputClass}
+          className={fieldClass}
           placeholder="Enter project title"
           value={formData.projectTitle}
           onChange={handleChange}
         />
       </div>
 
-      {/* Contact */}
       <div>
-        <label className={labelClass}><span className="text-red-500">*</span> Contact</label>
-        <div className="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label htmlFor="contact-name" className={labelClass}>
+          <Required />
+          Contact
+        </label>
+        <div className="space-y-2">
           {Object.entries(formData.contact).map(([key, value]) => (
-            <div
-              key={key}
-              className="flex items-center justify-between bg-gray-50 rounded px-3 py-1.5"
-            >
-              <span className="text-sm">
-                <span className="font-medium">{key}:</span> {value}
+            <div key={key} className="flex items-center justify-between gap-2 rounded-[8px] bg-surface-muted py-1 pl-3 pr-1">
+              <span className="min-w-0 truncate text-small text-ink">
+                <span className="font-medium">{key}</span> <span className="font-mono text-meta text-ink-muted">{value}</span>
               </span>
-              <button
-                type="button"
-                onClick={() => removeContact(key)}
-                className="text-red-400 hover:text-red-600 ml-2 text-sm leading-none"
-              >
-                ×
-              </button>
+              <IconButton size="sm" aria-label={`Remove ${key}`} onClick={() => removeContact(key)}>
+                <CloseOutlinedIcon sx={{ fontSize: 14 }} />
+              </IconButton>
             </div>
           ))}
-          <div className="flex gap-2 pt-1 items-start">
+          <div className="flex items-start gap-2">
             <input
+              id="contact-name"
               type="text"
-              className="flex-1 p-2 border border-gray-200 rounded text-sm"
-              placeholder="Full Name"
+              aria-label="Contact name"
+              className={cx(fieldClass, "h-[36px] flex-1")}
+              placeholder="Full name"
               value={contactKey}
               onChange={(e) => setContactKey(e.target.value)}
             />
-            <div className="flex-1 flex flex-col">
+            <div className="flex flex-1 flex-col">
               <input
                 type="text"
-                className={`p-2 border rounded text-sm ${contactEmailError ? "border-red-400 focus:border-red-400" : "border-gray-200"}`}
+                aria-label="Contact email"
+                aria-invalid={Boolean(contactEmailError)}
+                className={cx(fieldClass, "h-[36px]", contactEmailError && "border-danger focus:border-danger")}
                 placeholder="Email"
                 value={contactValue}
                 onChange={(e) => handleContactValueChange(e.target.value)}
@@ -206,38 +201,31 @@ const OpportunityForm: React.FC<OpportunityFormProps> = ({ initialData, onChange
                   }
                 }}
               />
-              {contactEmailError && (
-                <span className="text-red-500 text-xs mt-1">{contactEmailError}</span>
-              )}
+              {contactEmailError ? <span className="mt-1 text-meta text-danger">{contactEmailError}</span> : null}
             </div>
-            <button
-              type="button"
-              onClick={addContact}
-              className="bg-purple-500 text-white text-sm px-3 py-1 rounded-full hover:bg-purple-600 whitespace-nowrap"
-            >
-              + Add
-            </button>
+            <Button size="sm" className="h-[36px]" icon={<AddOutlinedIcon sx={{ fontSize: 14 }} />} onClick={addContact}>
+              Add
+            </Button>
           </div>
         </div>
       </div>
 
-      {/* Colleges */}
       <div>
-        <label className={labelClass}><span className="text-red-500">*</span> Colleges</label>
-        <div className="border border-gray-300 focus-within:border-gray-200 rounded-lg p-3">
-          <div className="flex flex-wrap gap-2 mb-2">
-            {formData.colleges.map((c) => (
-              <span
-                key={c}
-                onClick={() => toggleArrayField("colleges", c)}
-                className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full cursor-pointer hover:bg-blue-200"
-              >
-                {c} ×
-              </span>
-            ))}
-          </div>
+        <label htmlFor="colleges-select" className={labelClass}>
+          <Required />
+          Colleges
+        </label>
+        <div className="space-y-2">
+          {formData.colleges.length > 0 ? (
+            <div className="flex flex-wrap gap-1.5">
+              {formData.colleges.map((c) => (
+                <Tag key={c} keyword={c} onRemove={() => toggleArrayField("colleges", c)} />
+              ))}
+            </div>
+          ) : null}
           <select
-            className="block w-full p-2 border border-gray-200 rounded text-sm text-gray-500"
+            id="colleges-select"
+            className={fieldClass}
             value=""
             onChange={(e) => {
               if (e.target.value) toggleArrayField("colleges", e.target.value);
@@ -255,23 +243,22 @@ const OpportunityForm: React.FC<OpportunityFormProps> = ({ initialData, onChange
         </div>
       </div>
 
-      {/* Department */}
       <div>
-        <label className={labelClass}><span className="text-red-500">*</span> Department</label>
-        <div className="border border-gray-300 focus-within:border-gray-200 rounded-lg p-3">
-          <div className="flex flex-wrap gap-2 mb-2">
-            {formData.department.map((d) => (
-              <span
-                key={d}
-                onClick={() => toggleArrayField("department", d)}
-                className="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full cursor-pointer hover:bg-green-200"
-              >
-                {d} ×
-              </span>
-            ))}
-          </div>
+        <label htmlFor="department-select" className={labelClass}>
+          <Required />
+          Department
+        </label>
+        <div className="space-y-2">
+          {formData.department.length > 0 ? (
+            <div className="flex flex-wrap gap-1.5">
+              {formData.department.map((d) => (
+                <Tag key={d} keyword={d} onRemove={() => toggleArrayField("department", d)} />
+              ))}
+            </div>
+          ) : null}
           <select
-            className="block w-full p-2 border border-gray-200 rounded text-sm text-gray-500"
+            id="department-select"
+            className={fieldClass}
             value=""
             onChange={(e) => {
               if (e.target.value) toggleArrayField("department", e.target.value);
@@ -289,47 +276,41 @@ const OpportunityForm: React.FC<OpportunityFormProps> = ({ initialData, onChange
         </div>
       </div>
 
-      {/* Description */}
       <div>
         <label htmlFor="description" className={labelClass}>
-          <span className="text-red-500">*</span> Description
+          <Required />
+          Description
         </label>
         <textarea
           id="description"
           rows={5}
-          className={inputClass}
+          className={cx(fieldClass, "resize-y")}
           placeholder="Describe the research opportunity"
           value={formData.description}
           onChange={handleChange}
         />
       </div>
 
-      {/* Desired Skill Level */}
       <div>
         <label htmlFor="desiredSkillLevel" className={labelClass}>
-          Desired Skill Level
+          Desired skill level
         </label>
         <input
           type="text"
           id="desiredSkillLevel"
-          className={inputClass}
+          className={fieldClass}
           placeholder="e.g. Undergraduate Students, Masters Students"
           value={formData.desiredSkillLevel}
           onChange={handleChange}
         />
       </div>
 
-      {/* Paid/Unpaid */}
       <div>
         <label htmlFor="paidUnpaid" className={labelClass}>
-          <span className="text-red-500">*</span> Paid/Unpaid
+          <Required />
+          Paid/Unpaid
         </label>
-        <select
-          id="paidUnpaid"
-          className={`${inputClass} text-gray-500`}
-          value={formData.paidUnpaid}
-          onChange={handleChange}
-        >
+        <select id="paidUnpaid" className={fieldClass} value={formData.paidUnpaid} onChange={handleChange}>
           <option value="">Select compensation type</option>
           {paidOptions.map((opt) => (
             <option key={opt} value={opt}>
@@ -339,22 +320,21 @@ const OpportunityForm: React.FC<OpportunityFormProps> = ({ initialData, onChange
         </select>
       </div>
 
-      {/* Position */}
       <div>
         <label htmlFor="position" className={labelClass}>
-          <span className="text-red-500">*</span> Position
+          <Required />
+          Position
         </label>
         <input
           type="text"
           id="position"
-          className={inputClass}
+          className={fieldClass}
           placeholder="e.g. Independent Study"
           value={formData.position}
           onChange={handleChange}
         />
       </div>
 
-      {/* Prerequisites */}
       <TagsField
         label="Prerequisites"
         tags={formData.prereqs}
@@ -371,9 +351,8 @@ const OpportunityForm: React.FC<OpportunityFormProps> = ({ initialData, onChange
         placeholder="e.g. Machine Learning with Python"
       />
 
-      {/* Relevant Links */}
       <TagsField
-        label="Relevant Links"
+        label="Relevant links"
         tags={formData.relevantLinks}
         input={linkInput}
         onInputChange={setLinkInput}
@@ -388,15 +367,14 @@ const OpportunityForm: React.FC<OpportunityFormProps> = ({ initialData, onChange
         placeholder="e.g. https://www.scottylabs.org/"
       />
 
-      {/* Time Commitment */}
       <div>
         <label htmlFor="timeCommitment" className={labelClass}>
-          Time Commitment (hrs/week)
+          Time commitment (hrs/week)
         </label>
         <input
           type="number"
           id="timeCommitment"
-          className={inputClass}
+          className={fieldClass}
           placeholder="e.g. 5"
           min="0"
           step="1"
@@ -405,22 +383,21 @@ const OpportunityForm: React.FC<OpportunityFormProps> = ({ initialData, onChange
         />
       </div>
 
-      {/* Anticipated End Date */}
       <div>
         <label htmlFor="anticipatedEndDate" className={labelClass}>
-          <span className="text-red-500">*</span> Anticipated End Date
+          <Required />
+          Anticipated end date
         </label>
         <input
           type="text"
           id="anticipatedEndDate"
-          className={inputClass}
+          className={fieldClass}
           placeholder="e.g. May 2026"
           value={formData.anticipatedEndDate}
           onChange={handleChange}
         />
       </div>
 
-      {/* Keywords */}
       <TagsField
         label="Keywords"
         tags={formData.keywords}

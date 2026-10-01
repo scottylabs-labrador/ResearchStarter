@@ -88,10 +88,14 @@ const MainLayout = () => {
 
   return (
     <NavBarContext.Provider value={navHidden}>
-      <ScrollToTop />
-      <NavBar />
-      <Outlet />
-      {!hideFooter && <Footer />}
+      <div className="flex min-h-screen flex-col">
+        <ScrollToTop />
+        <NavBar />
+        <div className="flex-1">
+          <Outlet />
+        </div>
+        {!hideFooter && <Footer />}
+      </div>
     </NavBarContext.Provider>
   );
 };
