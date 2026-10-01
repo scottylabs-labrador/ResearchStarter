@@ -1,10 +1,11 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import FilterListOutlinedIcon from "@mui/icons-material/FilterListOutlined";
 import SearchOffOutlinedIcon from "@mui/icons-material/SearchOffOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FilterSection from "../components/FilterSection";
 import Card from "../components/Card";
 import Tag from "../components/Tag";
+import Badge from "../components/ui/Badge";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import Kbd from "../components/ui/Kbd";
@@ -56,6 +57,20 @@ const FilterPage = () => {
   const [headerHeight, setHeaderHeight] = useState(0);
 
   useSlashToFocus(searchRef);
+
+  // Each filter toggle unmounts when pressed, so hand focus to the other one instead of dropping it on <body>.
+  const showFiltersRef = useRef<HTMLButtonElement>(null);
+  const hideFiltersRef = useRef<HTMLButtonElement>(null);
+  const moveFocusToToggle = useRef(false);
+  const setFiltersVisible = (visible: boolean) => {
+    moveFocusToToggle.current = true;
+    setSidebarVisible(visible);
+  };
+  useEffect(() => {
+    if (!moveFocusToToggle.current) return;
+    moveFocusToToggle.current = false;
+    (sidebarVisible ? hideFiltersRef : showFiltersRef).current?.focus();
+  }, [sidebarVisible]);
 
   useEffect(() => {
     const header = headerRef.current;
@@ -287,7 +302,8 @@ const FilterPage = () => {
       <FilterSection
         navHidden={navHidden}
         visible={sidebarVisible}
-        onToggleVisible={() => setSidebarVisible(false)}
+        onToggleVisible={() => setFiltersVisible(false)}
+        hideButtonRef={hideFiltersRef}
         collegeChecks={collegeChecks}
         onCollegeCheck={handleCollegeCheck}
         onCollegeReset={handleCollegeReset}
@@ -322,16 +338,6 @@ const FilterPage = () => {
           <div className="pb-4 pl-8 pr-[calc(2rem+10px)] pt-6 xl:pl-12 xl:pr-[calc(3rem+10px)]">
             <div className={resultsColumn}>
               <div className="mb-4 flex items-center gap-3">
-                {!sidebarVisible && (
-                  <Button
-                    size="sm"
-                    className="ps-2.5"
-                    icon={<KeyboardArrowRightIcon sx={{ fontSize: 16, mx: "-4px" }} />}
-                    onClick={() => setSidebarVisible(true)}
-                  >
-                    Show filters
-                  </Button>
-                )}
                 <div className="flex min-w-0 items-baseline gap-3">
                   <h1 className="text-title text-ink">Search</h1>
                   {!loading ? <span className="font-mono text-meta text-ink-muted">{resultLabel}</span> : null}
@@ -352,20 +358,40 @@ const FilterPage = () => {
                 </div>
               </div>
 
-              <Input
-                ref={searchRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onFocus={() => {
-                  setSearchFocused(true);
-                  if (searchBarHidden) resultsRef.current?.scrollTo({ top: 0 });
-                }}
-                onBlur={() => setSearchFocused(false)}
-                placeholder="Search for research opportunities..."
-                aria-label="Search research opportunities"
-                icon={<SearchOutlinedIcon sx={{ fontSize: 18 }} />}
-                trailing={!searchFocused && input === "" ? <Kbd>/</Kbd> : null}
-              />
+              {/* With the sidebar hidden, its toggle joins the search row: the heading keeps the column's left edge. */}
+              <div className="flex items-center gap-2">
+                {!sidebarVisible && (
+                  <Button
+                    ref={showFiltersRef}
+                    className="shrink-0 ps-3"
+                    icon={<FilterListOutlinedIcon sx={{ fontSize: 18 }} />}
+                    aria-label={activeFilters.length > 0 ? `Show filters, ${activeFilters.length} active` : "Show filters"}
+                    onClick={() => setFiltersVisible(true)}
+                  >
+                    Filters
+                    {activeFilters.length > 0 ? (
+                      <Badge tone="accent" className="-me-1 font-mono">
+                        {activeFilters.length}
+                      </Badge>
+                    ) : null}
+                  </Button>
+                )}
+                <Input
+                  ref={searchRef}
+                  containerClassName="min-w-0 flex-1"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onFocus={() => {
+                    setSearchFocused(true);
+                    if (searchBarHidden) resultsRef.current?.scrollTo({ top: 0 });
+                  }}
+                  onBlur={() => setSearchFocused(false)}
+                  placeholder="Search for research opportunities..."
+                  aria-label="Search research opportunities"
+                  icon={<SearchOutlinedIcon sx={{ fontSize: 18 }} />}
+                  trailing={!searchFocused && input === "" ? <Kbd>/</Kbd> : null}
+                />
+              </div>
 
               {activeFilters.length > 0 ? (
                 <div className="mt-3 flex min-w-0 flex-wrap items-center gap-1.5">

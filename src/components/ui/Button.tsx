@@ -32,13 +32,17 @@ interface StyleProps {
 
 interface ButtonProps extends StyleProps, React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
-const Button = ({ variant, size, icon, iconRight, className, children, type = "button", ...rest }: ButtonProps) => (
-  <button type={type} className={buttonClasses(variant, size, className)} {...rest}>
-    {icon}
-    {children}
-    {iconRight}
-  </button>
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ variant, size, icon, iconRight, className, children, type = "button", ...rest }, ref) => (
+    <button ref={ref} type={type} className={buttonClasses(variant, size, className)} {...rest}>
+      {icon}
+      {children}
+      {iconRight}
+    </button>
+  )
 );
+
+Button.displayName = "Button";
 
 interface ButtonLinkProps extends StyleProps, Omit<LinkProps, "className"> {
   className?: string;

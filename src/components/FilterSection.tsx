@@ -10,6 +10,7 @@ interface FilterSectionProps {
   navHidden?: boolean;
   visible: boolean;
   onToggleVisible: () => void;
+  hideButtonRef?: React.Ref<HTMLButtonElement>;
   collegeChecks: Record<string, boolean>;
   onCollegeCheck: (name: string, checked: boolean) => void;
   onCollegeReset: () => void;
@@ -99,6 +100,7 @@ const FilterSection = ({
   navHidden,
   visible,
   onToggleVisible,
+  hideButtonRef,
   collegeChecks,
   onCollegeCheck,
   onCollegeReset,
@@ -146,6 +148,7 @@ const FilterSection = ({
         <div className="mb-5 flex items-center justify-between px-2">
           <h2 className="text-heading text-ink">Filters</h2>
           <Button
+            ref={hideButtonRef}
             size="sm"
             variant="ghost"
             aria-label="Hide filters"
