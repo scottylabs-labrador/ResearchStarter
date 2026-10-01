@@ -17,6 +17,9 @@ import { matchesCompensation, parseContact, toArray } from "../utils";
 import { useNavBarHidden } from "../contexts/NavBarContext";
 import DEV_MOCK_RESEARCHES from "../data/devMockResearches";
 
+// The header and the results share one capped, centered column so wide screens keep side margins.
+const resultsColumn = "mx-auto w-full max-w-[80rem]";
+
 interface ActiveFilter {
   label: string;
   type: string;
@@ -316,65 +319,67 @@ const FilterPage = () => {
               : "translate-y-0 opacity-100"
           }`}
         >
-          <div className="px-8 pb-4 pt-6 [padding-right:calc(2rem+10px)]">
-            <div className="mb-4 flex items-center gap-3">
-              {!sidebarVisible && (
-                <Button
-                  size="sm"
-                  className="ps-2.5"
-                  icon={<KeyboardArrowRightIcon sx={{ fontSize: 16, mx: "-4px" }} />}
-                  onClick={() => setSidebarVisible(true)}
-                >
-                  Show filters
-                </Button>
-              )}
-              <div className="flex min-w-0 items-baseline gap-3">
-                <h1 className="text-title text-ink">Search</h1>
-                {!loading ? <span className="font-mono text-meta text-ink-muted">{resultLabel}</span> : null}
-              </div>
-              <div className="ml-auto flex shrink-0 items-center gap-2">
-                <span aria-hidden="true" className="font-mono text-meta font-medium text-ink-muted">
-                  Sort
-                </span>
-                <SegmentedControl
-                  aria-label="Sort by"
-                  value={sortBy}
-                  onChange={setSortBy}
-                  options={[
-                    { value: "year", label: "Year" },
-                    { value: "time", label: "Time" },
-                  ]}
-                />
-              </div>
-            </div>
-
-            <Input
-              ref={searchRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onFocus={() => {
-                setSearchFocused(true);
-                if (searchBarHidden) resultsRef.current?.scrollTo({ top: 0 });
-              }}
-              onBlur={() => setSearchFocused(false)}
-              placeholder="Search for research opportunities..."
-              aria-label="Search research opportunities"
-              icon={<SearchOutlinedIcon sx={{ fontSize: 18 }} />}
-              trailing={!searchFocused && input === "" ? <Kbd>/</Kbd> : null}
-            />
-
-            {activeFilters.length > 0 ? (
-              <div className="mt-3 flex min-w-0 flex-wrap items-center gap-1.5">
-                {activeFilters.map((filter) => (
-                  <Tag key={`${filter.type}-${filter.value}`} keyword={filter.label} onRemove={() => removeFilter(filter)} />
-                ))}
-                {activeFilters.length >= 2 ? (
-                  <Button size="sm" variant="ghost" onClick={handleResetAll}>
-                    Clear all
+          <div className="pb-4 pl-8 pr-[calc(2rem+10px)] pt-6 xl:pl-12 xl:pr-[calc(3rem+10px)]">
+            <div className={resultsColumn}>
+              <div className="mb-4 flex items-center gap-3">
+                {!sidebarVisible && (
+                  <Button
+                    size="sm"
+                    className="ps-2.5"
+                    icon={<KeyboardArrowRightIcon sx={{ fontSize: 16, mx: "-4px" }} />}
+                    onClick={() => setSidebarVisible(true)}
+                  >
+                    Show filters
                   </Button>
-                ) : null}
+                )}
+                <div className="flex min-w-0 items-baseline gap-3">
+                  <h1 className="text-title text-ink">Search</h1>
+                  {!loading ? <span className="font-mono text-meta text-ink-muted">{resultLabel}</span> : null}
+                </div>
+                <div className="ml-auto flex shrink-0 items-center gap-2">
+                  <span aria-hidden="true" className="font-mono text-meta font-medium text-ink-muted">
+                    Sort
+                  </span>
+                  <SegmentedControl
+                    aria-label="Sort by"
+                    value={sortBy}
+                    onChange={setSortBy}
+                    options={[
+                      { value: "year", label: "Year" },
+                      { value: "time", label: "Time" },
+                    ]}
+                  />
+                </div>
               </div>
-            ) : null}
+
+              <Input
+                ref={searchRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onFocus={() => {
+                  setSearchFocused(true);
+                  if (searchBarHidden) resultsRef.current?.scrollTo({ top: 0 });
+                }}
+                onBlur={() => setSearchFocused(false)}
+                placeholder="Search for research opportunities..."
+                aria-label="Search research opportunities"
+                icon={<SearchOutlinedIcon sx={{ fontSize: 18 }} />}
+                trailing={!searchFocused && input === "" ? <Kbd>/</Kbd> : null}
+              />
+
+              {activeFilters.length > 0 ? (
+                <div className="mt-3 flex min-w-0 flex-wrap items-center gap-1.5">
+                  {activeFilters.map((filter) => (
+                    <Tag key={`${filter.type}-${filter.value}`} keyword={filter.label} onRemove={() => removeFilter(filter)} />
+                  ))}
+                  {activeFilters.length >= 2 ? (
+                    <Button size="sm" variant="ghost" onClick={handleResetAll}>
+                      Clear all
+                    </Button>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
           </div>
         </div>
 
@@ -382,36 +387,38 @@ const FilterPage = () => {
           ref={resultsRef}
           role="region"
           aria-label="Search results"
-          className="scrollbar-minimal h-full overflow-y-auto px-8 pb-[calc(2rem+var(--nav-h))]"
+          className="scrollbar-minimal h-full overflow-y-auto px-8 pb-[calc(2rem+var(--nav-h))] xl:px-12"
           style={{ paddingTop: headerHeight + 8 }}
           onScroll={handleScroll}
         >
-          {loading ? (
-            <div className="flex justify-center pt-16">
-              <Spinner label="Loading opportunities" />
-            </div>
-          ) : filteredData.length === 0 ? (
-            <EmptyState
-              icon={<SearchOffOutlinedIcon sx={{ fontSize: 20 }} />}
-              title="No opportunities match"
-              message={activeFilters.length > 0 ? "Try removing a filter" : undefined}
-              action={
-                activeFilters.length > 0 ? (
-                  <Button size="sm" onClick={handleResetAll}>
-                    Clear filters
-                  </Button>
-                ) : undefined
-              }
-            />
-          ) : (
-            <div className="flex flex-col gap-3">
-              {filteredData
-                .slice(0, visibleCount)
-                .map((research) => (
-                  <Card key={research._id} research={research} />
-                ))}
-            </div>
-          )}
+          <div className={resultsColumn}>
+            {loading ? (
+              <div className="flex justify-center pt-16">
+                <Spinner label="Loading opportunities" />
+              </div>
+            ) : filteredData.length === 0 ? (
+              <EmptyState
+                icon={<SearchOffOutlinedIcon sx={{ fontSize: 20 }} />}
+                title="No opportunities match"
+                message={activeFilters.length > 0 ? "Try removing a filter" : undefined}
+                action={
+                  activeFilters.length > 0 ? (
+                    <Button size="sm" onClick={handleResetAll}>
+                      Clear filters
+                    </Button>
+                  ) : undefined
+                }
+              />
+            ) : (
+              <div className="flex flex-col gap-3">
+                {filteredData
+                  .slice(0, visibleCount)
+                  .map((research) => (
+                    <Card key={research._id} research={research} />
+                  ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>
