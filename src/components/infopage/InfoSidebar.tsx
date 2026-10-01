@@ -9,6 +9,7 @@ import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import { ResearchType } from "../../DataTypes";
+import { contactEmail } from "../../lib/opportunities";
 import Surface from "../ui/Surface";
 import SectionLabel from "../ui/SectionLabel";
 import DetailsTable, { DetailRow } from "../ui/DetailsTable";
@@ -65,10 +66,10 @@ const InfoSidebar: React.FC<InfoSidebarProps> = ({ info }) => {
               <div key={andrewId}>
                 <p className="text-small font-medium text-ink">{name}</p>
                 <a
-                  href={`mailto:${andrewId}@andrew.cmu.edu`}
+                  href={`mailto:${contactEmail(andrewId)}`}
                   className="break-all font-mono text-meta text-ink-secondary underline-offset-2 hover:text-ink hover:underline"
                 >
-                  {andrewId}@andrew.cmu.edu
+                  {contactEmail(andrewId)}
                 </a>
               </div>
             ))}

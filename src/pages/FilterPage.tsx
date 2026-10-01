@@ -14,9 +14,9 @@ import EmptyState from "../components/ui/EmptyState";
 import SegmentedControl from "../components/ui/SegmentedControl";
 import { useSlashToFocus } from "../components/ui/useSlashToFocus";
 import { ResearchType } from "../DataTypes";
-import { matchesCompensation, parseContact, toArray } from "../utils";
+import { matchesCompensation } from "../utils";
+import { fetchOpportunities } from "../lib/opportunities";
 import { useNavBarHidden } from "../contexts/NavBarContext";
-import DEV_MOCK_RESEARCHES from "../data/devMockResearches";
 
 // The header and the results share one capped, centered column so wide screens keep side margins.
 const resultsColumn = "mx-auto w-full max-w-[80rem]";
@@ -84,40 +84,9 @@ const FilterPage = () => {
   useEffect(() => {
     const fetchResearches = async () => {
       try {
-        const res = await fetch("http://localhost:5050/opportunities/");
-        if (!res.ok) return;
-        const data: any[] = await res.json();
-        const transformed = data
-          .filter((item) => item["Project Title"])
-          .map((item) => ({
-            _id: item._id,
-            projectTitle: item["Project Title"],
-            contact: parseContact(item.Contact),
-            department: toArray(item.Department),
-            description: item.Description,
-            desiredSkillLevel: item["Desired Skill Level"],
-            paidUnpaid: item["Paid/Unpaid"],
-            position: item.Position,
-            prereqs: toArray(item.Prereqs),
-            relevantLinks: toArray(item["Relevant Links"]),
-            source: item.Source,
-            timeAdded: item["Time Added"],
-            timeCommitment: item["Time Commitment"],
-            anticipatedEndDate: item["Anticipated End Date"],
-            keywords: toArray(item.Keywords),
-            college: toArray(item.College),
-          }));
-        setResearches(transformed);
+        setResearches(await fetchOpportunities());
       } catch {
         console.log("Error Fetching Data");
-        // Local-only design preview fallback. Active ONLY when running `vite` in
-        // DEV with VITE_DEV_BYPASS_AUTH=true. Stripped from production builds.
-        if (
-          import.meta.env.DEV &&
-          import.meta.env.VITE_DEV_BYPASS_AUTH === "true"
-        ) {
-          setResearches(DEV_MOCK_RESEARCHES);
-        }
       } finally {
         setLoading(false);
       }

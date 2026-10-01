@@ -4,6 +4,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import { ResearchType } from "../DataTypes";
 import { parseContact, toArray } from "../utils";
+import { contactEmail } from "../lib/opportunities";
 import ResumeUploadPopup from "../components/infopage/ResumeUploadPopup";
 import InfoPageHeader from "../components/infopage/InfoPageHeader";
 import InfoSidebar from "../components/infopage/InfoSidebar";
@@ -272,7 +273,7 @@ const InfoPage: React.FC = () => {
           title: name,
           department: info.department.join(", "),
           officeLocation: "",
-          email: `${andrewId}@andrew.cmu.edu`,
+          email: contactEmail(andrewId),
         }))}
       />
 
