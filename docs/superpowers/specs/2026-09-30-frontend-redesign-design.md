@@ -310,3 +310,13 @@ These override the sections above.
 12. **Verification changes:**
     - ESLint here only lints `.js`/`.jsx`, so the type check (`tsc --noEmit` on `src/`, excluding stories, compared against a 3-error baseline) is the main static check.
     - A throwaway `gallery/` page, git-excluded and deleted at the end, renders the shared components, the Storybook-only profile sections, and the sign-in page for checks. That replaces temporarily editing the auth bypass in `App.tsx`.
+
+## Amendments after implementation (2026-10-01)
+
+These record direction changes made after the plan was executed (commit 4be5908, at the user's direction) and the review fixes that followed.
+
+13. **Accent is steel blue, not near-black.** Tokens: `accent` #62849E, `accent-strong` #486B84, `accent-muted` #A4BACC, `accent-bg` #ECF3F9. For contrast, filled primary buttons and accent-coloured text use `accent-strong` (≥5.2:1 against white and the canvas), and focus rings use full-strength `accent` (≥3.6:1). The active nav tab is an `accent-bg` pill with `accent-strong` text.
+14. **The student profile is editable.** Bio, interests and experiences save through `POST /users/:id`. Failed saves roll back and show an inline message, and so does a failed load. Completion counts only fields that are saved (major, bio, interests, experiences).
+15. **Professor bio and photo are read-only** on the professor's own profile and dashboard, because no professor save endpoint exists.
+16. **`Modal` is a native `<dialog>` opened with `showModal()`.** It takes an `onClose` prop for Escape, makes the rest of the page inert, and returns focus to whatever opened it.
+17. **Dev mock data is gated on `import.meta.env.DEV && VITE_DEV_BYPASS_AUTH === "true"` and stripped from production builds.** `VITE_DEV_MOCK_ROLE=professor|student` picks the mock session.
