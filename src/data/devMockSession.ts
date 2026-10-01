@@ -23,27 +23,29 @@ const splitName = (name: string) => {
   return { firstName: parts[0] ?? "", lastName: parts.slice(1).join(" ") };
 };
 
-const studentNames = splitName(DEV_MOCK_PROFILE.name);
-
-const DEV_MOCK_STUDENT_SESSION: MockSession = {
-  user: {
-    id: "mock-student-user",
-    name: DEV_MOCK_PROFILE.name,
-    email: DEV_MOCK_PROFILE.email,
-    andrewId: DEV_MOCK_PROFILE.email.split("@")[0] ?? "jlee2",
-    isProfessor: false,
-    firstName: studentNames.firstName,
-    lastName: studentNames.lastName,
-    image: DEV_MOCK_PROFILE.image,
-  },
-  session: {
-    id: "mock-student-session",
-    userId: "mock-student-user",
-    expiresAt: new Date(Date.now() + 86_400_000),
-  },
+// Built lazily so production builds, where getDevMockSession() returns early, drop the mock data.
+const studentSession = (): MockSession => {
+  const { firstName, lastName } = splitName(DEV_MOCK_PROFILE.name);
+  return {
+    user: {
+      id: "mock-student-user",
+      name: DEV_MOCK_PROFILE.name,
+      email: DEV_MOCK_PROFILE.email,
+      andrewId: DEV_MOCK_PROFILE.email.split("@")[0] ?? "jlee2",
+      isProfessor: false,
+      firstName,
+      lastName,
+      image: DEV_MOCK_PROFILE.image,
+    },
+    session: {
+      id: "mock-student-session",
+      userId: "mock-student-user",
+      expiresAt: new Date(Date.now() + 86_400_000),
+    },
+  };
 };
 
-const DEV_MOCK_PROFESSOR_SESSION: MockSession = {
+const professorSession = (): MockSession => ({
   user: {
     id: "mock-prof-user",
     name: "Lauren Herckis",
@@ -58,7 +60,9 @@ const DEV_MOCK_PROFESSOR_SESSION: MockSession = {
     userId: "mock-prof-user",
     expiresAt: new Date(Date.now() + 86_400_000),
   },
-};
+});
+
+let cached: MockSession | null = null;
 
 export function getDevMockRole(): DevMockRole {
   const role = import.meta.env.VITE_DEV_MOCK_ROLE;
@@ -67,5 +71,6 @@ export function getDevMockRole(): DevMockRole {
 
 export function getDevMockSession(): MockSession | null {
   if (!import.meta.env.DEV || import.meta.env.VITE_DEV_BYPASS_AUTH !== "true") return null;
-  return getDevMockRole() === "professor" ? DEV_MOCK_PROFESSOR_SESSION : DEV_MOCK_STUDENT_SESSION;
+  cached ??= getDevMockRole() === "professor" ? professorSession() : studentSession();
+  return cached;
 }

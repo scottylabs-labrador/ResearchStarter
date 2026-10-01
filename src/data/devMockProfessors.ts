@@ -43,6 +43,7 @@ const DEV_MOCK_PROFESSORS: Record<string, ProfessorType> = {
 };
 
 export function getDevMockProfessor(andrewId: string): ProfessorType | null {
+  if (!import.meta.env.DEV || import.meta.env.VITE_DEV_BYPASS_AUTH !== "true") return null;
   const key = andrewId.trim().toLowerCase();
   return DEV_MOCK_PROFESSORS[key] ?? null;
 }
