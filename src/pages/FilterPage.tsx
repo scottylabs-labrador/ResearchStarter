@@ -280,9 +280,9 @@ const FilterPage = () => {
       <div
         className="fixed right-0 bg-white transition-[left,top,height] duration-300 ease-out overflow-hidden flex flex-col"
         style={{
-          top: navHidden ? 0 : "10vh",
+          top: navHidden ? 0 : "var(--nav-h)",
           left: contentLeft,
-          height: navHidden ? "100vh" : "90vh",
+          height: navHidden ? "100vh" : "calc(100vh - var(--nav-h))",
         }}
       >
         {/* Header: search bar + filters + sort — collapses on scroll like the navbar.

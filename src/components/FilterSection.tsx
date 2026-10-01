@@ -65,7 +65,7 @@ const FilterSection = ({
   return (
     <div
       className="fixed bottom-0 left-0 w-[280px] bg-[#F3EAFF] border-r border-gray-200 overflow-y-auto transition-all duration-300 z-10"
-      style={{ top: navHidden ? 0 : "10vh", height: navHidden ? "100vh" : "90vh" }}
+      style={{ top: navHidden ? 0 : "var(--nav-h)", height: navHidden ? "100vh" : "calc(100vh - var(--nav-h))" }}
     >
       <div className="px-8 py-6">
         {/* Header */}

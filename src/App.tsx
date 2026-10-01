@@ -9,7 +9,6 @@ import FilterPage from "./pages/FilterPage";
 import Dashboard from "./pages/StudentDashboard";
 import NotFoundPage from "./pages/NotFoundPage";
 import SignInPage from "./pages/SignInPage";
-import MainPage from "./pages/MainPage";
 import ProfessorDashboard from "./pages/ProfessorDashboard";
 import ProfessorProfile from "./pages/ProfessorProfile";
 
@@ -24,7 +23,6 @@ const router = createBrowserRouter(
       <Route path="/profile" element={<Dashboard />} />
       <Route path="/professor-dashboard" element={<ProfessorDashboard />} />
       <Route path="/professor/:andrewId" element={<ProfessorProfile />} />
-      <Route path="/main" element={<MainPage />} />
       <Route path="/info/:id" element={<InfoPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Route>
