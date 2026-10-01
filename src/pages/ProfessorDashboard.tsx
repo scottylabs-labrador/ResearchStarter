@@ -208,11 +208,6 @@ const ProfessorDashboard = () => {
         readOnly
         action={
           <>
-            {andrewId ? (
-              <ButtonLink size="sm" to={`/professor/${encodeURIComponent(andrewId)}`}>
-                View public profile
-              </ButtonLink>
-            ) : null}
             <Button
               ref={addButtonRef}
               size="sm"
@@ -222,6 +217,11 @@ const ProfessorDashboard = () => {
             >
               Add opportunity
             </Button>
+            {andrewId ? (
+              <ButtonLink size="sm" to={`/professor/${encodeURIComponent(andrewId)}`}>
+                View public profile
+              </ButtonLink>
+            ) : null}
           </>
         }
       />
