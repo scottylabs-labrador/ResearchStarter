@@ -286,4 +286,27 @@ One commit per stage on `frontend-redesign`, never pushed without an explicit re
 8. Sign-in and 404.
 9. Cleanup (§5).
 
-**Uncommitted dev mocks.** `src/data/devMockProfessors.ts` is never staged. For `src/pages/ProfessorProfile.tsx`, only the redesign hunks are staged (via a filtered patch applied with `git apply --cached`), so the local mock-fallback hunks remain uncommitted working-tree changes.
+**Uncommitted dev mocks.** `src/data/devMockProfessors.ts` is never staged. For `src/pages/ProfessorProfile.tsx`, only the redesign hunks are staged, so the local mock-fallback hunks remain uncommitted working-tree changes.
+
+## Amendments (made while planning)
+
+These override the sections above.
+
+1. **`ink-muted` is #6B6B73**, not #71717A. #71717A measures 4.48:1 on `canvas`, just under the 4.5:1 AA minimum. #6B6B73 gives ≥4.8:1 on both `canvas` and `surface`.
+2. **Two more shared components:**
+   - `SegmentedControl`, used by the sort toggle and the compensation filter;
+   - `Modal`, used by the resume upload, discard confirmation, delete confirmation, and add-interest dialogs.
+3. **Links are a separate component.** `Button` renders only `<button>`, and links use a separate `ButtonLink` with the same styling.
+4. **`Tag` stays at `src/components/Tag.tsx`,** because the set-aside `MainPage.tsx` imports it from there.
+5. **Two more deletions in cleanup:** the old `src/components/Spinner.tsx` and the unused `src/components/RelatedOpportunities.tsx`.
+6. **Bug fix: "Paid" no longer matches "Unpaid".** The Paid filter used a substring match, so it also caught "Unpaid". Paid now excludes values containing "unpaid".
+7. **Result cards use a stretched link.** The title is the link, and it covers the whole card, so the bookmark and Apply buttons are no longer nested inside a link (invalid HTML). Clicking anywhere else on the card still opens it.
+8. **`/` shortcut details:**
+   - Shift is allowed, because some keyboard layouts need it to type "/".
+   - A focused checkbox, radio, or button doesn't block the shortcut; only text-entry fields do.
+9. **`DetailsTable` rows carry icons.** They reuse the app's existing glyphs where one exists (house for college, book for position, coin for compensation, calendar for dates) and use MUI Outlined icons otherwise.
+10. **The 404 page gets no extra `pt-nav`,** because the layout's nav spacer already offsets every page.
+11. **Professor links strip an email domain** when the contact value is an email (`abc@andrew.cmu.edu` → `/professor/abc`).
+12. **Verification changes:**
+    - ESLint here only lints `.js`/`.jsx`, so the type check (`tsc --noEmit` on `src/`, excluding stories, compared against a 3-error baseline) is the main static check.
+    - A throwaway `gallery/` page, git-excluded and deleted at the end, renders the shared components, the Storybook-only profile sections, and the sign-in page for checks. That replaces temporarily editing the auth bypass in `App.tsx`.
