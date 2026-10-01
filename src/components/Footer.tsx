@@ -6,7 +6,7 @@ const Footer = () => (
         href="https://scottylabs.org"
         target="_blank"
         rel="noopener noreferrer"
-        className="font-medium text-accent underline decoration-accent/35 underline-offset-2 transition-colors duration-150 hover:text-accent-strong hover:decoration-accent-strong/50"
+        className="font-medium text-accent-strong underline decoration-accent/35 underline-offset-2 transition-colors duration-150 hover:text-accent-strong hover:decoration-accent-strong/50"
       >
         ScottyLabs
       </a>

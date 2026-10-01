@@ -73,7 +73,7 @@ const ProfileDetails = ({ major, class: userClass, colleges, email, onMajorChang
       value: email ? (
         <a
           href={`mailto:${email}`}
-          className="break-all rounded-[4px] font-mono text-meta text-accent underline decoration-accent/35 underline-offset-[3px] transition-colors duration-150 hover:text-accent-strong hover:decoration-accent-strong/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35"
+          className="break-all rounded-[4px] font-mono text-meta text-accent-strong underline decoration-accent/35 underline-offset-[3px] transition-colors duration-150 hover:text-accent-strong hover:decoration-accent-strong/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           {email}
         </a>

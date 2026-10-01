@@ -14,7 +14,7 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
-const focusRing = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2";
+const focusRing = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
 
 const menuItemClass =
   "flex w-full items-center gap-2 px-4 py-2 text-body text-ink-secondary transition-colors duration-150 hover:bg-surface-muted hover:text-ink focus-visible:bg-surface-muted focus-visible:outline-none";

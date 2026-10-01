@@ -89,7 +89,7 @@ const Card = ({ research, showApplyButton, onApply }: CardProps) => {
         <h3 className="min-w-0 break-words text-card-title text-ink">
           <Link
             to={`/info/${research._id}`}
-            className="after:absolute after:inset-0 after:rounded-surface focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-accent/35"
+            className="after:absolute after:inset-0 after:rounded-surface focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-accent"
           >
             {research.projectTitle}
           </Link>

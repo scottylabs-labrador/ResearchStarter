@@ -59,7 +59,7 @@ const FilterCheckbox = ({ label, checked, onChange }: FilterCheckboxProps) => (
     <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="peer sr-only" />
     <span
       aria-hidden="true"
-      className="mt-[3px] flex h-[16px] w-[16px] shrink-0 items-center justify-center rounded-[4px] border border-hairline-strong bg-surface transition-colors duration-150 peer-checked:border-accent peer-checked:bg-accent peer-focus-visible:ring-2 peer-focus-visible:ring-accent/35 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-canvas"
+      className="mt-[3px] flex h-[16px] w-[16px] shrink-0 items-center justify-center rounded-[4px] border border-hairline-strong bg-surface transition-colors duration-150 peer-checked:border-accent peer-checked:bg-accent peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-canvas"
     >
       {checked ? <CheckIcon sx={{ fontSize: 12 }} className="text-white" /> : null}
     </span>
@@ -72,7 +72,7 @@ const ResetButton = ({ onClick, label }: { onClick: () => void; label: string })
     type="button"
     onClick={onClick}
     aria-label={label}
-    className="rounded px-1 text-meta font-medium text-accent underline-offset-2 transition-colors duration-150 hover:text-accent-strong hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35"
+    className="rounded px-1 text-meta font-medium text-accent-strong underline-offset-2 transition-colors duration-150 hover:text-accent-strong hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
   >
     Reset
   </button>
@@ -199,7 +199,7 @@ const FilterSection = ({
               type="button"
               onClick={() => setShowAllDepartments((prev) => !prev)}
               aria-expanded={showAllDepartments}
-              className="flex h-[32px] w-full items-center rounded-[8px] px-2 text-small font-medium text-ink-secondary transition-colors duration-150 hover:bg-surface-muted hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+              className="flex h-[32px] w-full items-center rounded-[8px] px-2 text-small font-medium text-ink-secondary transition-colors duration-150 hover:bg-surface-muted hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               {showAllDepartments ? "Show fewer" : `Show ${hiddenDepartmentCount} more`}
             </button>

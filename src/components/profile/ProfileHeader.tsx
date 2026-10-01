@@ -95,7 +95,7 @@ const ProfileHeader = ({
             type="button"
             onClick={() => fileInputRef.current?.click()}
             aria-label="Change profile photo"
-            className={`group ${avatarShellClass} transition-transform duration-150 ease-out active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas`}
+            className={`group ${avatarShellClass} transition-transform duration-150 ease-out active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-canvas`}
           >
             {avatarInner}
             <span
