@@ -1,7 +1,7 @@
 import { ResearchType } from "../DataTypes";
 
 // Dev-only sample data used when the backend is unreachable.
-// Imported by FilterPage and InfoPage. Active ONLY when running `vite` in
+// Returned by fetchOpportunities() ONLY when running `vite` in
 // DEV with VITE_DEV_BYPASS_AUTH=true — stripped from production builds.
 const DEV_MOCK_RESEARCHES: ResearchType[] = [
   {
@@ -20,7 +20,7 @@ const DEV_MOCK_RESEARCHES: ResearchType[] = [
     timeAdded: "5/12/26",
     timeCommitment: "8",
     anticipatedEndDate: "Fall 2026",
-    keywords: ["LLM", "Accessibility", "User Studies"],
+    keywords: ["LLM", "Accessibility", "User Studies", "Generative AI"],
     college: ["School of Computer Science"],
   },
   {

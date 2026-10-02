@@ -56,6 +56,20 @@ export async function fetchOpportunities(): Promise<ResearchType[]> {
 export const listingsBy = (opportunities: ResearchType[], andrewId: string) =>
   opportunities.filter((research) => isListedBy(research, andrewId));
 
+const topicsOf = (research: ResearchType) => [...research.department, ...(research.keywords ?? [])].map((topic) => topic.toLowerCase());
+
+/** Other listings that share a department or keyword with this one, the most shared first. */
+export function relatedTo(research: ResearchType, opportunities: ResearchType[], limit = 3): ResearchType[] {
+  const topics = new Set(topicsOf(research));
+  return opportunities
+    .filter((other) => other._id !== research._id)
+    .map((other) => ({ other, shared: topicsOf(other).filter((topic) => topics.has(topic)).length }))
+    .filter(({ shared }) => shared > 0)
+    .sort((a, b) => b.shared - a.shared)
+    .slice(0, limit)
+    .map(({ other }) => other);
+}
+
 export async function createOpportunity(opportunity: ResearchOpportunity): Promise<void> {
   const res = await fetch(OPPORTUNITIES_URL, {
     method: "POST",

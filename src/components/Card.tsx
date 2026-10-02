@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkIconUnfilled from "@mui/icons-material/BookmarkBorderOutlined";
@@ -9,7 +9,7 @@ import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined
 import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import { ResearchType } from "../DataTypes";
 import { matchesCompensation } from "../utils";
-import { useSession } from "../lib/authClient";
+import { useBookmark } from "../lib/useBookmark";
 import Tag from "./Tag";
 import Surface from "./ui/Surface";
 import IconButton from "./ui/IconButton";
@@ -30,55 +30,7 @@ interface CardProps {
 const iconClass = "shrink-0 text-ink-muted";
 
 const Card = ({ research, showApplyButton, onApply, showBookmark = true, actions }: CardProps) => {
-  const { data: session } = useSession();
-  const id = session?.user?.id ?? undefined;
-
-  const [bookmark, setBookmark] = useState(false);
-
-  async function saveUserBookmark(bookmark: boolean, id: string) {
-    const response = await fetch(`/api/users/saved/${id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        opportunityId: research._id,
-        action: bookmark ? "add" : "remove",
-      }),
-    });
-    if (!response.ok) {
-      const message = `An error occurred: ${response.statusText}`;
-      console.error(message);
-      return;
-    }
-    console.log(response);
-  }
-
-  // Fetch bookmark status
-  useEffect(() => {
-    if (!id || !showBookmark) return;
-    async function fetchBookmark() {
-      const response = await fetch(`/api/users/${id}`);
-      if (!response.ok) {
-        const message = `An error occurred: ${response.statusText}`;
-        console.error(message);
-        return;
-      }
-      const userData = await response.json();
-      setBookmark(userData.saved.includes(research._id));
-    }
-
-    fetchBookmark();
-  }, [id, research._id, showBookmark]);
-
-  function bookmarkOpportunity() {
-    if (id != undefined) {
-      setBookmark(!bookmark);
-      saveUserBookmark(!bookmark, id);
-    } else {
-      console.log("Unable to set bookmark due to no user id!");
-    }
-  }
+  const bookmark = useBookmark(research._id, showBookmark);
 
   const professorName = Object.keys(research.contact ?? {}).join(", ");
   const college = Array.isArray(research.college) ? research.college.join(", ") : "";
@@ -106,11 +58,11 @@ const Card = ({ research, showApplyButton, onApply, showBookmark = true, actions
             <IconButton
               size="sm"
               className="-my-1.5 -me-2.5"
-              aria-label={bookmark ? "Remove bookmark" : "Bookmark"}
-              pressed={bookmark}
-              onClick={bookmarkOpportunity}
+              aria-label={bookmark.saved ? "Remove bookmark" : "Bookmark"}
+              pressed={bookmark.saved}
+              onClick={bookmark.toggle}
             >
-              {bookmark ? <BookmarkIcon sx={{ fontSize: 20 }} /> : <BookmarkIconUnfilled sx={{ fontSize: 20 }} />}
+              {bookmark.saved ? <BookmarkIcon sx={{ fontSize: 20 }} /> : <BookmarkIconUnfilled sx={{ fontSize: 20 }} />}
             </IconButton>
           ) : null}
           {actions}
