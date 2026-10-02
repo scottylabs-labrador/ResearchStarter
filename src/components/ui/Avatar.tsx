@@ -24,15 +24,18 @@ interface AvatarProps {
   name: string;
   src?: string;
   size?: AvatarSize;
+  /** Set when the name is shown beside the avatar, so screen readers don’t hear it twice. */
+  decorative?: boolean;
   className?: string;
 }
 
-const Avatar = ({ name, src, size = "md", className }: AvatarProps) => {
+const Avatar = ({ name, src, size = "md", decorative = false, className }: AvatarProps) => {
   const initials = initialsOf(name);
   return (
     <span
-      role={src ? undefined : "img"}
-      aria-label={src ? undefined : name || "User"}
+      role={src || decorative ? undefined : "img"}
+      aria-label={src || decorative ? undefined : name || "User"}
+      aria-hidden={decorative || undefined}
       className={cx(
         "inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full border border-hairline bg-surface-muted font-medium leading-none tracking-[0.04em] text-ink-secondary",
         sizeClasses[size],
@@ -40,7 +43,7 @@ const Avatar = ({ name, src, size = "md", className }: AvatarProps) => {
       )}
     >
       {src ? (
-        <img src={src} alt={name} className="h-full w-full object-cover" />
+        <img src={src} alt={decorative ? "" : name} className="h-full w-full object-cover" />
       ) : initials ? (
         <span aria-hidden="true">{initials}</span>
       ) : (

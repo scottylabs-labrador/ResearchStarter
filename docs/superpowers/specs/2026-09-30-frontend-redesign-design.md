@@ -355,3 +355,11 @@ These record direction changes made after the plan was executed (commit 4be5908,
     - **Text inputs:** 16px below `sm`, so iOS doesn't zoom on focus.
     - **Characters:** use curly apostrophes, a single-character ellipsis, and "and" instead of "&" except in proper names.
     - **Headings:** each page has one h1. `EmptyState` takes `titleAs="h1"` when it is the whole page.
+24. **The opportunity page shows each fact once (overrides section 3.3's layout).**
+    - **Header:** title, byline (contact linked to their profile · department · college), topic tags, Apply and Save.
+      - The facts line above the title is gone, because the Details table holds those facts.
+      - Tags are keywords only, because the byline already names the department and college.
+    - **Body, wide screens:** a reading column (About, Prerequisites, Relevant links) beside a 340px side column (Details, Contact).
+    - **Body, phones:** Details comes right after the header, then the reading sections, then Contact.
+    - **Contact:** one card per person, with a decorative avatar, the name and a mailto link. The separate bottom Contacts section (`ContactsSection`, `ContactCard`) is deleted: it repeated the name and email, and labelled every contact with the listing's department.
+    - **Section labels** carry no icons, matching the rest of the app.

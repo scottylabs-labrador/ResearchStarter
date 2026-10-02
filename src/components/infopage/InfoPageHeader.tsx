@@ -5,7 +5,7 @@ import BookmarkIconUnfilled from "@mui/icons-material/BookmarkBorderOutlined";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Tag from "../Tag";
 import Button from "../ui/Button";
-import { Meta, MetaRow } from "../ui/Meta";
+import { MetaRow } from "../ui/Meta";
 import { cx } from "../ui/cx";
 import { linkUnderline } from "../ui/linkClass";
 
@@ -14,13 +14,11 @@ interface InfoPageHeaderProps {
   contacts: [name: string, andrewId: string][];
   department: string[];
   college: string[];
-  tags: string[]; // Combines keywords, colleges, and departments for display
+  /** Topic keywords. Department and college already appear in the byline. */
+  tags: string[];
   isBookmarked: boolean;
   onBookmarkToggle: () => void;
   onApplyClick: () => void;
-  position?: string;
-  compensation?: string;
-  timeCommitment?: string;
 }
 
 const profilePath = (andrewId: string) => `/professor/${encodeURIComponent(andrewId.split("@")[0] ?? andrewId)}`;
@@ -34,25 +32,11 @@ const InfoPageHeader: React.FC<InfoPageHeaderProps> = ({
   isBookmarked,
   onBookmarkToggle,
   onApplyClick,
-  position,
-  compensation,
-  timeCommitment,
 }) => {
-  const eyebrow = [position, compensation, timeCommitment ? `${timeCommitment} hrs/week` : undefined].filter(
-    (part): part is string => Boolean(part)
-  );
   const hasSubtitle = contacts.length > 0 || department.length > 0 || college.length > 0;
 
   return (
     <header className="mb-10 mt-6">
-      {eyebrow.length > 0 ? (
-        <MetaRow className="mb-3 text-meta">
-          {eyebrow.map((part) => (
-            <Meta key={part}>{part}</Meta>
-          ))}
-        </MetaRow>
-      ) : null}
-
       <h1 className="mb-3 text-title text-ink sm:text-display">{title}</h1>
 
       {hasSubtitle ? (

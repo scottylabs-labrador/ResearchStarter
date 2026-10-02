@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import OpenInNewOutlinedIcon from "@mui/icons-material/OpenInNewOutlined";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import { ResearchType } from "../DataTypes";
 import { parseContact, toArray } from "../utils";
-import { contactEmail } from "../lib/opportunities";
 import ResumeUploadPopup from "../components/infopage/ResumeUploadPopup";
 import InfoPageHeader from "../components/infopage/InfoPageHeader";
-import InfoSidebar from "../components/infopage/InfoSidebar";
-import ContactsSection from "../components/infopage/ContactsSection";
+import { InfoContact, InfoDetails } from "../components/infopage/InfoSidebar";
 import RelatedOpportunitiesSection from "../components/infopage/RelatedOpportunitiesSection";
 import Button from "../components/ui/Button";
 import Spinner from "../components/ui/Spinner";
 import EmptyState from "../components/ui/EmptyState";
 import SectionLabel from "../components/ui/SectionLabel";
+import { cx } from "../components/ui/cx";
+import { linkHoverUnderline } from "../components/ui/linkClass";
 import { useSession } from "../lib/authClient";
 import DEV_MOCK_RESEARCHES from "../data/devMockResearches";
 
@@ -239,43 +240,69 @@ const InfoPage: React.FC = () => {
         contacts={Object.entries(info.contact)}
         department={info.department || []}
         college={info.college || []}
-        tags={[...(info.keywords || []), ...(info.college || []), ...(info.department || [])]}
+        tags={info.keywords || []}
         isBookmarked={savedStates[info._id] || false}
         onBookmarkToggle={handleBookmarkToggle}
         onApplyClick={handleApply}
-        position={info.position}
-        compensation={info.paidUnpaid}
-        timeCommitment={info.timeCommitment}
       />
 
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
-        <section className="lg:col-span-2">
-          <SectionLabel as="h2" className="mb-3">
-            About this opportunity
-          </SectionLabel>
-          {info.description ? (
-            <p className="max-w-measure whitespace-pre-line break-words text-lead text-ink-secondary">
-              {info.description}
-            </p>
-          ) : (
-            <p className="text-body text-ink-muted">No description available.</p>
-          )}
-        </section>
+      {/* Phones read facts, then the description, then the contact; wide screens put facts and contact beside the text. */}
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_340px] lg:grid-rows-[auto_1fr] lg:gap-x-12 lg:gap-y-8">
+        <InfoDetails info={info} className="lg:col-start-2 lg:row-start-1" />
 
-        <div className="lg:col-span-1">
-          <InfoSidebar info={info} />
+        <div className="flex min-w-0 flex-col gap-10 lg:col-start-1 lg:row-span-2 lg:row-start-1">
+          <section>
+            <SectionLabel as="h2" className="mb-3">
+              About this opportunity
+            </SectionLabel>
+            {info.description ? (
+              <p className="max-w-measure whitespace-pre-line break-words text-lead text-ink-secondary">
+                {info.description}
+              </p>
+            ) : (
+              <p className="text-body text-ink-muted">No description available.</p>
+            )}
+          </section>
+
+          {info.prereqs && info.prereqs.length > 0 ? (
+            <section>
+              <SectionLabel as="h2" className="mb-3">
+                Prerequisites
+              </SectionLabel>
+              <ul className="max-w-measure list-disc space-y-1 pl-5 text-lead text-ink-secondary marker:text-ink-muted">
+                {info.prereqs.map((prereq) => (
+                  <li key={prereq}>{prereq}</li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+
+          {info.relevantLinks && info.relevantLinks.length > 0 ? (
+            <section>
+              <SectionLabel as="h2" className="mb-3">
+                Relevant links
+              </SectionLabel>
+              <ul className="space-y-2">
+                {info.relevantLinks.map((link) => (
+                  <li key={link} className="min-w-0">
+                    <a
+                      href={link.startsWith("http") ? link : `https://${link}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={cx(linkHoverUnderline, "inline-flex max-w-full items-center gap-1.5 font-mono text-meta text-ink-secondary hover:text-ink")}
+                    >
+                      <span className="truncate">{link}</span>
+                      <OpenInNewOutlinedIcon sx={{ fontSize: 13 }} className="shrink-0" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
         </div>
-      </div>
 
-      <ContactsSection
-        contacts={Object.entries(info.contact).map(([name, andrewId]) => ({
-          headshotUrl: info.profilePicture || "",
-          title: name,
-          department: info.department.join(", "),
-          officeLocation: "",
-          email: contactEmail(andrewId),
-        }))}
-      />
+        <InfoContact contact={info.contact} className="lg:col-start-2 lg:row-start-2 lg:self-start" />
+      </div>
 
       {/* Related Opportunities Section (Static Data) */}
       <RelatedOpportunitiesSection

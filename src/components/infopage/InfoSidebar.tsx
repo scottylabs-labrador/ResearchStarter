@@ -1,108 +1,75 @@
-import React from "react";
-import MailIcon from "@mui/icons-material/Mail";
-import LinkIcon from "@mui/icons-material/Link";
-import InfoIcon from "@mui/icons-material/Info";
-import OpenInNewOutlinedIcon from "@mui/icons-material/OpenInNewOutlined";
-import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
-import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
+import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
+import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import { ResearchType } from "../../DataTypes";
 import { contactEmail } from "../../lib/opportunities";
+import Avatar from "../ui/Avatar";
 import Surface from "../ui/Surface";
 import SectionLabel from "../ui/SectionLabel";
 import DetailsTable, { DetailRow } from "../ui/DetailsTable";
 import { cx } from "../ui/cx";
 import { linkHoverUnderline } from "../ui/linkClass";
 
-interface InfoSidebarProps {
+// The info page's side column: the listing's facts, and who to contact. Each appears nowhere else on the page.
+
+interface InfoDetailsProps {
   info: ResearchType;
+  className?: string;
 }
 
-const InfoSidebar: React.FC<InfoSidebarProps> = ({ info }) => {
-  const detailRows: DetailRow[] = [];
-  if (info.position) detailRows.push({ label: "Position", value: info.position, icon: <MenuBookOutlinedIcon sx={{ fontSize: 14 }} /> });
-  if (info.paidUnpaid) detailRows.push({ label: "Compensation", value: info.paidUnpaid, icon: <PaidOutlinedIcon sx={{ fontSize: 14 }} /> });
+export const InfoDetails = ({ info, className }: InfoDetailsProps) => {
+  const rows: DetailRow[] = [];
+  if (info.position) rows.push({ label: "Position", value: info.position, icon: <MenuBookOutlinedIcon sx={{ fontSize: 14 }} /> });
+  if (info.paidUnpaid) rows.push({ label: "Compensation", value: info.paidUnpaid, icon: <PaidOutlinedIcon sx={{ fontSize: 14 }} /> });
   if (info.timeCommitment)
-    detailRows.push({ label: "Time commitment", value: `${info.timeCommitment} hrs / week`, icon: <ScheduleOutlinedIcon sx={{ fontSize: 14 }} /> });
-  if (info.desiredSkillLevel)
-    detailRows.push({ label: "Skill level", value: info.desiredSkillLevel, icon: <SchoolOutlinedIcon sx={{ fontSize: 14 }} /> });
+    rows.push({ label: "Time commitment", value: `${info.timeCommitment} hrs / week`, icon: <ScheduleOutlinedIcon sx={{ fontSize: 14 }} /> });
+  if (info.desiredSkillLevel) rows.push({ label: "Skill level", value: info.desiredSkillLevel, icon: <SchoolOutlinedIcon sx={{ fontSize: 14 }} /> });
   if (info.anticipatedEndDate)
-    detailRows.push({ label: "Anticipated end", value: info.anticipatedEndDate, icon: <CalendarTodayOutlinedIcon sx={{ fontSize: 14 }} /> });
-
-  const prereqs = info.prereqs ?? [];
-  const contacts = Object.entries(info.contact ?? {});
-  const links = info.relevantLinks ?? [];
+    rows.push({ label: "Anticipated end", value: info.anticipatedEndDate, icon: <CalendarTodayOutlinedIcon sx={{ fontSize: 14 }} /> });
+  if (rows.length === 0) return null;
 
   return (
-    <aside className="space-y-6">
-      {detailRows.length > 0 || prereqs.length > 0 ? (
-        <section>
-          <SectionLabel as="h2" className="mb-2">
-            <InfoIcon sx={{ fontSize: 14 }} />
-            Details
-          </SectionLabel>
-          {detailRows.length > 0 ? <DetailsTable rows={detailRows} /> : null}
-          {prereqs.length > 0 ? (
-            <Surface className="mt-3 p-4">
-              <p className="mb-2 font-mono text-meta text-ink-muted">Prerequisites</p>
-              <ul className="list-disc space-y-1 pl-4 text-small text-ink">
-                {prereqs.map((p) => (
-                  <li key={p}>{p}</li>
-                ))}
-              </ul>
-            </Surface>
-          ) : null}
-        </section>
-      ) : null}
-
-      {contacts.length > 0 ? (
-        <section>
-          <SectionLabel as="h2" className="mb-2">
-            <MailIcon sx={{ fontSize: 14 }} />
-            Contact
-          </SectionLabel>
-          <Surface className="space-y-3 p-4">
-            {contacts.map(([name, andrewId]) => (
-              <div key={andrewId}>
-                <p className="text-small font-medium text-ink">{name}</p>
-                <a
-                  href={`mailto:${contactEmail(andrewId)}`}
-                  className={cx(linkHoverUnderline, "break-all font-mono text-meta text-ink-secondary hover:text-ink")}
-                >
-                  {contactEmail(andrewId)}
-                </a>
-              </div>
-            ))}
-          </Surface>
-        </section>
-      ) : null}
-
-      {links.length > 0 ? (
-        <section>
-          <SectionLabel as="h2" className="mb-2">
-            <LinkIcon sx={{ fontSize: 14 }} />
-            Relevant links
-          </SectionLabel>
-          <Surface className="space-y-2 p-4">
-            {links.map((link, i) => (
-              <a
-                key={i}
-                href={link.startsWith("http") ? link : `https://${link}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cx(linkHoverUnderline, "flex min-w-0 items-center gap-1.5 font-mono text-meta text-ink-secondary hover:text-ink")}
-              >
-                <span className="truncate">{link}</span>
-                <OpenInNewOutlinedIcon sx={{ fontSize: 13 }} className="shrink-0" />
-              </a>
-            ))}
-          </Surface>
-        </section>
-      ) : null}
-    </aside>
+    <section className={className}>
+      <SectionLabel as="h2" className="mb-2">
+        Details
+      </SectionLabel>
+      <DetailsTable rows={rows} />
+    </section>
   );
 };
 
-export default InfoSidebar;
+interface InfoContactProps {
+  contact: ResearchType["contact"];
+  className?: string;
+}
+
+export const InfoContact = ({ contact, className }: InfoContactProps) => {
+  const contacts = Object.entries(contact ?? {});
+  if (contacts.length === 0) return null;
+
+  return (
+    <section className={className}>
+      <SectionLabel as="h2" className="mb-2">
+        Contact
+      </SectionLabel>
+      <Surface className="divide-y divide-hairline">
+        {contacts.map(([name, andrewId]) => (
+          <div key={andrewId} className="flex items-center gap-3 px-4 py-3">
+            <Avatar name={name} decorative />
+            <div className="min-w-0">
+              <p className="truncate text-body font-medium text-ink">{name}</p>
+              <a
+                href={`mailto:${contactEmail(andrewId)}`}
+                className={cx(linkHoverUnderline, "block truncate font-mono text-meta text-ink-secondary hover:text-ink")}
+              >
+                {contactEmail(andrewId)}
+              </a>
+            </div>
+          </div>
+        ))}
+      </Surface>
+    </section>
+  );
+};
