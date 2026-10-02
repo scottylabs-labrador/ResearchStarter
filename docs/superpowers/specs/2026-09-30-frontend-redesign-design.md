@@ -372,3 +372,10 @@ These record direction changes made after the plan was executed (commit 4be5908,
     - **Cards:** cards use `pt-4` against `px-5 pb-5`, because the title's leading already adds air above its capitals. Card icon buttons pull in to their glyph. Seen padding is about 21px on every side.
     - **Label rhythm:** every section label sits 15px (±1) above the first ink of its content. Labels take `mb-2` before boxed content and `mb-0.5` before plain text, whose leading supplies the rest.
     - **Chips:** tags, chips and the inline add-interest input are all 24px tall.
+26. **Review cleanup.**
+    - **Related opportunities are real listings.** The info page shows up to three listings that share a department or keyword with the one open, most shared first, as ordinary search cards. The section is hidden when nothing matches. The static placeholder cards and `OpportunityCard` are deleted.
+    - **One data path.** The info page loads through `fetchOpportunities()` like every other page, and bookmarks go through one `useBookmark` hook shared by cards and the info page. Loading a page no longer re-sends its bookmark state to the server.
+    - **Search on narrow screens.** Below the `lg` breakpoint the filter sidebar starts closed and opens over the results, with a scrim that closes it on tap, instead of pushing the results aside.
+    - **Phones.** A card's posted date moves from beside its title into the date row, so titles get the full width. Nav buttons are icon-only, with their labels kept for screen readers.
+    - **Search load errors** show "Couldn’t load opportunities" instead of "No opportunities match".
+    - **Dead code removed:** `ProfileSummary`, `DeadlineCard`, and the component options nothing used (Avatar `lg`, IconButton sizes and `bordered`, Spinner sizes, Badge `warning`/`danger`). Inline error messages use one `Alert` component.
