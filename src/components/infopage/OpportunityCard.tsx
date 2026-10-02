@@ -38,15 +38,18 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({
     <Surface as="article" interactive className="flex flex-col px-5 pb-5 pt-4">
       <div className="mb-2 flex items-start justify-between gap-3">
         <h3 className="flex-1 text-card-title text-ink">{opportunityName}</h3>
-        <IconButton
-          size="sm"
-          className="-my-1 -me-2.5"
-          aria-label={isBookmarked ? "Remove bookmark" : "Bookmark"}
-          pressed={isBookmarked}
-          onClick={onBookmarkToggle}
-        >
-          {isBookmarked ? <BookmarkIcon sx={{ fontSize: 20 }} /> : <BookmarkIconUnfilled sx={{ fontSize: 20 }} />}
-        </IconButton>
+        {/* One title line tall, so the icon centres on the title's capitals, as on search cards. */}
+        <div className="flex h-[22px] shrink-0 items-center">
+          <IconButton
+            size="sm"
+            className="-my-1.5 -me-2.5"
+            aria-label={isBookmarked ? "Remove bookmark" : "Bookmark"}
+            pressed={isBookmarked}
+            onClick={onBookmarkToggle}
+          >
+            {isBookmarked ? <BookmarkIcon sx={{ fontSize: 20 }} /> : <BookmarkIconUnfilled sx={{ fontSize: 20 }} />}
+          </IconButton>
+        </div>
       </div>
 
       {professorName || department ? (
