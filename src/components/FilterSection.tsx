@@ -141,7 +141,7 @@ const FilterSection = ({
   return (
     <aside
       aria-label="Filters"
-      className="scrollbar-minimal fixed bottom-0 left-0 top-nav z-10 w-[296px] overflow-y-auto border-r border-hairline bg-canvas"
+      className="scrollbar-minimal fixed bottom-0 left-0 top-nav z-10 w-[296px] overflow-y-auto border-r border-hairline bg-canvas shadow-popover lg:shadow-none"
     >
       {/* pt puts the Filters heading on the Search title's baseline. */}
       <div className="px-6 pb-5 pt-[30px]">

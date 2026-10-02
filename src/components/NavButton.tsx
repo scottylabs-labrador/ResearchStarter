@@ -11,7 +11,8 @@ type NavButtonProps = {
 const NavButton = ({ name, links, Icon, linkClass }: NavButtonProps) => (
   <NavLink to={links} className={linkClass}>
     <Icon sx={{ fontSize: 18 }} />
-    {name}
+    {/* Icon-only on phones, where the nav has no room for labels. */}
+    <span className="max-sm:sr-only">{name}</span>
   </NavLink>
 );
 

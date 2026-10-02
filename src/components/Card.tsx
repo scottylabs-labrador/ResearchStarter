@@ -16,6 +16,7 @@ import IconButton from "./ui/IconButton";
 import Button from "./ui/Button";
 import Badge from "./ui/Badge";
 import { Meta, MetaRow } from "./ui/Meta";
+import { cx } from "./ui/cx";
 
 interface CardProps {
   research: ResearchType;
@@ -38,6 +39,8 @@ const Card = ({ research, showApplyButton, onApply, showBookmark = true, actions
     ...(Array.isArray(research.keywords) ? research.keywords : []),
     ...(Array.isArray(research.department) ? research.department : []),
   ];
+  const posted = research.timeAdded ? `Posted ${research.timeAdded}` : "";
+  const hasDateRow = Boolean(research.anticipatedEndDate || research.paidUnpaid);
 
   return (
     // pt-4, not 5: the title's line-height already adds space above it.
@@ -53,7 +56,7 @@ const Card = ({ research, showApplyButton, onApply, showBookmark = true, actions
         </h3>
         {/* One title line tall, so the date and icon centre on the title's first line. */}
         <div className="relative z-10 flex h-[22px] shrink-0 items-center gap-1">
-          {research.timeAdded ? <Meta>Posted {research.timeAdded}</Meta> : null}
+          {posted ? <Meta className="hidden sm:inline-flex">{posted}</Meta> : null}
           {showBookmark ? (
             <IconButton
               className="-my-1.5 -me-2.5"
@@ -91,8 +94,9 @@ const Card = ({ research, showApplyButton, onApply, showBookmark = true, actions
         </MetaRow>
       ) : null}
 
-      {research.anticipatedEndDate || research.paidUnpaid ? (
-        <div className="mb-3 flex flex-wrap items-center gap-2">
+      {hasDateRow || posted ? (
+        // Phones have no room beside the title, so there the posted date joins this row.
+        <div className={cx("mb-3 flex flex-wrap items-center gap-2", !hasDateRow && "sm:hidden")}>
           {research.anticipatedEndDate ? (
             <Meta icon={<CalendarTodayOutlinedIcon sx={{ fontSize: 14 }} />}>{research.anticipatedEndDate}</Meta>
           ) : null}
@@ -105,6 +109,7 @@ const Card = ({ research, showApplyButton, onApply, showBookmark = true, actions
               <Meta icon={<PaidOutlinedIcon sx={{ fontSize: 14 }} />}>{research.paidUnpaid}</Meta>
             )
           ) : null}
+          {posted ? <Meta className="sm:hidden">{posted}</Meta> : null}
         </div>
       ) : null}
 

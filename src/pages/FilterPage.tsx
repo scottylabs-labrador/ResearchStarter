@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
+import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import FilterListOutlinedIcon from "@mui/icons-material/FilterListOutlined";
 import SearchOffOutlinedIcon from "@mui/icons-material/SearchOffOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
@@ -12,6 +13,7 @@ import Kbd from "../components/ui/Kbd";
 import Spinner from "../components/ui/Spinner";
 import EmptyState from "../components/ui/EmptyState";
 import SegmentedControl from "../components/ui/SegmentedControl";
+import { cx } from "../components/ui/cx";
 import { useSlashToFocus } from "../components/ui/useSlashToFocus";
 import { ResearchType } from "../DataTypes";
 import { matchesCompensation } from "../utils";
@@ -19,6 +21,9 @@ import { fetchOpportunities } from "../lib/opportunities";
 
 // The header and the results share one capped, centered column so wide screens keep side margins.
 const resultsColumn = "mx-auto w-full max-w-[80rem]";
+
+// The sidebar sits beside the results from the lg breakpoint; narrower, it opens over them, so it starts closed.
+const sidebarFitsBeside = () => window.matchMedia("(min-width: 1024px)").matches;
 
 interface ActiveFilter {
   label: string;
@@ -29,9 +34,10 @@ interface ActiveFilter {
 const FilterPage = () => {
   const [researches, setResearches] = useState<ResearchType[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
   const [input, setInput] = useState("");
   const [searchFocused, setSearchFocused] = useState(false);
-  const [sidebarVisible, setSidebarVisible] = useState(true);
+  const [sidebarVisible, setSidebarVisible] = useState(sidebarFitsBeside);
   const searchRef = useRef<HTMLInputElement>(null);
 
   // College checkboxes
@@ -72,8 +78,9 @@ const FilterPage = () => {
     const fetchResearches = async () => {
       try {
         setResearches(await fetchOpportunities());
-      } catch {
-        console.log("Error Fetching Data");
+      } catch (err) {
+        console.error("Error fetching opportunities", err);
+        setLoadFailed(true);
       } finally {
         setLoading(false);
       }
@@ -253,6 +260,10 @@ const FilterPage = () => {
 
   return (
     <>
+      {/* Below lg the sidebar opens over the results; tapping them closes it. */}
+      {sidebarVisible ? (
+        <div aria-hidden="true" className="fixed inset-x-0 bottom-0 top-nav z-10 bg-ink/20 lg:hidden" onClick={() => setFiltersVisible(false)} />
+      ) : null}
       <FilterSection
         visible={sidebarVisible}
         onToggleVisible={() => setFiltersVisible(false)}
@@ -271,11 +282,13 @@ const FilterPage = () => {
         onResetAll={handleResetAll}
       />
 
-      {/* Fills the window below the nav and scrolls as one page: the header moves up and away with the results. */}
+      {/* Scrolls as one page, so the header moves away with the results. */}
       <main
         ref={scrollerRef}
-        className="scrollbar-minimal fixed bottom-0 right-0 top-nav overflow-y-auto bg-canvas px-8 pb-8 transition-[left] duration-200 ease-out motion-reduce:transition-none xl:px-12"
-        style={{ left: sidebarVisible ? "296px" : "0px" }}
+        className={cx(
+          "scrollbar-minimal fixed bottom-0 left-0 right-0 top-nav overflow-y-auto bg-canvas px-8 pb-8 transition-[left] duration-200 ease-out motion-reduce:transition-none xl:px-12",
+          sidebarVisible && "lg:left-[296px]"
+        )}
         onScroll={handleScroll}
       >
         <div className={resultsColumn}>
@@ -283,10 +296,10 @@ const FilterPage = () => {
             <div className="mb-4 flex items-center gap-3">
               <div className="flex min-w-0 items-baseline gap-3">
                 <h1 className="text-title text-ink">Search</h1>
-                {!loading ? <span className="font-mono text-meta text-ink-muted">{resultLabel}</span> : null}
+                {!loading && !loadFailed ? <span className="whitespace-nowrap font-mono text-meta text-ink-muted">{resultLabel}</span> : null}
               </div>
               <div className="ml-auto flex shrink-0 items-center gap-2">
-                <span aria-hidden="true" className="font-mono text-meta font-medium text-ink-muted">
+                <span aria-hidden="true" className="hidden font-mono text-meta font-medium text-ink-muted sm:inline">
                   Sort
                 </span>
                 <SegmentedControl
@@ -301,7 +314,7 @@ const FilterPage = () => {
               </div>
             </div>
 
-            {/* With the sidebar hidden, its toggle joins the search row: the heading keeps the column's left edge. */}
+            {/* With the sidebar hidden, its toggle sits in the search row. */}
             <div className="flex items-center gap-2">
               {!sidebarVisible && (
                 <Button
@@ -357,6 +370,12 @@ const FilterPage = () => {
               <div className="flex justify-center pt-16">
                 <Spinner label="Loading opportunities" />
               </div>
+            ) : loadFailed ? (
+              <EmptyState
+                icon={<ErrorOutlineOutlinedIcon sx={{ fontSize: 20 }} />}
+                title="Couldn’t load opportunities"
+                message="Check your connection and refresh the page."
+              />
             ) : filteredData.length === 0 ? (
               <EmptyState
                 icon={<SearchOffOutlinedIcon sx={{ fontSize: 20 }} />}
