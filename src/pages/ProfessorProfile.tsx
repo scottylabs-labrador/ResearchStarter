@@ -16,6 +16,7 @@ import ProfessorProfileDetails from "../components/profile/ProfessorProfileDetai
 import BioBlurbSection from "../components/profile/BioBlurbSection";
 import ResearchAreasSection from "../components/profile/ResearchAreasSection";
 import { professorSummaryLine } from "../components/profile/professorSummary";
+import Alert from "../components/ui/Alert";
 import { ButtonLink } from "../components/ui/Button";
 import Spinner from "../components/ui/Spinner";
 import EmptyState from "../components/ui/EmptyState";
@@ -146,9 +147,9 @@ const ProfessorProfile = () => {
         action={listings ? <Meta>{listingCount === 1 ? "1 listing" : `${listingCount} listings`}</Meta> : null}
       >
         {listingsFailed ? (
-          <p role="alert" className="rounded-control border border-danger/20 bg-danger-bg px-4 py-3 text-small text-danger">
+          <Alert>
             Couldn&rsquo;t load research listings. Refresh the page to try again.
-          </p>
+          </Alert>
         ) : listings === null ? (
           <div className="flex justify-center py-10">
             <Spinner label="Loading research listings" />

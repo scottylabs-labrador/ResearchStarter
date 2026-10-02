@@ -12,7 +12,7 @@ import DetailsTable, { DetailRow } from "../ui/DetailsTable";
 import { cx } from "../ui/cx";
 import { linkHoverUnderline } from "../ui/linkClass";
 
-// The info page's side column: the listing's facts, and who to contact. Each appears nowhere else on the page.
+// The info page's side column: the listing's facts and who to contact.
 
 interface InfoDetailsProps {
   info: ResearchType;

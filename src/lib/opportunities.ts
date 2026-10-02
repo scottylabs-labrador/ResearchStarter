@@ -2,10 +2,9 @@ import { ResearchType } from "../DataTypes";
 import { ResearchOpportunity } from "../types/ResearchOpportunity";
 import { parseContact, toArray } from "../utils";
 import DEV_MOCK_RESEARCHES from "../data/devMockResearches";
+import { isDevBypass } from "./devBypass";
 
 export const OPPORTUNITIES_URL = "http://localhost:5050/opportunities";
-
-const isDevBypass = import.meta.env.DEV && import.meta.env.VITE_DEV_BYPASS_AUTH === "true";
 
 /** A ResearchProjects document in the shape the UI renders. */
 export const toResearch = (item: any): ResearchType => ({

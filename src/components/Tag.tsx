@@ -25,7 +25,7 @@ const Tag = ({ keyword, className, onRemove }: TagProps) => {
     <span
       title={label}
       className={cx(
-        "inline-flex max-w-full items-center gap-1 rounded-chip bg-surface-muted h-6 px-2 text-small text-ink-secondary",
+        "inline-flex h-6 max-w-full items-center gap-1 rounded-chip bg-surface-muted px-2 text-small text-ink-secondary",
         className
       )}
     >

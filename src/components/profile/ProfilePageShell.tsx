@@ -14,7 +14,7 @@ const ProfilePageShell = ({
   breadcrumbIcon = <PersonOutlineOutlinedIcon sx={{ fontSize: 16 }} />,
   children,
 }: ProfilePageShellProps) => (
-  // pt puts the breadcrumb's ink 32px under the nav, like every page. 3xl keeps profile reading text near 85 characters a line while it still fills its card.
+  // pt-[26px] puts the breadcrumb text 32px under the nav, as on other pages; max-w-3xl keeps bios near 85 characters a line.
   <main className="mx-auto w-full max-w-3xl px-5 pb-20 pt-[26px] sm:px-8">
     <nav aria-label="Breadcrumb" className="mb-8 flex items-center gap-2 text-body">
       <span className="-ms-[3px] inline-flex items-center gap-1.5 text-ink-muted">

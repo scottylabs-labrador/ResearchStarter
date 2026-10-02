@@ -44,12 +44,7 @@ const InterestsSkillsSection = ({ items = [], onAddItem, onRemoveItem }: Interes
     >
       <Surface className="flex flex-wrap items-center gap-1.5 p-4">
         {items.map((item) => (
-          <Tag
-            key={item}
-            keyword={item}
-            className="h-6"
-            onRemove={onRemoveItem ? () => onRemoveItem(item) : undefined}
-          />
+          <Tag key={item} keyword={item} onRemove={onRemoveItem ? () => onRemoveItem(item) : undefined} />
         ))}
         {adding ? (
           <input
@@ -63,7 +58,7 @@ const InterestsSkillsSection = ({ items = [], onAddItem, onRemoveItem }: Interes
             }}
             placeholder="Type and press Enter"
             autoFocus
-            className="h-6 w-[180px] rounded-chip border border-accent bg-surface px-2 text-[16px] text-ink sm:text-small outline-none ring-2 ring-accent/15 placeholder:text-ink-muted"
+            className="h-6 w-[180px] rounded-chip border border-accent bg-surface px-2 text-[16px] text-ink outline-none ring-2 ring-accent/15 placeholder:text-ink-muted sm:text-small"
           />
         ) : (
           <button type="button" className={chipButton} onClick={() => setAdding(true)}>

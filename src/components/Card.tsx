@@ -40,7 +40,7 @@ const Card = ({ research, showApplyButton, onApply, showBookmark = true, actions
   ];
 
   return (
-    // pt-4 rather than 5: the title's leading already adds air above its capitals, so the top reads as wide as the sides.
+    // pt-4, not 5: the title's line-height already adds space above it.
     <Surface as="article" interactive className="relative px-5 pb-5 pt-4">
       <div className="mb-1 flex items-start justify-between gap-4">
         <h3 className="min-w-0 break-words text-card-title text-ink">
@@ -51,12 +51,11 @@ const Card = ({ research, showApplyButton, onApply, showBookmark = true, actions
             {research.projectTitle}
           </Link>
         </h3>
-        {/* One title line tall (22px), so the small date and the icon centre on the title's capitals; sharing its baseline left them looking low. */}
+        {/* One title line tall, so the date and icon centre on the title's first line. */}
         <div className="relative z-10 flex h-[22px] shrink-0 items-center gap-1">
           {research.timeAdded ? <Meta>Posted {research.timeAdded}</Meta> : null}
           {showBookmark ? (
             <IconButton
-              size="sm"
               className="-my-1.5 -me-2.5"
               aria-label={bookmark.saved ? "Remove bookmark" : "Bookmark"}
               pressed={bookmark.saved}

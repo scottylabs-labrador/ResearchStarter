@@ -171,7 +171,7 @@ const OpportunityForm: React.FC<OpportunityFormProps> = ({ initialData, onChange
               <span className="min-w-0 truncate text-small text-ink">
                 <span className="font-medium">{key}</span> <span className="font-mono text-meta text-ink-muted">{value}</span>
               </span>
-              <IconButton size="sm" aria-label={`Remove ${key}`} onClick={() => removeContact(key)}>
+              <IconButton aria-label={`Remove ${key}`} onClick={() => removeContact(key)}>
                 <CloseOutlinedIcon sx={{ fontSize: 14 }} />
               </IconButton>
             </div>

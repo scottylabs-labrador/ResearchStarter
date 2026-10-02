@@ -14,6 +14,7 @@ import ProfilePageShell from "../components/profile/ProfilePageShell";
 import ProfileHeader from "../components/profile/ProfileHeader";
 import AboutSection from "../components/profile/AboutSection";
 import { professorSummaryLine } from "../components/profile/professorSummary";
+import Alert from "../components/ui/Alert";
 import Button, { ButtonLink } from "../components/ui/Button";
 import EmptyState from "../components/ui/EmptyState";
 import IconButton from "../components/ui/IconButton";
@@ -49,8 +50,6 @@ const isFormValid = (data: FormData): boolean =>
   data.description.trim() !== "" &&
   data.position.trim() !== "" &&
   data.anticipatedEndDate.trim() !== "";
-
-const alertClass = "rounded-control border border-danger/20 bg-danger-bg px-4 py-3 text-small text-danger";
 
 // The backend can list, create and delete a professor's listings; it has no way to edit one or to save profile changes.
 const ProfessorDashboard = () => {
@@ -233,9 +232,9 @@ const ProfessorDashboard = () => {
       >
         <div className="flex flex-col gap-3">
           {deleteError ? (
-            <p role="alert" className={alertClass}>
+            <Alert>
               {deleteError}
-            </p>
+            </Alert>
           ) : null}
 
           {showCreateForm ? (
@@ -244,9 +243,9 @@ const ProfessorDashboard = () => {
                 <h3 className="mb-5 text-heading text-ink">New opportunity</h3>
                 <OpportunityForm initialData={newOpportunity} onChange={(data) => setNewOpportunity(data)} />
                 {submitError ? (
-                  <p role="alert" className={`mt-6 ${alertClass}`}>
+                  <Alert className="mt-6">
                     {submitError}
-                  </p>
+                  </Alert>
                 ) : null}
                 <div className="mt-6 flex justify-end gap-2">
                   <Button size="sm" onClick={handleDiscard}>
@@ -261,9 +260,9 @@ const ProfessorDashboard = () => {
           ) : null}
 
           {loadFailed ? (
-            <p role="alert" className={alertClass}>
+            <Alert>
               Couldn&rsquo;t load your listings. Refresh the page to try again.
-            </p>
+            </Alert>
           ) : listings === null ? (
             <div className="flex justify-center py-10">
               <Spinner label="Loading your listings" />
@@ -282,7 +281,6 @@ const ProfessorDashboard = () => {
                 showBookmark={false}
                 actions={
                   <IconButton
-                    size="sm"
                     className="-my-1.5 -me-2.5"
                     aria-label={`Delete ${research.projectTitle}`}
                     title="Delete listing"

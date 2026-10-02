@@ -31,9 +31,8 @@ const NavBar = () => {
   const email = session?.user?.email ?? "";
   const image = session?.user?.image ?? undefined;
   const isProfessor = session?.user?.isProfessor ?? false;
-  const dashboardLink = isProfessor ? "/professor-dashboard" : "/dashboard";
   const andrewId = session?.user?.andrewId || email.split("@")[0] || "";
-  // Professors manage listings on their dashboard and can't edit their profile, so the menu shows the page students see.
+  // Professors can't edit their profile, so their menu links to the public page instead.
   const profileLink =
     isProfessor && andrewId
       ? { to: `/professor/${encodeURIComponent(andrewId)}`, label: "View public profile" }
@@ -63,7 +62,7 @@ const NavBar = () => {
 
           <div className="flex items-center gap-1">
             {isProfessor && (
-              <NavButton name="Dashboard" Icon={HomeOutlinedIcon} links={dashboardLink} linkClass={linkClass} />
+              <NavButton name="Dashboard" Icon={HomeOutlinedIcon} links="/professor-dashboard" linkClass={linkClass} />
             )}
             <NavButton name="Search" Icon={SearchOutlinedIcon} links="/" linkClass={linkClass} />
           </div>

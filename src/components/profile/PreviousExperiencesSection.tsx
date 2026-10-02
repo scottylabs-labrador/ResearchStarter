@@ -94,6 +94,7 @@ const PreviousExperiencesSection = ({
       professorOrCompany: "",
       topic: "",
       date: "",
+      endDate: "",
       level: "",
       associatedTags: [],
       description: "",
@@ -108,7 +109,7 @@ const PreviousExperiencesSection = ({
         <>
           <div className="mb-3 flex items-center gap-1">
             <h2 className="text-heading text-ink">Previous Experiences</h2>
-            <IconButton size="sm" aria-label="Edit experiences" onClick={onEditExperiencesClick}>
+            <IconButton aria-label="Edit experiences" onClick={onEditExperiencesClick}>
               <FaPencil size={13} />
             </IconButton>
           </div>

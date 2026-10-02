@@ -1,14 +1,12 @@
 import React from "react";
 import { cx } from "./cx";
 
-type Tone = "neutral" | "accent" | "positive" | "warning" | "danger";
+type Tone = "neutral" | "accent" | "positive";
 
 const tones: Record<Tone, string> = {
   neutral: "bg-surface-muted text-ink-secondary",
   accent: "bg-accent-bg text-accent-strong",
   positive: "bg-positive-bg text-positive",
-  warning: "bg-warning-bg text-warning",
-  danger: "bg-danger-bg text-danger",
 };
 
 interface BadgeProps {

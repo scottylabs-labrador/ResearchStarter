@@ -1,7 +1,6 @@
 import { ProfessorType } from "../DataTypes";
 import { getDevMockProfessor } from "../data/devMockProfessors";
-
-const isDevBypass = import.meta.env.DEV && import.meta.env.VITE_DEV_BYPASS_AUTH === "true";
+import { isDevBypass } from "./devBypass";
 
 const listOf = (value: unknown): string[] => (Array.isArray(value) ? value : value ? [String(value)] : []);
 

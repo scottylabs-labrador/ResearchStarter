@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import PhotoCameraOutlinedIcon from "@mui/icons-material/PhotoCameraOutlined";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import { initialsOf } from "../ui/Avatar";
 import Badge from "../ui/Badge";
 
 interface ProfileHeaderProps {
@@ -20,15 +21,6 @@ interface ProfileHeaderProps {
   /** Page actions, in a row under the summary. Put the primary action first. */
   action?: React.ReactNode;
 }
-
-const initialsOf = (name: string) =>
-  name
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part.charAt(0).toUpperCase())
-    .join("");
 
 const avatarShellClass =
   "relative block h-[64px] w-[64px] rounded-[18px] border border-accent/20 bg-accent-bg/40 p-[3px] shadow-[0_1px_2px_rgb(72_107_132/0.08)]";
@@ -127,7 +119,6 @@ const ProfileHeader = ({
         ) : null}
       </div>
       <p className="mt-1 text-lead text-ink-muted">{displaySummary}</p>
-      {/* Same left edge as everything above, at every width; the gap matches the avatar-to-name gap. */}
       {action ? <div className="mt-5 flex flex-wrap items-center gap-2">{action}</div> : null}
     </header>
   );

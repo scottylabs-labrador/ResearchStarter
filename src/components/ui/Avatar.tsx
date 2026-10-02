@@ -1,17 +1,16 @@
 import PersonIcon from "@mui/icons-material/Person";
 import { cx } from "./cx";
 
-type AvatarSize = "sm" | "md" | "lg";
+type AvatarSize = "sm" | "md";
 
 const sizeClasses: Record<AvatarSize, string> = {
   sm: "h-[28px] w-[28px] text-[11px]",
   md: "h-[40px] w-[40px] text-[14px]",
-  lg: "h-[96px] w-[96px] text-[30px]",
 };
 
-const iconSizes: Record<AvatarSize, number> = { sm: 16, md: 22, lg: 48 };
+const iconSizes: Record<AvatarSize, number> = { sm: 16, md: 22 };
 
-const initialsOf = (name: string) =>
+export const initialsOf = (name: string) =>
   name
     .trim()
     .split(/\s+/)

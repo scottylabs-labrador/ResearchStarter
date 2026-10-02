@@ -6,14 +6,14 @@ import BioBlurbSection from "../components/profile/BioBlurbSection";
 import InterestsSkillsSection from "../components/profile/InterestsSkillsSection";
 import ExperienceList from "../components/profile/ExperienceList";
 import AboutSection from "../components/profile/AboutSection";
+import Alert from "../components/ui/Alert";
 import { useSession } from "../lib/authClient";
+import { isDevBypass } from "../lib/devBypass";
 import { Experience } from "../types/Experience";
 import { toArray } from "../utils";
 import DEV_MOCK_PROFILE, { StudentProfile } from "../data/devMockProfile";
 
 type EditableFields = Partial<Pick<StudentProfile, "bio" | "major" | "interests" | "experiences">>;
-
-const isDevBypass = import.meta.env.DEV && import.meta.env.VITE_DEV_BYPASS_AUTH === "true";
 
 const emptyProfile: StudentProfile = {
   name: "",
@@ -57,7 +57,7 @@ const ProfilePage = () => {
       name: session.user.name ?? "",
       email: session.user.email ?? "",
       image: session.user.image ?? undefined,
-      class: (session.user as any).class ?? prev.class,
+      class: session.user.class ?? prev.class,
     }));
   }, [session, isPending]);
 
@@ -135,11 +135,11 @@ const ProfilePage = () => {
       />
 
       {saveFailed || loadFailed ? (
-        <p role="alert" className="mt-6 rounded-control border border-danger/20 bg-danger-bg px-4 py-3 text-small text-danger">
+        <Alert className="mt-6">
           {saveFailed
             ? "Couldn’t save your last change, so it was undone. Check your connection and try again."
             : "Couldn’t load your saved profile. Refresh the page before making changes."}
-        </p>
+        </Alert>
       ) : null}
 
       <AboutSection title="Details" className="mt-8">

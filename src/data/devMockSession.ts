@@ -1,4 +1,5 @@
 import DEV_MOCK_PROFILE from "./devMockProfile";
+import { isDevBypass } from "../lib/devBypass";
 
 export type DevMockRole = "student" | "professor";
 
@@ -70,7 +71,7 @@ export function getDevMockRole(): DevMockRole {
 }
 
 export function getDevMockSession(): MockSession | null {
-  if (!import.meta.env.DEV || import.meta.env.VITE_DEV_BYPASS_AUTH !== "true") return null;
+  if (!isDevBypass) return null;
   cached ??= getDevMockRole() === "professor" ? professorSession() : studentSession();
   return cached;
 }

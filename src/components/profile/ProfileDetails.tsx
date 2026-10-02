@@ -56,7 +56,7 @@ const ProfileDetails = ({ major, class: userClass, colleges, email, onMajorChang
   ) : (
     <span className="-my-1.5 flex w-full items-center justify-between gap-2">
       {majorValue || notSet}
-      <IconButton size="sm" aria-label="Edit major" onClick={() => setEditingMajor(true)}>
+      <IconButton aria-label="Edit major" onClick={() => setEditingMajor(true)}>
         <EditOutlinedIcon sx={{ fontSize: 15 }} />
       </IconButton>
     </span>
