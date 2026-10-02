@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -31,17 +29,40 @@
 
 html {
   font-size: 14px;
+  font-kerning: normal;
+  /* Geist ships no italic and only 400–600; never let the browser fake a face. */
+  font-synthesis: none;
   /* The nav is always on screen, so anything scrolled into view (keyboard focus, anchors) stops below it. */
   scroll-padding-top: calc(var(--nav-h) + 1rem);
 }
 
 @layer base {
   body {
-    @apply bg-canvas font-sans text-ink antialiased;
+    @apply bg-canvas font-sans text-body text-ink antialiased;
+  }
+
+  /* Even line lengths in headings, and no one-word last line in running text. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  dd,
+  figcaption {
+    text-wrap: pretty;
   }
 }
 
 @layer utilities {
+  /* A mono space is a full cell wide; pull it in so phrases like "Spring 2027" read as one unit. */
+  .font-mono {
+    word-spacing: -0.3em;
+  }
+
   .bg-hairline-texture {
     background-image: repeating-linear-gradient(
       135deg,

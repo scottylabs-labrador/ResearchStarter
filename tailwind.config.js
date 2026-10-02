@@ -13,14 +13,20 @@ export default {
         sans: ["Geist", "ui-sans-serif", "system-ui", "sans-serif"],
         mono: ['"Geist Mono"', "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
+      // Whole-pixel sizes and leading; tracking tightens as size grows, following Geist's own scale.
       fontSize: {
-        display: ["36px", { lineHeight: "42px", letterSpacing: "-0.02em", fontWeight: "600" }],
-        title: ["28px", { lineHeight: "34px", letterSpacing: "-0.02em", fontWeight: "600" }],
-        heading: ["18px", { lineHeight: "26px", fontWeight: "600" }],
-        "card-title": ["17px", { lineHeight: "24px", fontWeight: "600" }],
-        body: ["14px", { lineHeight: "22px" }],
-        small: ["13px", { lineHeight: "19px" }],
+        display: ["36px", { lineHeight: "40px", letterSpacing: "-0.03em", fontWeight: "600" }],
+        title: ["28px", { lineHeight: "32px", letterSpacing: "-0.025em", fontWeight: "600" }],
+        heading: ["18px", { lineHeight: "24px", letterSpacing: "-0.015em", fontWeight: "600" }],
+        "card-title": ["16px", { lineHeight: "22px", letterSpacing: "-0.01em", fontWeight: "600" }],
+        lead: ["15px", { lineHeight: "22px" }],
+        body: ["14px", { lineHeight: "20px" }],
+        small: ["13px", { lineHeight: "18px" }],
         meta: ["12px", { lineHeight: "16px" }],
+      },
+      maxWidth: {
+        // About 85 characters of Geist at any size; `ch` overshoots because Geist's zero is wide.
+        measure: "40em",
       },
       colors: {
         canvas: token("canvas"),
