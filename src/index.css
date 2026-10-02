@@ -31,6 +31,8 @@
 
 html {
   font-size: 14px;
+  /* The nav is always on screen, so anything scrolled into view (keyboard focus, anchors) stops below it. */
+  scroll-padding-top: calc(var(--nav-h) + 1rem);
 }
 
 @layer base {

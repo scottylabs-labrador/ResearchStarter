@@ -6,7 +6,6 @@ import NavButton from "./NavButton";
 import Logo from "./Logo";
 import Avatar from "./ui/Avatar";
 import { cx } from "./ui/cx";
-import { useNavBarHidden } from "../contexts/NavBarContext";
 
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
@@ -41,7 +40,6 @@ const NavBar = () => {
       : { to: "/profile", label: "Manage account" };
 
   const [open, setOpen] = useState(false);
-  const hidden = useNavBarHidden();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
@@ -57,12 +55,7 @@ const NavBar = () => {
 
   return (
     <>
-      <nav
-        className={cx(
-          "fixed inset-x-0 top-0 z-20 h-nav border-b border-hairline bg-surface motion-reduce:transition-none",
-          hidden ? "-translate-y-full" : "translate-y-0"
-        )}
-      >
+      <nav className="fixed inset-x-0 top-0 z-20 h-nav border-b border-hairline bg-surface">
         <div className="grid h-full grid-cols-[1fr_auto_1fr] items-center px-8">
           <NavLink to="/" aria-label="CMU Research home" className={cx("flex items-center justify-self-start rounded-[6px]", focusRing)}>
             <Logo />

@@ -16,7 +16,6 @@ import { useSlashToFocus } from "../components/ui/useSlashToFocus";
 import { ResearchType } from "../DataTypes";
 import { matchesCompensation } from "../utils";
 import { fetchOpportunities } from "../lib/opportunities";
-import { useNavBarHidden } from "../contexts/NavBarContext";
 
 // The header and the results share one capped, centered column so wide screens keep side margins.
 const resultsColumn = "mx-auto w-full max-w-[80rem]";
@@ -28,7 +27,6 @@ interface ActiveFilter {
 }
 
 const FilterPage = () => {
-  const navHidden = useNavBarHidden();
   const [researches, setResearches] = useState<ResearchType[]>([]);
   const [loading, setLoading] = useState(true);
   const [input, setInput] = useState("");
@@ -269,7 +267,6 @@ const FilterPage = () => {
   return (
     <>
       <FilterSection
-        navHidden={navHidden}
         visible={sidebarVisible}
         onToggleVisible={() => setFiltersVisible(false)}
         hideButtonRef={hideFiltersRef}
@@ -287,13 +284,10 @@ const FilterPage = () => {
         onResetAll={handleResetAll}
       />
 
-      {/* Moves with transforms only; animating top or height here repaints the whole list every frame. */}
+      {/* Fills the window below the nav; only the results list inside it scrolls. */}
       <div
-        className="fixed right-0 top-0 h-screen overflow-hidden bg-canvas transition-[left] duration-200 ease-out motion-reduce:transition-none"
-        style={{
-          left: sidebarVisible ? "296px" : "0px",
-          transform: navHidden ? "translateY(0)" : "translateY(var(--nav-h))",
-        }}
+        className="fixed bottom-0 right-0 top-nav overflow-hidden bg-canvas transition-[left] duration-200 ease-out motion-reduce:transition-none"
+        style={{ left: sidebarVisible ? "296px" : "0px" }}
       >
         <div
           ref={headerRef}
@@ -382,7 +376,7 @@ const FilterPage = () => {
           ref={resultsRef}
           role="region"
           aria-label="Search results"
-          className="scrollbar-minimal h-full overflow-y-auto px-8 pb-[calc(2rem+var(--nav-h))] xl:px-12"
+          className="scrollbar-minimal h-full overflow-y-auto px-8 pb-8 xl:px-12"
           style={{ paddingTop: headerHeight + 8 }}
           onScroll={handleScroll}
         >

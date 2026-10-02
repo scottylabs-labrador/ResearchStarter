@@ -1,102 +1,21 @@
-import React, { useState, useEffect, useRef } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import ScrollToTop from "../effects/ScrollToTop";
 import Footer from "../components/Footer";
-import { NavBarContext } from "../contexts/NavBarContext";
-
-function readVerticalScrollY(target: EventTarget): number {
-  if (target === document || target === document.documentElement) {
-    return window.scrollY;
-  }
-  if (target instanceof Element) {
-    return target.scrollTop;
-  }
-  return window.scrollY;
-}
-
-function isScrolledToEnd(target: EventTarget): boolean {
-  const el =
-    target instanceof Element && target !== document.documentElement ? target : document.documentElement;
-  return el.scrollHeight - el.clientHeight - el.scrollTop < 1;
-}
-
-const SCROLL_HIDE_GRACE_MS = 200;
 
 const MainLayout = () => {
   const location = useLocation();
   const hideFooter = location.pathname === "/" || location.pathname === "/saved";
 
-  const [navHidden, setNavHidden] = useState(false);
-  const lastScrollY = useRef(0);
-  const scrollLogicReadyAt = useRef(0);
-  /** First scroll after grace: sync baseline only (covers restored inner scroll with no events during grace). */
-  const needsScrollBaseline = useRef(true);
-
-  // After a route change, full reload, or bfcache restore: show the header and
-  // absorb restored scroll positions without treating them as "scroll down".
-  useEffect(() => {
-    const onPageShow = () => {
-      setNavHidden(false);
-      needsScrollBaseline.current = true;
-      scrollLogicReadyAt.current = performance.now() + SCROLL_HIDE_GRACE_MS;
-      lastScrollY.current = window.scrollY;
-    };
-    window.addEventListener("pageshow", onPageShow);
-    return () => window.removeEventListener("pageshow", onPageShow);
-  }, []);
-
-  // Hide header on scroll down, show on scroll up
-  // Uses capture mode so it fires for any scrollable element (e.g. FilterPage's inner div)
-  useEffect(() => {
-    setNavHidden(false);
-    needsScrollBaseline.current = true;
-    scrollLogicReadyAt.current = performance.now() + SCROLL_HIDE_GRACE_MS;
-    lastScrollY.current = window.scrollY;
-
-    const handleScroll = (e: Event) => {
-      const currentScrollY = readVerticalScrollY(e.target ?? document);
-      if (performance.now() < scrollLogicReadyAt.current) {
-        lastScrollY.current = currentScrollY;
-        return;
-      }
-      if (needsScrollBaseline.current) {
-        lastScrollY.current = currentScrollY;
-        needsScrollBaseline.current = false;
-        return;
-      }
-      if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
-        setNavHidden(true);
-      } else if (!isScrolledToEnd(e.target ?? document)) {
-        // A short list that grows taller (nav hiding, header collapsing) gets its
-        // scrollTop clamped back down; that clamp is not the user scrolling up.
-        setNavHidden(false);
-      }
-      lastScrollY.current = currentScrollY;
-    };
-
-    document.addEventListener("scroll", handleScroll, { capture: true });
-    const t = window.setTimeout(() => {
-      lastScrollY.current = window.scrollY;
-    }, 0);
-
-    return () => {
-      clearTimeout(t);
-      document.removeEventListener("scroll", handleScroll, { capture: true });
-    };
-  }, [location.pathname]);
-
   return (
-    <NavBarContext.Provider value={navHidden}>
-      <div className="flex min-h-screen flex-col">
-        <ScrollToTop />
-        <NavBar />
-        <div className="flex-1">
-          <Outlet />
-        </div>
-        {!hideFooter && <Footer />}
+    <div className="flex min-h-screen flex-col">
+      <ScrollToTop />
+      <NavBar />
+      <div className="flex-1">
+        <Outlet />
       </div>
-    </NavBarContext.Provider>
+      {!hideFooter && <Footer />}
+    </div>
   );
 };
 

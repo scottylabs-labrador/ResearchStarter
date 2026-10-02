@@ -7,7 +7,6 @@ import SectionLabel from "./ui/SectionLabel";
 import SegmentedControl from "./ui/SegmentedControl";
 
 interface FilterSectionProps {
-  navHidden?: boolean;
   visible: boolean;
   onToggleVisible: () => void;
   hideButtonRef?: React.Ref<HTMLButtonElement>;
@@ -97,7 +96,6 @@ const FilterGroup = ({ label, open, onToggle, action, children }: FilterGroupPro
 );
 
 const FilterSection = ({
-  navHidden,
   visible,
   onToggleVisible,
   hideButtonRef,
@@ -141,10 +139,9 @@ const FilterSection = ({
   return (
     <aside
       aria-label="Filters"
-      className="scrollbar-minimal fixed left-0 top-0 z-10 h-screen w-[296px] overflow-y-auto border-r border-hairline bg-canvas motion-reduce:transition-none"
-      style={{ transform: navHidden ? "translateY(0)" : "translateY(var(--nav-h))" }}
+      className="scrollbar-minimal fixed bottom-0 left-0 top-nav z-10 w-[296px] overflow-y-auto border-r border-hairline bg-canvas"
     >
-      <div className="px-6 pb-[calc(1.25rem+var(--nav-h))] pt-[26px]">
+      <div className="px-6 pb-5 pt-[26px]">
         <div className="mb-5 flex items-center justify-between px-2">
           <h2 className="text-heading text-ink">Filters</h2>
           <Button
