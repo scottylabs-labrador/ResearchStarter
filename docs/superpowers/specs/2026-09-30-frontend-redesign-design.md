@@ -332,3 +332,26 @@ These record direction changes made after the plan was executed (commit 4be5908,
     - **Two read fixes.** Contacts saved as a full email are no longer given a second `@andrew.cmu.edu`. Listings saved under `Colleges` (the documented schema, and what the form posts) show their college in search.
 21. **The nav no longer hides on scroll.** It stays fixed at the top on every page, overriding section 3.1's "hide-on-scroll behavior is unchanged". The scroll listener and `NavBarContext` are gone. On search, the filter sidebar and results panel sit between the nav and the bottom of the window (`top-nav bottom-0`) and no longer shift with it. `html` gets `scroll-padding-top` equal to the nav's height plus 1rem, so keyboard focus and anchors scrolled into view stop below the nav. The search header's own collapse when the results scroll is unchanged.
 22. **The search header scrolls with the results.** It no longer floats over the list and vanishes as soon as the list moves (overriding section 3.2's "collapse-on-scroll header behavior is unchanged"). The area below the nav scrolls as one page: a `<main>` holding the header (title, sort, search row, filter chips), then a `<section aria-label="Search results">` with the cards. The header moves up and away with the cards and comes back the same way, and its resting position is unchanged. Pressing `/`, or Shift+Tab back to the search field, scrolls to the top so the title shows too.
+23. **Typography pass (overrides the type table in §1.2).**
+    - **Scale:** every size and line-height is a whole number of pixels, and tracking tightens as size grows, following Geist's own system. Mono is never tracked.
+
+      | Token | Size / leading | Tracking | Use |
+      |---|---|---|---|
+      | `display` | 36/40 (28/32 below `sm`) | −0.03em | Info page title |
+      | `title` | 28/32 | −0.025em | Every page h1 (Search, profile names, sign-in) |
+      | `heading` | 18/24 | −0.015em | Panel and empty-state headings, modal titles |
+      | `card-title` | 16/22 | −0.01em | Card titles |
+      | `lead` | 15/22 | 0 | Reading paragraphs and page subtitles |
+      | `body` | 14/20 | 0 | UI text; `body` inherits it, so nothing falls back to a 1.5 line-height |
+      | `small` | 13/18 | 0 | Controls, tags, table cells |
+      | `meta` | 12/16 | 0 | Mono labels (500) and data (400) |
+
+      Avatar initials, key hints and the experience initial are graphic glyphs: `leading-none`, with +0.04em on initials.
+    - **Fonts:** Geist 400/500/600 and Geist Mono 400/500 load from preconnected `<link>` tags in `index.html`, not a CSS `@import`. `font-synthesis: none` means no faux bold or italic, and nothing is set in italic. The Google subset has no tabular figures, `case`, slashed zero or stylistic sets, so no `font-feature-settings` are set. `frac` must stay off, or dates would become fractions.
+    - **Wrapping:** headings use `text-wrap: balance`, and paragraphs, list items and `dd` use `text-wrap: pretty`.
+    - **Measure:** reading text is capped at `max-w-measure` (40em, about 85 characters of Geist; `ch` overshoots because Geist's zero is wide). Profile pages use a `max-w-3xl` column, so bios fill their card at about 80 characters.
+    - **Mono:** `.font-mono` has `word-spacing: -0.3em`, so phrases like "Spring 2027" read as one unit. Compensation is always mono, with "Paid" keeping its green pill.
+    - **Links:** in running text, links use `linkUnderline` / `linkHoverUnderline` (`src/components/ui/linkClass.ts`): a 1px rule 0.22em below the baseline.
+    - **Text inputs:** 16px below `sm`, so iOS doesn't zoom on focus.
+    - **Characters:** use curly apostrophes, a single-character ellipsis, and "and" instead of "&" except in proper names.
+    - **Headings:** each page has one h1. `EmptyState` takes `titleAs="h1"` when it is the whole page.

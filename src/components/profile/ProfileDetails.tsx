@@ -7,6 +7,8 @@ import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
 import DetailsTable, { DetailRow } from "../ui/DetailsTable";
 import IconButton from "../ui/IconButton";
 import Input from "../ui/Input";
+import { cx } from "../ui/cx";
+import { linkUnderline } from "../ui/linkClass";
 
 interface ProfileDetailsProps {
   major: string;
@@ -73,7 +75,7 @@ const ProfileDetails = ({ major, class: userClass, colleges, email, onMajorChang
       value: email ? (
         <a
           href={`mailto:${email}`}
-          className="break-all rounded-[4px] font-mono text-meta text-accent-strong underline decoration-accent/35 underline-offset-[3px] transition-colors duration-150 hover:text-accent-strong hover:decoration-accent-strong/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className={cx(linkUnderline, "break-all rounded-[4px] font-mono text-meta text-accent-strong decoration-accent/35 transition-colors duration-150 hover:decoration-accent-strong/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent")}
         >
           {email}
         </a>

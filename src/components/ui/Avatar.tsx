@@ -34,7 +34,7 @@ const Avatar = ({ name, src, size = "md", className }: AvatarProps) => {
       role={src ? undefined : "img"}
       aria-label={src ? undefined : name || "User"}
       className={cx(
-        "inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full border border-hairline bg-surface-muted font-medium text-ink-secondary",
+        "inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full border border-hairline bg-surface-muted font-medium leading-none tracking-[0.04em] text-ink-secondary",
         sizeClasses[size],
         className
       )}

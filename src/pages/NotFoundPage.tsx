@@ -8,7 +8,8 @@ const NotFoundPage = () => (
       className="w-full"
       icon={<FaExclamationTriangle size={18} />}
       title="Page not found"
-      message="womp womp — this page doesn't exist."
+      titleAs="h1"
+      message="womp womp — this page doesn’t exist."
       action={
         <ButtonLink to="/" variant="primary">
           Back to search

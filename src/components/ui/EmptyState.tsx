@@ -3,13 +3,15 @@ import { cx } from "./cx";
 
 interface EmptyStateProps {
   title: string;
+  /** h1 when the empty state is the whole page (404, not found); otherwise a plain line. */
+  titleAs?: "p" | "h1";
   icon?: React.ReactNode;
   message?: React.ReactNode;
   action?: React.ReactNode;
   className?: string;
 }
 
-const EmptyState = ({ title, icon, message, action, className }: EmptyStateProps) => (
+const EmptyState = ({ title, titleAs: Title = "p", icon, message, action, className }: EmptyStateProps) => (
   <div
     className={cx(
       "flex flex-col items-center justify-center gap-2 rounded-surface border border-hairline bg-canvas bg-hairline-texture px-6 py-14 text-center",
@@ -21,7 +23,7 @@ const EmptyState = ({ title, icon, message, action, className }: EmptyStateProps
         {icon}
       </span>
     ) : null}
-    <p className="text-heading text-ink">{title}</p>
+    <Title className="text-heading text-ink">{title}</Title>
     {message ? <p className="max-w-sm text-body text-ink-secondary">{message}</p> : null}
     {action ? <div className="mt-3">{action}</div> : null}
   </div>

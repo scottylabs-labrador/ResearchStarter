@@ -6,6 +6,8 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Tag from "../Tag";
 import Button from "../ui/Button";
 import { Meta, MetaRow } from "../ui/Meta";
+import { cx } from "../ui/cx";
+import { linkUnderline } from "../ui/linkClass";
 
 interface InfoPageHeaderProps {
   title: string;
@@ -44,17 +46,17 @@ const InfoPageHeader: React.FC<InfoPageHeaderProps> = ({
   return (
     <header className="mb-10 mt-6">
       {eyebrow.length > 0 ? (
-        <MetaRow className="mb-3">
+        <MetaRow className="mb-3 text-meta">
           {eyebrow.map((part) => (
             <Meta key={part}>{part}</Meta>
           ))}
         </MetaRow>
       ) : null}
 
-      <h1 className="mb-3 text-display text-ink">{title}</h1>
+      <h1 className="mb-3 text-title text-ink sm:text-display">{title}</h1>
 
       {hasSubtitle ? (
-        <MetaRow className="mb-5 text-[15px] text-ink-secondary">
+        <MetaRow className="mb-5 text-lead text-ink-secondary">
           {contacts.length > 0 ? (
             <span>
               {contacts.map(([name, andrewId], i) => (
@@ -62,7 +64,7 @@ const InfoPageHeader: React.FC<InfoPageHeaderProps> = ({
                   {i > 0 ? ", " : null}
                   <Link
                     to={profilePath(andrewId)}
-                    className="rounded font-medium text-ink underline decoration-hairline-strong underline-offset-4 transition-colors duration-150 hover:decoration-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+                    className={cx(linkUnderline, "rounded font-medium text-ink decoration-hairline-strong transition-colors duration-150 hover:decoration-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink")}
                   >
                     {name}
                   </Link>

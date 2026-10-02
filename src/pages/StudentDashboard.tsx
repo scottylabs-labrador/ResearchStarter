@@ -137,8 +137,8 @@ const ProfilePage = () => {
       {saveFailed || loadFailed ? (
         <p role="alert" className="mt-6 rounded-control border border-danger/20 bg-danger-bg px-4 py-3 text-small text-danger">
           {saveFailed
-            ? "Couldn't save your last change, so it was undone. Check your connection and try again."
-            : "Couldn't load your saved profile. Refresh the page before making changes."}
+            ? "Couldn’t save your last change, so it was undone. Check your connection and try again."
+            : "Couldn’t load your saved profile. Refresh the page before making changes."}
         </p>
       ) : null}
 

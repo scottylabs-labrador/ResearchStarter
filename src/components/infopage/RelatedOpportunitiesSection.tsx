@@ -1,5 +1,6 @@
 import React from "react";
 import OpportunityCard from "./OpportunityCard";
+import SectionLabel from "../ui/SectionLabel";
 
 interface Opportunity {
   opportunityName: string;
@@ -17,7 +18,9 @@ interface RelatedOpportunitiesSectionProps {
 
 const RelatedOpportunitiesSection: React.FC<RelatedOpportunitiesSectionProps> = ({ opportunities }) => (
   <section className="mt-14 border-t border-hairline pt-10">
-    <h2 className="mb-5 text-heading text-ink">Related opportunities</h2>
+    <SectionLabel as="h2" className="mb-3">
+      Related opportunities
+    </SectionLabel>
     <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3">
       {opportunities.map((opportunity, index) => (
         <OpportunityCard

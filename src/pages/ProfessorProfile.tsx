@@ -106,7 +106,7 @@ const ProfessorProfile = () => {
   if (error || !professor) {
     return (
       <ProfilePageShell breadcrumbRoot="Professors" breadcrumbCurrent="Not found" breadcrumbIcon={<SchoolOutlinedIcon sx={{ fontSize: 16 }} />}>
-        <EmptyState icon={<ErrorOutlineOutlinedIcon sx={{ fontSize: 20 }} />} title="Professor not found." />
+        <EmptyState icon={<ErrorOutlineOutlinedIcon sx={{ fontSize: 20 }} />} title="Professor not found" titleAs="h1" />
       </ProfilePageShell>
     );
   }

@@ -64,7 +64,7 @@ const ProfileHeader = ({
     summary ??
     ([major, userClass].filter(Boolean).join(" · ") ||
       email ||
-      "Add your major and class so professors know where you're coming from.");
+      "Add your major and class so professors know where you’re coming from.");
   const showProgress = completedSteps !== undefined && totalSteps !== undefined;
   const isComplete = showProgress && completedSteps >= totalSteps;
 
@@ -73,7 +73,7 @@ const ProfileHeader = ({
       {displayImage ? (
         <img src={displayImage} alt="" className="h-full w-full object-cover" />
       ) : (
-        <span aria-hidden="true" className="text-[20px] font-semibold tracking-[-0.01em] text-ink-secondary">
+        <span aria-hidden="true" className="text-[20px] font-semibold leading-none tracking-[0.04em] text-ink-secondary">
           {initialsOf(name ?? "") || "?"}
         </span>
       )}
@@ -113,7 +113,7 @@ const ProfileHeader = ({
       )}
 
       <div className="mt-5 flex flex-wrap items-center gap-x-2.5 gap-y-1">
-        <h1 className="break-words text-[24px] font-semibold leading-8 tracking-[-0.015em] text-ink">{displayName}</h1>
+        <h1 className="break-words text-title text-ink">{displayName}</h1>
         {showProgress ? (
           isComplete ? (
             <Badge tone="positive" icon={<CheckCircleRoundedIcon sx={{ fontSize: 13 }} />}>
@@ -126,7 +126,7 @@ const ProfileHeader = ({
           )
         ) : null}
       </div>
-      <p className="mt-1 text-[15px] leading-6 text-ink-muted">{displaySummary}</p>
+      <p className="mt-1 text-lead text-ink-muted">{displaySummary}</p>
       {/* Same left edge as everything above, at every width; the gap matches the avatar-to-name gap. */}
       {action ? <div className="mt-5 flex flex-wrap items-center gap-2">{action}</div> : null}
     </header>

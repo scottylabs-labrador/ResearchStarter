@@ -331,7 +331,7 @@ const FilterPage = () => {
                   if (scroller && scroller.scrollTop > 0) scroller.scrollTo({ top: 0 });
                 }}
                 onBlur={() => setSearchFocused(false)}
-                placeholder="Search for research opportunities..."
+                placeholder="Search for research opportunities…"
                 aria-label="Search research opportunities"
                 icon={<SearchOutlinedIcon sx={{ fontSize: 18 }} />}
                 trailing={!searchFocused && input === "" ? <Kbd>/</Kbd> : null}

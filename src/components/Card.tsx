@@ -145,7 +145,7 @@ const Card = ({ research, showApplyButton, onApply, showBookmark = true, actions
           ) : null}
           {research.paidUnpaid ? (
             matchesCompensation(research.paidUnpaid, "Paid") ? (
-              <Badge tone="positive" icon={<PaidOutlinedIcon sx={{ fontSize: 14 }} />}>
+              <Badge tone="positive" className="font-mono" icon={<PaidOutlinedIcon sx={{ fontSize: 14 }} />}>
                 {research.paidUnpaid}
               </Badge>
             ) : (
@@ -156,7 +156,7 @@ const Card = ({ research, showApplyButton, onApply, showBookmark = true, actions
       ) : null}
 
       {research.description ? (
-        <p className="mb-3 line-clamp-3 max-w-[80ch] text-body text-ink-secondary">{research.description}</p>
+        <p className="mb-3 line-clamp-3 max-w-measure text-body text-ink-secondary">{research.description}</p>
       ) : null}
 
       {allKeywords.length > 0 || showApplyButton ? (

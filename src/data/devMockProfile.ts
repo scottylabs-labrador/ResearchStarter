@@ -21,7 +21,7 @@ const DEV_MOCK_PROFILE: StudentProfile = {
   class: "Junior",
   colleges: ["Dietrich College of Humanities & Social Sciences"],
   departments: ["Information Systems"],
-  bio: "I'm interested in how people make decisions with AI tools, and I'd like to spend next semester helping a lab run user studies. I've done a little front-end work and I'm comfortable with Python and R.",
+  bio: "I’m interested in how people make decisions with AI tools, and I’d like to spend next semester helping a lab run user studies. I’ve done a little front-end work and I’m comfortable with Python and R.",
   interests: ["Human-Computer Interaction", "Machine Learning", "Accessibility", "Data Visualization"],
   experiences: [
     {

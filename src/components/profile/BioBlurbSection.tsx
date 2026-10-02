@@ -49,7 +49,7 @@ const BioBlurbSection: React.FC<BioBlurbSectionProps> = ({ initialBio = "", onSa
         <Surface className="p-4">
           <textarea
             aria-label="Bio"
-            className={cx(fieldClass, "resize-none text-[15px] leading-7")}
+            className={cx(fieldClass, "resize-none text-lead")}
             rows={5}
             value={currentBio}
             onChange={(e) => setCurrentBio(e.target.value)}
@@ -71,7 +71,7 @@ const BioBlurbSection: React.FC<BioBlurbSectionProps> = ({ initialBio = "", onSa
         </Surface>
       ) : initialBio ? (
         <Surface className="px-5 py-4">
-          <p className="w-full whitespace-pre-wrap text-[15px] leading-7 text-ink-secondary">{initialBio}</p>
+          <p className="w-full whitespace-pre-wrap text-lead text-ink-secondary">{initialBio}</p>
         </Surface>
       ) : canEdit ? (
         <Surface className="flex flex-col items-start gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">

@@ -254,11 +254,11 @@ const InfoPage: React.FC = () => {
             About this opportunity
           </SectionLabel>
           {info.description ? (
-            <p className="max-w-prose whitespace-pre-line break-words text-[15px] leading-[1.7] text-ink-secondary">
+            <p className="max-w-measure whitespace-pre-line break-words text-lead text-ink-secondary">
               {info.description}
             </p>
           ) : (
-            <p className="text-body italic text-ink-muted">No description available.</p>
+            <p className="text-body text-ink-muted">No description available.</p>
           )}
         </section>
 

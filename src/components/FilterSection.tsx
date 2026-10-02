@@ -3,6 +3,8 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import CheckIcon from "@mui/icons-material/Check";
 import { departmentOptions } from "../FilterData";
 import Button from "./ui/Button";
+import { cx } from "./ui/cx";
+import { linkHoverUnderline } from "./ui/linkClass";
 import SectionLabel from "./ui/SectionLabel";
 import SegmentedControl from "./ui/SegmentedControl";
 
@@ -72,7 +74,7 @@ const ResetButton = ({ onClick, label }: { onClick: () => void; label: string })
     type="button"
     onClick={onClick}
     aria-label={label}
-    className="rounded px-1 text-meta font-medium text-accent-strong underline-offset-2 transition-colors duration-150 hover:text-accent-strong hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+    className={cx(linkHoverUnderline, "rounded px-1 text-meta font-medium text-accent-strong transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent")}
   >
     Reset
   </button>

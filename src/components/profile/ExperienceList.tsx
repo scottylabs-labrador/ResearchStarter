@@ -136,7 +136,7 @@ const ExperienceList = ({ experiences, onChange }: ExperienceListProps) => {
                 >
                   <span
                     aria-hidden="true"
-                    className="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-[8px] border border-hairline bg-surface-muted text-[12px] font-semibold text-ink-secondary"
+                    className="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-[8px] border border-hairline bg-surface-muted text-[12px] font-semibold leading-none text-ink-secondary"
                   >
                     {initial || <WorkOutlineOutlinedIcon sx={{ fontSize: 14 }} />}
                   </span>

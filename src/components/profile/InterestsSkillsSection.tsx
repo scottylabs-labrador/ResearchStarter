@@ -39,7 +39,7 @@ const InterestsSkillsSection = ({ items = [], onAddItem, onRemoveItem }: Interes
 
   return (
     <AboutSection
-      title="Interests & skills"
+      title="Interests and skills"
       action={items.length > 0 ? <Meta>{items.length} added</Meta> : null}
     >
       <Surface className="flex flex-wrap items-center gap-1.5 p-4">
@@ -63,7 +63,7 @@ const InterestsSkillsSection = ({ items = [], onAddItem, onRemoveItem }: Interes
             }}
             placeholder="Type and press Enter"
             autoFocus
-            className="h-[26px] w-[180px] rounded-chip border border-accent bg-surface px-2 text-small text-ink outline-none ring-2 ring-accent/15 placeholder:text-ink-muted"
+            className="h-[26px] w-[180px] rounded-chip border border-accent bg-surface px-2 text-[16px] text-ink sm:text-small outline-none ring-2 ring-accent/15 placeholder:text-ink-muted"
           />
         ) : (
           <button type="button" className={chipButton} onClick={() => setAdding(true)}>

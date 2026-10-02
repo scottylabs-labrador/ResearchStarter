@@ -13,6 +13,8 @@ import { contactEmail } from "../../lib/opportunities";
 import Surface from "../ui/Surface";
 import SectionLabel from "../ui/SectionLabel";
 import DetailsTable, { DetailRow } from "../ui/DetailsTable";
+import { cx } from "../ui/cx";
+import { linkHoverUnderline } from "../ui/linkClass";
 
 interface InfoSidebarProps {
   info: ResearchType;
@@ -67,7 +69,7 @@ const InfoSidebar: React.FC<InfoSidebarProps> = ({ info }) => {
                 <p className="text-small font-medium text-ink">{name}</p>
                 <a
                   href={`mailto:${contactEmail(andrewId)}`}
-                  className="break-all font-mono text-meta text-ink-secondary underline-offset-2 hover:text-ink hover:underline"
+                  className={cx(linkHoverUnderline, "break-all font-mono text-meta text-ink-secondary hover:text-ink")}
                 >
                   {contactEmail(andrewId)}
                 </a>
@@ -90,7 +92,7 @@ const InfoSidebar: React.FC<InfoSidebarProps> = ({ info }) => {
                 href={link.startsWith("http") ? link : `https://${link}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex min-w-0 items-center gap-1.5 font-mono text-meta text-ink-secondary hover:text-ink hover:underline"
+                className={cx(linkHoverUnderline, "flex min-w-0 items-center gap-1.5 font-mono text-meta text-ink-secondary hover:text-ink")}
               >
                 <span className="truncate">{link}</span>
                 <OpenInNewOutlinedIcon sx={{ fontSize: 13 }} className="shrink-0" />

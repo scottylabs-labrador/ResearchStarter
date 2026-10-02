@@ -1,6 +1,8 @@
 import React from "react";
 import Surface from "../ui/Surface";
 import Avatar from "../ui/Avatar";
+import { cx } from "../ui/cx";
+import { linkHoverUnderline } from "../ui/linkClass";
 
 interface ContactCardProps {
   headshotUrl: string;
@@ -22,7 +24,7 @@ const ContactCard: React.FC<ContactCardProps> = ({ headshotUrl, title, departmen
     </div>
     <a
       href={`mailto:${email}`}
-      className="truncate border-t border-hairline pt-3 font-mono text-meta text-ink-secondary hover:text-ink hover:underline"
+      className={cx(linkHoverUnderline, "truncate border-t border-hairline pt-3 font-mono text-meta text-ink-secondary hover:text-ink")}
     >
       {email}
     </a>
