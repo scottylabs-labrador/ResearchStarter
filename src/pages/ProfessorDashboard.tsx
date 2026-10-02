@@ -283,7 +283,7 @@ const ProfessorDashboard = () => {
                 actions={
                   <IconButton
                     size="sm"
-                    className="-my-1 -me-1.5"
+                    className="-my-1 -me-2.5"
                     aria-label={`Delete ${research.projectTitle}`}
                     title="Delete listing"
                     onClick={() => setPendingDelete(research)}

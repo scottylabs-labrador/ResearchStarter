@@ -104,7 +104,7 @@ const ExperienceList = ({ experiences, onChange }: ExperienceListProps) => {
       title="Experience"
       action={
         experiences.length > 0 ? (
-          <Button size="sm" variant="ghost" icon={<AddOutlinedIcon sx={{ fontSize: 15 }} />} onClick={() => openEditor({ mode: "add" }, emptyDraft)}>
+          <Button size="sm" variant="ghost" className="-my-1 -me-3" icon={<AddOutlinedIcon sx={{ fontSize: 15 }} />} onClick={() => openEditor({ mode: "add" }, emptyDraft)}>
             Add
           </Button>
         ) : null

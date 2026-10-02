@@ -38,7 +38,7 @@ const BioBlurbSection: React.FC<BioBlurbSectionProps> = ({ initialBio = "", onSa
   const canEdit = Boolean(onSave);
   const editAction =
     canEdit && !isEditing && initialBio ? (
-      <Button size="sm" variant="ghost" icon={<EditOutlinedIcon sx={{ fontSize: 15 }} />} onClick={() => setIsEditing(true)}>
+      <Button size="sm" variant="ghost" className="-my-1 -me-3" icon={<EditOutlinedIcon sx={{ fontSize: 15 }} />} onClick={() => setIsEditing(true)}>
         Edit
       </Button>
     ) : null;

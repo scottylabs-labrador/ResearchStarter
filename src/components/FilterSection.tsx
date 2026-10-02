@@ -57,11 +57,11 @@ interface FilterCheckboxProps {
 }
 
 const FilterCheckbox = ({ label, checked, onChange }: FilterCheckboxProps) => (
-  <label className="flex min-h-[32px] cursor-pointer items-start gap-2.5 rounded-[8px] px-2 py-[5px] text-body text-ink-secondary transition-colors duration-150 hover:bg-surface-muted hover:text-ink">
+  <label className="flex min-h-[32px] cursor-pointer items-start gap-2.5 rounded-[8px] px-2 py-1.5 text-body text-ink-secondary transition-colors duration-150 hover:bg-surface-muted hover:text-ink">
     <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="peer sr-only" />
     <span
       aria-hidden="true"
-      className="mt-[3px] flex h-[16px] w-[16px] shrink-0 items-center justify-center rounded-[4px] border border-hairline-strong bg-surface transition-colors duration-150 peer-checked:border-accent peer-checked:bg-accent peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-canvas"
+      className="mt-0.5 flex h-[16px] w-[16px] shrink-0 items-center justify-center rounded-[4px] border border-hairline-strong bg-surface transition-colors duration-150 peer-checked:border-accent peer-checked:bg-accent peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-canvas"
     >
       {checked ? <CheckIcon sx={{ fontSize: 12 }} className="text-white" /> : null}
     </span>
@@ -143,7 +143,8 @@ const FilterSection = ({
       aria-label="Filters"
       className="scrollbar-minimal fixed bottom-0 left-0 top-nav z-10 w-[296px] overflow-y-auto border-r border-hairline bg-canvas"
     >
-      <div className="px-6 pb-5 pt-[26px]">
+      {/* pt puts the Filters heading on the Search title's baseline. */}
+      <div className="px-6 pb-5 pt-[30px]">
         <div className="mb-5 flex items-center justify-between px-2">
           <h2 className="text-heading text-ink">Filters</h2>
           <Button
@@ -151,7 +152,7 @@ const FilterSection = ({
             size="sm"
             variant="ghost"
             aria-label="Hide filters"
-            className="ps-2.5"
+            className="-me-3 ps-2.5"
             icon={<KeyboardArrowLeftIcon sx={{ fontSize: 16, mx: "-4px" }} />}
             onClick={onToggleVisible}
           >

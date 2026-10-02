@@ -33,7 +33,7 @@ html {
   /* Geist ships no italic and only 400–600; never let the browser fake a face. */
   font-synthesis: none;
   /* The nav is always on screen, so anything scrolled into view (keyboard focus, anchors) stops below it. */
-  scroll-padding-top: calc(var(--nav-h) + 1rem);
+  scroll-padding-top: calc(var(--nav-h) + 16px);
 }
 
 @layer base {

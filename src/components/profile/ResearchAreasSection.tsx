@@ -12,7 +12,7 @@ const ResearchAreasSection = ({ tags }: ResearchAreasSectionProps) => (
     {tags.length > 0 ? (
       <Surface className="flex flex-wrap gap-1.5 p-4">
         {tags.map((tag) => (
-          <Tag key={tag} keyword={tag} className="h-[26px]" />
+          <Tag key={tag} keyword={tag} />
         ))}
       </Surface>
     ) : (

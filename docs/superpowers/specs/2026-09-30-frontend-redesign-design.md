@@ -363,3 +363,12 @@ These record direction changes made after the plan was executed (commit 4be5908,
     - **Body, phones:** Details comes right after the header, then the reading sections, then Contact.
     - **Contact:** one card per person, with a decorative avatar, the name and a mailto link. The separate bottom Contacts section (`ContactsSection`, `ContactCard`) is deleted: it repeated the name and email, and labelled every contact with the listing's department.
     - **Section labels** carry no icons, matching the rest of the app.
+25. **Spacing pass.**
+    - **Grid:** spacing and radii are whole pixels on a 4px grid. `theme.spacing` is redefined in pixels (`p-4` = 16px, as in standard Tailwind), and radii are pixels too. With the 14px root, Tailwind's rem steps had landed on fractions (10.5px, 17.5px) for about 640 rendered values. 1–3px details (hairline offsets, the avatar's concentric ring, optical nudges) are the only odd values.
+    - **Page tops:** the first ink on every page sits 32px under the nav (search title, profile breadcrumb, opportunity Back link). The sidebar's "Filters" heading shares the Search title's baseline.
+    - **Optical edges:** alignment is measured on ink, not boxes.
+      - The Back arrow, breadcrumb icons and the 36px opportunity title are nudged by their glyphs' side bearing, so they meet the column edge.
+      - Ghost buttons in label rows let their padding hang past the content edge, so their text ends where the cards and counts do. They also take `-my-1`, so they don't stretch the 24px label row.
+    - **Cards:** cards use `pt-4` against `px-5 pb-5`, because the title's leading already adds air above its capitals. Card icon buttons pull in to their glyph. Seen padding is about 21px on every side.
+    - **Label rhythm:** every section label sits 15px (±1) above the first ink of its content. Labels take `mb-2` before boxed content and `mb-0.5` before plain text, whose leading supplies the rest.
+    - **Chips:** tags, chips and the inline add-interest input are all 24px tall.

@@ -201,14 +201,14 @@ const InfoPage: React.FC = () => {
   };
 
   const backButton = (
-    <Button variant="ghost" size="sm" className="-ml-3" icon={<ArrowBackIcon sx={{ fontSize: 16 }} />} onClick={handleBackClick}>
+    <Button variant="ghost" size="sm" className="-ml-[14px]" icon={<ArrowBackIcon sx={{ fontSize: 16 }} />} onClick={handleBackClick}>
       Back
     </Button>
   );
 
   if (loading) {
     return (
-      <main className="mx-auto max-w-6xl px-8 pb-16 pt-8">
+      <main className="mx-auto max-w-6xl px-8 pb-16 pt-[22px]">
         {backButton}
         <div className="flex min-h-[50vh] items-center justify-center">
           <Spinner label="Loading research information" />
@@ -219,7 +219,7 @@ const InfoPage: React.FC = () => {
 
   if (error || !info) {
     return (
-      <main className="mx-auto max-w-6xl px-8 pb-16 pt-8">
+      <main className="mx-auto max-w-6xl px-8 pb-16 pt-[22px]">
         {backButton}
         <EmptyState
           className="mt-8"
@@ -231,8 +231,9 @@ const InfoPage: React.FC = () => {
     );
   }
 
+  // Every page's first line of ink sits 32px under the nav; the Back button's box adds 10px above its text.
   return (
-    <main className="mx-auto max-w-6xl px-8 pb-16 pt-8">
+    <main className="mx-auto max-w-6xl px-8 pb-16 pt-[22px]">
       {backButton}
 
       <InfoPageHeader
@@ -252,7 +253,7 @@ const InfoPage: React.FC = () => {
 
         <div className="flex min-w-0 flex-col gap-10 lg:col-start-1 lg:row-span-2 lg:row-start-1">
           <section>
-            <SectionLabel as="h2" className="mb-3">
+            <SectionLabel as="h2" className="mb-0.5">
               About this opportunity
             </SectionLabel>
             {info.description ? (
@@ -266,7 +267,7 @@ const InfoPage: React.FC = () => {
 
           {info.prereqs && info.prereqs.length > 0 ? (
             <section>
-              <SectionLabel as="h2" className="mb-3">
+              <SectionLabel as="h2" className="mb-0.5">
                 Prerequisites
               </SectionLabel>
               <ul className="max-w-measure list-disc space-y-1 pl-5 text-lead text-ink-secondary marker:text-ink-muted">
@@ -279,7 +280,7 @@ const InfoPage: React.FC = () => {
 
           {info.relevantLinks && info.relevantLinks.length > 0 ? (
             <section>
-              <SectionLabel as="h2" className="mb-3">
+              <SectionLabel as="h2" className="mb-0.5">
                 Relevant links
               </SectionLabel>
               <ul className="space-y-2">

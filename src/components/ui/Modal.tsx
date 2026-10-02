@@ -43,7 +43,7 @@ const Modal = ({ title, children, footer, onClose, size = "sm", className }: Mod
         onClose();
       }}
       className={cx(
-        "m-auto w-[calc(100%-2rem)] bg-transparent p-0 text-ink backdrop:animate-fadeIn backdrop:bg-ink/40 backdrop:backdrop-blur-sm motion-reduce:backdrop:animate-none",
+        "m-auto w-[calc(100%-32px)] bg-transparent p-0 text-ink backdrop:animate-fadeIn backdrop:bg-ink/40 backdrop:backdrop-blur-sm motion-reduce:backdrop:animate-none",
         sizeClass[size]
       )}
     >

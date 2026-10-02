@@ -279,7 +279,7 @@ const FilterPage = () => {
         onScroll={handleScroll}
       >
         <div className={resultsColumn}>
-          <header className="pb-[calc(1rem+8px)] pt-6">
+          <header className="pb-6 pt-7">
             <div className="mb-4 flex items-center gap-3">
               <div className="flex min-w-0 items-baseline gap-3">
                 <h1 className="text-title text-ink">Search</h1>

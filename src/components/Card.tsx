@@ -88,7 +88,8 @@ const Card = ({ research, showApplyButton, onApply, showBookmark = true, actions
   ];
 
   return (
-    <Surface as="article" interactive className="relative p-[20px]">
+    // pt-4 rather than 5: the title's leading already adds air above its capitals, so the top reads as wide as the sides.
+    <Surface as="article" interactive className="relative px-5 pb-5 pt-4">
       <div className={`mb-1 flex justify-between gap-4 ${research.timeAdded ? "items-baseline" : "items-start"}`}>
         <h3 className="min-w-0 break-words text-card-title text-ink">
           <Link
@@ -103,7 +104,7 @@ const Card = ({ research, showApplyButton, onApply, showBookmark = true, actions
           {showBookmark ? (
             <IconButton
               size="sm"
-              className="-my-1 -me-1.5"
+              className="-my-1 -me-2.5"
               aria-label={bookmark ? "Remove bookmark" : "Bookmark"}
               pressed={bookmark}
               onClick={bookmarkOpportunity}

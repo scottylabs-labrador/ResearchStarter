@@ -35,11 +35,12 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({
   const dateLine = [semester, date].filter(Boolean).join(" · ");
 
   return (
-    <Surface as="article" interactive className="flex flex-col p-[20px]">
+    <Surface as="article" interactive className="flex flex-col px-5 pb-5 pt-4">
       <div className="mb-2 flex items-start justify-between gap-3">
         <h3 className="flex-1 text-card-title text-ink">{opportunityName}</h3>
         <IconButton
           size="sm"
+          className="-my-1 -me-2.5"
           aria-label={isBookmarked ? "Remove bookmark" : "Bookmark"}
           pressed={isBookmarked}
           onClick={onBookmarkToggle}

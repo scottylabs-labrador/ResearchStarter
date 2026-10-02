@@ -1,5 +1,10 @@
 const token = (name) => `rgb(var(--${name}) / <alpha-value>)`;
 
+// Spacing on a 4px grid in pixels (Tailwind's usual values: p-4 = 16px). Tailwind's rem steps would land on
+// fractions like 10.5px and 17.5px with the 14px root.
+const STEPS = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 72, 80, 96];
+const spacing = { px: "1px", 0: "0px", ...Object.fromEntries(STEPS.map((step) => [step, `${step * 4}px`])) };
+
 /** @type {import('tailwindcss').Config} */
 export default {
   mode: "jit",
@@ -8,6 +13,7 @@ export default {
     hoverOnlyWhenSupported: true,
   },
   theme: {
+    spacing,
     extend: {
       fontFamily: {
         sans: ["Geist", "ui-sans-serif", "system-ui", "sans-serif"],
@@ -44,6 +50,12 @@ export default {
         danger: { DEFAULT: token("danger"), bg: token("danger-bg") },
       },
       borderRadius: {
+        // Pixel radii for the same reason as spacing.
+        sm: "2px",
+        DEFAULT: "4px",
+        md: "6px",
+        lg: "8px",
+        xl: "12px",
         surface: "14px",
         control: "10px",
         chip: "6px",

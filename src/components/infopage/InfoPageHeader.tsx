@@ -37,7 +37,7 @@ const InfoPageHeader: React.FC<InfoPageHeaderProps> = ({
 
   return (
     <header className="mb-10 mt-6">
-      <h1 className="mb-3 text-title text-ink sm:text-display">{title}</h1>
+      <h1 className="-ms-0.5 mb-3 text-title text-ink sm:text-display">{title}</h1>
 
       {hasSubtitle ? (
         <MetaRow className="mb-5 text-lead text-ink-secondary">
