@@ -53,7 +53,8 @@ const NavBar = () => {
 
   return (
     <>
-      <nav className="fixed inset-x-0 top-0 z-20 h-nav border-b border-hairline bg-surface">
+      {/* The hairline is an inset shadow, not a border, so items centre in the full 56px and land on whole pixels. */}
+      <nav className="fixed inset-x-0 top-0 z-20 h-nav bg-surface shadow-[inset_0_-1px_0_rgb(var(--hairline))]">
         <div className="grid h-full grid-cols-[1fr_auto_1fr] items-center px-8">
           <NavLink to="/" aria-label="CMU Research home" className={cx("flex items-center justify-self-start rounded-[6px]", focusRing)}>
             <Logo />
