@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
-import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
-import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
-import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
 import DetailsTable, { DetailRow } from "../ui/DetailsTable";
 import IconButton from "../ui/IconButton";
 import Input from "../ui/Input";
 import { cx } from "../ui/cx";
+import { AccountBalanceIcon, BadgeIcon, MailIcon, SchoolIcon } from "../ui/icons";
 import { linkUnderline } from "../ui/linkClass";
 
 interface ProfileDetailsProps {
@@ -63,12 +60,12 @@ const ProfileDetails = ({ major, class: userClass, colleges, email, onMajorChang
   );
 
   const rows: DetailRow[] = [
-    { label: "Major", value: majorCell, icon: <SchoolOutlinedIcon sx={{ fontSize: 15 }} /> },
-    { label: "Class", value: userClass || notSet, icon: <BadgeOutlinedIcon sx={{ fontSize: 15 }} /> },
+    { label: "Major", value: majorCell, icon: <SchoolIcon size={11} /> },
+    { label: "Class", value: userClass || notSet, icon: <BadgeIcon size={12} /> },
     {
       label: "College",
       value: colleges.length > 0 ? colleges.join(", ") : notSet,
-      icon: <AccountBalanceOutlinedIcon sx={{ fontSize: 15 }} />,
+      icon: <AccountBalanceIcon size={12} />,
     },
     {
       label: "Email",
@@ -82,7 +79,7 @@ const ProfileDetails = ({ major, class: userClass, colleges, email, onMajorChang
       ) : (
         notSet
       ),
-      icon: <MailOutlinedIcon sx={{ fontSize: 15 }} />,
+      icon: <MailIcon size={10.5} />,
     },
   ];
 

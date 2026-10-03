@@ -1,8 +1,6 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
-import FilterListOutlinedIcon from "@mui/icons-material/FilterListOutlined";
 import SearchOffOutlinedIcon from "@mui/icons-material/SearchOffOutlined";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FilterSection from "../components/FilterSection";
 import Card from "../components/Card";
 import Tag from "../components/Tag";
@@ -14,6 +12,7 @@ import Spinner from "../components/ui/Spinner";
 import EmptyState from "../components/ui/EmptyState";
 import SegmentedControl from "../components/ui/SegmentedControl";
 import { cx } from "../components/ui/cx";
+import { FilterListIcon, SearchIcon } from "../components/ui/icons";
 import { useSlashToFocus } from "../components/ui/useSlashToFocus";
 import { ResearchType } from "../DataTypes";
 import { matchesCompensation } from "../utils";
@@ -319,8 +318,8 @@ const FilterPage = () => {
               {!sidebarVisible && (
                 <Button
                   ref={showFiltersRef}
-                  className="shrink-0 ps-3"
-                  icon={<FilterListOutlinedIcon sx={{ fontSize: 18 }} />}
+                  className="shrink-0"
+                  icon={<FilterListIcon size={9} />}
                   aria-label={activeFilters.length > 0 ? `Show filters, ${activeFilters.length} active` : "Show filters"}
                   onClick={() => setFiltersVisible(true)}
                 >
@@ -346,7 +345,7 @@ const FilterPage = () => {
                 onBlur={() => setSearchFocused(false)}
                 placeholder="Search for research opportunities…"
                 aria-label="Search research opportunities"
-                icon={<SearchOutlinedIcon sx={{ fontSize: 18 }} />}
+                icon={<SearchIcon size={13} />}
                 trailing={!searchFocused && input === "" ? <Kbd>/</Kbd> : null}
               />
             </div>

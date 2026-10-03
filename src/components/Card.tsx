@@ -2,11 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkIconUnfilled from "@mui/icons-material/BookmarkBorderOutlined";
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
-import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import { ResearchType } from "../DataTypes";
 import { matchesCompensation } from "../utils";
 import { useBookmark } from "../lib/useBookmark";
@@ -17,6 +12,7 @@ import Button from "./ui/Button";
 import Badge from "./ui/Badge";
 import { Meta, MetaRow } from "./ui/Meta";
 import { cx } from "./ui/cx";
+import { AccountBalanceIcon, ArrowForwardIcon, CalendarIcon, MenuBookIcon, PaidIcon, PersonIcon } from "./ui/icons";
 
 interface CardProps {
   research: ResearchType;
@@ -28,7 +24,8 @@ interface CardProps {
   actions?: React.ReactNode;
 }
 
-const iconClass = "shrink-0 text-ink-muted";
+// Lifted 1px onto the capitals of the 13px text beside them.
+const iconClass = "shrink-0 -translate-y-px text-ink-muted";
 
 const Card = ({ research, showApplyButton, onApply, showBookmark = true, actions }: CardProps) => {
   const bookmark = useBookmark(research._id, showBookmark);
@@ -74,20 +71,20 @@ const Card = ({ research, showApplyButton, onApply, showBookmark = true, actions
       {professorName || college || research.position ? (
         <MetaRow className="mb-1.5 text-small text-ink-secondary">
           {professorName ? (
-            <span className="inline-flex min-w-0 items-center gap-1.5">
-              <PersonOutlineOutlinedIcon sx={{ fontSize: 15 }} className={iconClass} />
+            <span className="inline-flex min-w-0 items-center gap-[5px]">
+              <PersonIcon size={12} className={iconClass} />
               {professorName}
             </span>
           ) : null}
           {college ? (
-            <span className="inline-flex min-w-0 items-center gap-1.5">
-              <AccountBalanceOutlinedIcon sx={{ fontSize: 15 }} className={iconClass} />
+            <span className="inline-flex min-w-0 items-center gap-[5px]">
+              <AccountBalanceIcon size={12} className={iconClass} />
               {college}
             </span>
           ) : null}
           {research.position ? (
-            <span className="inline-flex min-w-0 items-center gap-1.5">
-              <MenuBookOutlinedIcon sx={{ fontSize: 15 }} className={iconClass} />
+            <span className="inline-flex min-w-0 items-center gap-[5px]">
+              <MenuBookIcon size={10.5} className={iconClass} />
               {research.position}
             </span>
           ) : null}
@@ -98,15 +95,15 @@ const Card = ({ research, showApplyButton, onApply, showBookmark = true, actions
         // Phones have no room beside the title, so there the posted date joins this row.
         <div className={cx("mb-3 flex flex-wrap items-center gap-2", !hasDateRow && "sm:hidden")}>
           {research.anticipatedEndDate ? (
-            <Meta icon={<CalendarTodayOutlinedIcon sx={{ fontSize: 14 }} />}>{research.anticipatedEndDate}</Meta>
+            <Meta icon={<CalendarIcon size={11.5} />}>{research.anticipatedEndDate}</Meta>
           ) : null}
           {research.paidUnpaid ? (
             matchesCompensation(research.paidUnpaid, "Paid") ? (
-              <Badge tone="positive" className="font-mono" icon={<PaidOutlinedIcon sx={{ fontSize: 14 }} />}>
+              <Badge tone="positive" className="font-mono" icon={<PaidIcon size={11} />}>
                 {research.paidUnpaid}
               </Badge>
             ) : (
-              <Meta icon={<PaidOutlinedIcon sx={{ fontSize: 14 }} />}>{research.paidUnpaid}</Meta>
+              <Meta icon={<PaidIcon size={11} />}>{research.paidUnpaid}</Meta>
             )
           ) : null}
           {posted ? <Meta className="sm:hidden">{posted}</Meta> : null}
@@ -128,7 +125,7 @@ const Card = ({ research, showApplyButton, onApply, showBookmark = true, actions
             <Button
               size="sm"
               className="relative z-10 shrink-0"
-              iconRight={<span aria-hidden="true">→</span>}
+              iconRight={<ArrowForwardIcon size={10} />}
               onClick={() => onApply?.(research._id)}
             >
               Apply

@@ -1,12 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
-import BookmarkIconUnfilled from "@mui/icons-material/BookmarkBorderOutlined";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Tag from "../Tag";
 import Button from "../ui/Button";
 import { MetaRow } from "../ui/Meta";
 import { cx } from "../ui/cx";
+import { ArrowForwardIcon, BookmarkBorderIcon, BookmarkIcon } from "../ui/icons";
 import { linkUnderline } from "../ui/linkClass";
 
 interface InfoPageHeaderProps {
@@ -70,7 +68,7 @@ const InfoPageHeader: React.FC<InfoPageHeaderProps> = ({
       ) : null}
 
       <div className="flex items-center gap-2">
-        <Button variant="primary" onClick={onApplyClick} iconRight={<ArrowForwardIcon sx={{ fontSize: 16 }} />}>
+        <Button variant="primary" onClick={onApplyClick} iconRight={<ArrowForwardIcon size={10} />}>
           Apply now
         </Button>
         <Button
@@ -78,9 +76,9 @@ const InfoPageHeader: React.FC<InfoPageHeaderProps> = ({
           aria-pressed={isBookmarked}
           icon={
             isBookmarked ? (
-              <BookmarkIcon sx={{ fontSize: 16 }} />
+              <BookmarkIcon size={14.5} />
             ) : (
-              <BookmarkIconUnfilled sx={{ fontSize: 16 }} className="text-ink-muted" />
+              <BookmarkBorderIcon size={14.5} className="text-ink-muted" />
             )
           }
         >

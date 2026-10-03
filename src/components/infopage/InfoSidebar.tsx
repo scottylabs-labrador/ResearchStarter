@@ -1,8 +1,3 @@
-import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
-import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
-import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
-import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import { ResearchType } from "../../DataTypes";
 import { contactEmail } from "../../lib/opportunities";
 import Avatar from "../ui/Avatar";
@@ -10,6 +5,7 @@ import Surface from "../ui/Surface";
 import SectionLabel from "../ui/SectionLabel";
 import DetailsTable, { DetailRow } from "../ui/DetailsTable";
 import { cx } from "../ui/cx";
+import { CalendarIcon, MenuBookIcon, PaidIcon, ScheduleIcon, SchoolIcon } from "../ui/icons";
 import { linkHoverUnderline } from "../ui/linkClass";
 
 // The info page's side column: the listing's facts and who to contact.
@@ -21,13 +17,13 @@ interface InfoDetailsProps {
 
 export const InfoDetails = ({ info, className }: InfoDetailsProps) => {
   const rows: DetailRow[] = [];
-  if (info.position) rows.push({ label: "Position", value: info.position, icon: <MenuBookOutlinedIcon sx={{ fontSize: 14 }} /> });
-  if (info.paidUnpaid) rows.push({ label: "Compensation", value: info.paidUnpaid, icon: <PaidOutlinedIcon sx={{ fontSize: 14 }} /> });
+  if (info.position) rows.push({ label: "Position", value: info.position, icon: <MenuBookIcon size={10.5} /> });
+  if (info.paidUnpaid) rows.push({ label: "Compensation", value: info.paidUnpaid, icon: <PaidIcon size={12} /> });
   if (info.timeCommitment)
-    rows.push({ label: "Time commitment", value: `${info.timeCommitment} hrs / week`, icon: <ScheduleOutlinedIcon sx={{ fontSize: 14 }} /> });
-  if (info.desiredSkillLevel) rows.push({ label: "Skill level", value: info.desiredSkillLevel, icon: <SchoolOutlinedIcon sx={{ fontSize: 14 }} /> });
+    rows.push({ label: "Time commitment", value: `${info.timeCommitment} hrs / week`, icon: <ScheduleIcon size={12} /> });
+  if (info.desiredSkillLevel) rows.push({ label: "Skill level", value: info.desiredSkillLevel, icon: <SchoolIcon size={11} /> });
   if (info.anticipatedEndDate)
-    rows.push({ label: "Anticipated end", value: info.anticipatedEndDate, icon: <CalendarTodayOutlinedIcon sx={{ fontSize: 14 }} /> });
+    rows.push({ label: "Anticipated end", value: info.anticipatedEndDate, icon: <CalendarIcon size={12} /> });
   if (rows.length === 0) return null;
 
   return (

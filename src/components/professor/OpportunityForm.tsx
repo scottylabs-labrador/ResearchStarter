@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useId } from "react";
-import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { ResearchOpportunity } from "../../types/ResearchOpportunity";
 import { collegeOptions, departmentOptions } from "../../FilterData";
@@ -8,6 +7,7 @@ import Button from "../ui/Button";
 import IconButton from "../ui/IconButton";
 import { fieldClass } from "../ui/Input";
 import { cx } from "../ui/cx";
+import { AddIcon } from "../ui/icons";
 
 type FormData = Omit<ResearchOpportunity, "source" | "timeAdded" | "enableApply">;
 
@@ -64,7 +64,7 @@ const TagsField: React.FC<TagsFieldProps> = ({ label, tags, input, onInputChange
             onChange={(e) => onInputChange(e.target.value)}
             onKeyDown={onKeyDown}
           />
-          <Button size="sm" icon={<AddOutlinedIcon sx={{ fontSize: 14 }} />} onClick={onAdd}>
+          <Button size="sm" icon={<AddIcon size={9} />} onClick={onAdd}>
             Add
           </Button>
         </div>
@@ -204,7 +204,7 @@ const OpportunityForm: React.FC<OpportunityFormProps> = ({ initialData, onChange
               />
               {contactEmailError ? <span className="mt-1 text-meta text-danger">{contactEmailError}</span> : null}
             </div>
-            <Button size="sm" className="h-[36px]" icon={<AddOutlinedIcon sx={{ fontSize: 14 }} />} onClick={addContact}>
+            <Button size="sm" className="h-[36px]" icon={<AddIcon size={9} />} onClick={addContact}>
               Add
             </Button>
           </div>

@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import OpenInNewOutlinedIcon from "@mui/icons-material/OpenInNewOutlined";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import { ResearchType } from "../DataTypes";
 import { fetchOpportunities, relatedTo } from "../lib/opportunities";
@@ -15,6 +13,7 @@ import Spinner from "../components/ui/Spinner";
 import EmptyState from "../components/ui/EmptyState";
 import SectionLabel from "../components/ui/SectionLabel";
 import { cx } from "../components/ui/cx";
+import { ArrowBackIcon, OpenInNewIcon } from "../components/ui/icons";
 import { linkHoverUnderline } from "../components/ui/linkClass";
 
 const InfoPage = () => {
@@ -58,7 +57,7 @@ const InfoPage = () => {
   };
 
   const backButton = (
-    <Button variant="ghost" size="sm" className="-ml-[14px]" icon={<ArrowBackIcon sx={{ fontSize: 16 }} />} onClick={() => navigate(-1)}>
+    <Button variant="ghost" size="sm" className="-ml-[11px]" icon={<ArrowBackIcon size={10} />} onClick={() => navigate(-1)}>
       Back
     </Button>
   );
@@ -149,10 +148,10 @@ const InfoPage = () => {
                       href={link.startsWith("http") ? link : `https://${link}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={cx(linkHoverUnderline, "inline-flex max-w-full items-center gap-1.5 font-mono text-meta text-ink-secondary hover:text-ink")}
+                      className={cx(linkHoverUnderline, "inline-flex max-w-full items-center gap-1 font-mono text-meta text-ink-secondary hover:text-ink")}
                     >
                       <span className="truncate">{link}</span>
-                      <OpenInNewOutlinedIcon sx={{ fontSize: 13 }} className="shrink-0" />
+                      <OpenInNewIcon size={9} className="shrink-0 -translate-y-[0.5px]" />
                     </a>
                   </li>
                 ))}

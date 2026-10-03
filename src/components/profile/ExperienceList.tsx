@@ -1,7 +1,4 @@
 import { useEffect, useState } from "react";
-import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
 import { Experience } from "../../types/Experience";
@@ -13,6 +10,7 @@ import Button from "../ui/Button";
 import Modal from "../ui/Modal";
 import { MetaRow } from "../ui/Meta";
 import { cx } from "../ui/cx";
+import { AddIcon, DeleteIcon, EditIcon } from "../ui/icons";
 
 type ExperienceDraft = Omit<Experience, "id">;
 
@@ -104,7 +102,7 @@ const ExperienceList = ({ experiences, onChange }: ExperienceListProps) => {
       title="Experience"
       action={
         experiences.length > 0 ? (
-          <Button size="sm" variant="ghost" className="-my-1 -me-3" icon={<AddOutlinedIcon sx={{ fontSize: 15 }} />} onClick={() => openEditor({ mode: "add" }, emptyDraft)}>
+          <Button size="sm" variant="ghost" className="-my-1 -me-3" icon={<AddIcon size={9} />} onClick={() => openEditor({ mode: "add" }, emptyDraft)}>
             Add
           </Button>
         ) : null
@@ -113,7 +111,7 @@ const ExperienceList = ({ experiences, onChange }: ExperienceListProps) => {
       {experiences.length === 0 ? (
         <Surface className="flex flex-col items-start gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-body text-ink-muted">Labs, internships, and class projects all count.</p>
-          <Button size="sm" icon={<AddOutlinedIcon sx={{ fontSize: 15 }} />} onClick={() => openEditor({ mode: "add" }, emptyDraft)}>
+          <Button size="sm" icon={<AddIcon size={9} />} onClick={() => openEditor({ mode: "add" }, emptyDraft)}>
             Add experience
           </Button>
         </Surface>
@@ -188,11 +186,11 @@ const ExperienceList = ({ experiences, onChange }: ExperienceListProps) => {
                           </div>
                         </div>
                       ) : null}
-                      <div className="-mb-1 -ml-3 mt-4 flex gap-1">
+                      <div className="-mb-1 -ml-[11px] mt-4 flex gap-1">
                         <Button
                           size="sm"
                           variant="ghost"
-                          icon={<EditOutlinedIcon sx={{ fontSize: 15 }} />}
+                          icon={<EditIcon size={12.5} />}
                           onClick={() => openEditor({ mode: "edit", id: exp.id }, toDraft(exp))}
                         >
                           Edit
@@ -201,7 +199,7 @@ const ExperienceList = ({ experiences, onChange }: ExperienceListProps) => {
                           size="sm"
                           variant="ghost"
                           className="hover:text-danger"
-                          icon={<DeleteOutlineOutlinedIcon sx={{ fontSize: 15 }} />}
+                          icon={<DeleteIcon size={13} />}
                           onClick={() => setDeleteId(exp.id)}
                         >
                           Delete

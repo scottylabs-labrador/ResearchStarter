@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import PhotoCameraOutlinedIcon from "@mui/icons-material/PhotoCameraOutlined";
-import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import { initialsOf } from "../ui/Avatar";
 import Badge from "../ui/Badge";
+import { CheckCircleIcon } from "../ui/icons";
 
 interface ProfileHeaderProps {
   profileImage?: string;
@@ -108,7 +108,7 @@ const ProfileHeader = ({
         <h1 className="break-words text-title text-ink">{displayName}</h1>
         {showProgress ? (
           isComplete ? (
-            <Badge tone="positive" icon={<CheckCircleRoundedIcon sx={{ fontSize: 13 }} />}>
+            <Badge tone="positive" icon={<CheckCircleIcon size={11} />}>
               Profile complete
             </Badge>
           ) : (

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import CheckIcon from "@mui/icons-material/Check";
 import { departmentOptions } from "../FilterData";
 import Button from "./ui/Button";
 import { cx } from "./ui/cx";
+import { ChevronLeftIcon } from "./ui/icons";
 import { linkHoverUnderline } from "./ui/linkClass";
 import SectionLabel from "./ui/SectionLabel";
 import SegmentedControl from "./ui/SegmentedControl";
@@ -152,8 +152,8 @@ const FilterSection = ({
             size="sm"
             variant="ghost"
             aria-label="Hide filters"
-            className="-me-3 ps-2.5"
-            icon={<KeyboardArrowLeftIcon sx={{ fontSize: 16, mx: "-4px" }} />}
+            className="-me-3"
+            icon={<ChevronLeftIcon size={8} />}
             onClick={onToggleVisible}
           >
             Hide

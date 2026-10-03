@@ -1,8 +1,6 @@
-import ApartmentOutlinedIcon from "@mui/icons-material/ApartmentOutlined";
-import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
-import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
 import DetailsTable, { DetailRow } from "../ui/DetailsTable";
 import { cx } from "../ui/cx";
+import { AccountBalanceIcon, ApartmentIcon, MailIcon } from "../ui/icons";
 import { linkUnderline } from "../ui/linkClass";
 
 interface ProfessorProfileDetailsProps {
@@ -18,12 +16,12 @@ const ProfessorProfileDetails = ({ college, department, email }: ProfessorProfil
     {
       label: "College",
       value: college.length > 0 ? college.join(", ") : notSet,
-      icon: <AccountBalanceOutlinedIcon sx={{ fontSize: 15 }} />,
+      icon: <AccountBalanceIcon size={12} />,
     },
     {
       label: "Department",
       value: department.length > 0 ? department.join(", ") : notSet,
-      icon: <ApartmentOutlinedIcon sx={{ fontSize: 15 }} />,
+      icon: <ApartmentIcon size={12} />,
     },
     {
       label: "Email",
@@ -37,7 +35,7 @@ const ProfessorProfileDetails = ({ college, department, email }: ProfessorProfil
       ) : (
         notSet
       ),
-      icon: <MailOutlinedIcon sx={{ fontSize: 15 }} />,
+      icon: <MailIcon size={10.5} />,
     },
   ];
 

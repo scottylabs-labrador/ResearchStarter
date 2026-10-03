@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import AboutSection from "./AboutSection";
 import Tag from "../Tag";
 import Surface from "../ui/Surface";
 import { Meta } from "../ui/Meta";
+import { AddIcon } from "../ui/icons";
 
 interface InterestsSkillsSectionProps {
   items?: string[];
@@ -11,8 +11,9 @@ interface InterestsSkillsSectionProps {
   onRemoveItem?: (item: string) => void;
 }
 
+// The plus is lifted 1px to centre on the capitals of the 13px text.
 const chipButton =
-  "inline-flex h-6 items-center gap-1 rounded-chip border border-dashed border-accent/30 px-2 text-small text-accent-strong transition-[background-color,color,border-color,transform] duration-150 ease-out hover:border-accent/50 hover:bg-accent-bg/60 hover:text-accent-strong active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent";
+  "inline-flex h-6 items-center gap-1.5 rounded-chip border border-dashed border-accent/30 px-2 text-small text-accent-strong transition-[background-color,color,border-color,transform] duration-150 ease-out hover:border-accent/50 hover:bg-accent-bg/60 hover:text-accent-strong active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent [&>svg]:-translate-y-px";
 
 const InterestsSkillsSection = ({ items = [], onAddItem, onRemoveItem }: InterestsSkillsSectionProps) => {
   const [adding, setAdding] = useState(false);
@@ -62,7 +63,7 @@ const InterestsSkillsSection = ({ items = [], onAddItem, onRemoveItem }: Interes
           />
         ) : (
           <button type="button" className={chipButton} onClick={() => setAdding(true)}>
-            <AddOutlinedIcon sx={{ fontSize: 14 }} />
+            <AddIcon size={9} />
             {items.length > 0 ? "Add" : "Add an interest or skill"}
           </button>
         )}

@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
-import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
 import { ProfessorType, ResearchType } from "../DataTypes";
@@ -20,6 +19,7 @@ import Alert from "../components/ui/Alert";
 import { ButtonLink } from "../components/ui/Button";
 import Spinner from "../components/ui/Spinner";
 import EmptyState from "../components/ui/EmptyState";
+import { SchoolIcon } from "../components/ui/icons";
 import { Meta } from "../components/ui/Meta";
 
 const ProfessorProfile = () => {
@@ -106,7 +106,7 @@ const ProfessorProfile = () => {
 
   if (error || !professor) {
     return (
-      <ProfilePageShell breadcrumbRoot="Professors" breadcrumbCurrent="Not found" breadcrumbIcon={<SchoolOutlinedIcon sx={{ fontSize: 16 }} />}>
+      <ProfilePageShell breadcrumbRoot="Professors" breadcrumbCurrent="Not found" breadcrumbIcon={<SchoolIcon size={12} />}>
         <EmptyState icon={<ErrorOutlineOutlinedIcon sx={{ fontSize: 20 }} />} title="Professor not found" titleAs="h1" />
       </ProfilePageShell>
     );
@@ -118,7 +118,7 @@ const ProfessorProfile = () => {
     <ProfilePageShell
       breadcrumbRoot={isOwnProfile ? "Account" : "Professors"}
       breadcrumbCurrent={isOwnProfile ? "Public profile" : professor.name}
-      breadcrumbIcon={isOwnProfile ? undefined : <SchoolOutlinedIcon sx={{ fontSize: 16 }} />}
+      breadcrumbIcon={isOwnProfile ? undefined : <SchoolIcon size={12} />}
     >
       <ProfileHeader
         profileImage={professor.profilePicture}

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import AboutSection from "./AboutSection";
 import Surface from "../ui/Surface";
 import Button from "../ui/Button";
 import { fieldClass } from "../ui/Input";
 import { cx } from "../ui/cx";
+import { AddIcon, EditIcon } from "../ui/icons";
 
 interface BioBlurbSectionProps {
   initialBio?: string;
@@ -38,7 +37,7 @@ const BioBlurbSection: React.FC<BioBlurbSectionProps> = ({ initialBio = "", onSa
   const canEdit = Boolean(onSave);
   const editAction =
     canEdit && !isEditing && initialBio ? (
-      <Button size="sm" variant="ghost" className="-my-1 -me-3" icon={<EditOutlinedIcon sx={{ fontSize: 15 }} />} onClick={() => setIsEditing(true)}>
+      <Button size="sm" variant="ghost" className="-my-1 -me-3" icon={<EditIcon size={12.5} />} onClick={() => setIsEditing(true)}>
         Edit
       </Button>
     ) : null;
@@ -76,7 +75,7 @@ const BioBlurbSection: React.FC<BioBlurbSectionProps> = ({ initialBio = "", onSa
       ) : canEdit ? (
         <Surface className="flex flex-col items-start gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-body text-ink-muted">A few sentences on what you want to research helps professors say yes.</p>
-          <Button size="sm" icon={<AddOutlinedIcon sx={{ fontSize: 15 }} />} onClick={() => setIsEditing(true)}>
+          <Button size="sm" icon={<AddIcon size={9} />} onClick={() => setIsEditing(true)}>
             Add bio
           </Button>
         </Surface>

@@ -379,3 +379,12 @@ These record direction changes made after the plan was executed (commit 4be5908,
     - **Phones.** A card's posted date moves from beside its title into the date row, so titles get the full width. Nav buttons are icon-only, with their labels kept for screen readers.
     - **Search load errors** show "Couldn’t load opportunities" instead of "No opportunities match".
     - **Dead code removed:** `ProfileSummary`, `DeadlineCard`, and the component options nothing used (Avatar `lg`, IconButton sizes and `bordered`, Spinner sizes, Badge `warning`/`danger`). Inline error messages use one `Alert` component.
+27. **Icons beside text are aligned on their ink.**
+    - **Cause:** Material icons draw inside a 24-unit square with uneven blank margins (1–8 units a side), and some glyphs sit off-centre in it. Gaps and padding set around the square came out 1.0–1.2 cap wide, and the icon side of chips and buttons looked looser than the text side.
+    - **Fix:** `src/components/ui/icons.tsx` exports each icon used beside text cropped to its glyph's ink box (measured from its path data), so an icon's box is its visible shape. `size` is the ink height. Icon-only buttons, tiles and avatars keep the plain MUI icons.
+    - **Rules, from the reference chips:**
+      - The ink gap between icon and word is 0.5–0.7 cap: `gap-[5px]` at 13–14px, `gap-1` at 12px. A capital's side bearing makes up the rest.
+      - Glyph icons are about 1.3 cap by √(w·h), so wide glyphs (book, mail, school) come out shorter. Plus, arrows and chevrons are about 1 cap.
+      - The icon side of a chip or button is about 0.85× the text side: `ps-[11px]` on small buttons and nav pills, `ps-[14px]` on medium buttons, `ps-[7px]` on badges.
+      - Icons centre on the capitals within 0.5px. Text baselines snap to whole pixels, so icons beside 13px text are lifted 1px and beside 12px text 0.5px.
+    - **Grid:** this spacing is set ink to ink and may be any whole pixel. It's the one exception to the 2px half-grid besides 1–3px nudges.

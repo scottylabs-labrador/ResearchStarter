@@ -1,6 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
-import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
 import { useEffectiveSession } from "../lib/useEffectiveSession";
@@ -18,6 +16,7 @@ import Alert from "../components/ui/Alert";
 import Button, { ButtonLink } from "../components/ui/Button";
 import EmptyState from "../components/ui/EmptyState";
 import IconButton from "../components/ui/IconButton";
+import { AddIcon, DashboardIcon } from "../components/ui/icons";
 import { Meta } from "../components/ui/Meta";
 import Modal from "../components/ui/Modal";
 import Spinner from "../components/ui/Spinner";
@@ -198,7 +197,7 @@ const ProfessorDashboard = () => {
     <ProfilePageShell
       breadcrumbRoot="Account"
       breadcrumbCurrent="Dashboard"
-      breadcrumbIcon={<DashboardOutlinedIcon sx={{ fontSize: 16 }} />}
+      breadcrumbIcon={<DashboardIcon size={13} />}
     >
       <ProfileHeader
         profileImage={professor?.profilePicture}
@@ -211,7 +210,7 @@ const ProfessorDashboard = () => {
               ref={addButtonRef}
               size="sm"
               variant="primary"
-              icon={<AddOutlinedIcon sx={{ fontSize: 15 }} />}
+              icon={<AddIcon size={9} />}
               onClick={openCreateForm}
             >
               Add opportunity
