@@ -15,8 +15,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ icon, trailing, inputSize = "md", className, containerClassName, ...rest }, ref) => (
     <div
       className={cx(
-        "flex items-center gap-2 rounded-control border border-hairline-strong bg-surface px-3 transition-[border-color,box-shadow] duration-150 ease-out focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/15",
+        "flex items-center gap-[5px] rounded-control border border-hairline-strong bg-surface px-3 transition-[border-color,box-shadow] duration-150 ease-out focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/15",
         inputSize === "sm" ? "h-[32px]" : "h-[40px]",
+        icon ? "ps-[11px]" : null,
         containerClassName
       )}
     >

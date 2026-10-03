@@ -1,6 +1,6 @@
 import React from "react";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { cx } from "./cx";
+import { ChevronDownIcon } from "./icons";
 
 interface SectionLabelProps {
   children: React.ReactNode;
@@ -23,12 +23,12 @@ const SectionLabel = ({ children, as: Heading = "h3", collapsed = false, onToggl
           aria-expanded={!collapsed}
           className={cx(
             labelText,
-            "inline-flex items-center gap-1 rounded transition-colors duration-150 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+            "inline-flex items-center gap-[5px] rounded transition-colors duration-150 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
           )}
         >
           {children}
-          <KeyboardArrowDownIcon
-            sx={{ fontSize: 16 }}
+          <ChevronDownIcon
+            size={8}
             className={cx("transition-transform duration-200 ease-out motion-reduce:transition-none", collapsed && "-rotate-90")}
           />
         </button>

@@ -6,7 +6,7 @@ type Variant = "primary" | "secondary" | "ghost" | "danger";
 type Size = "sm" | "md";
 
 const base =
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-control font-medium transition-[background-color,border-color,color,opacity,transform] duration-150 ease-out active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-canvas disabled:pointer-events-none disabled:opacity-50";
+  "inline-flex items-center justify-center gap-[5px] whitespace-nowrap rounded-control font-medium transition-[background-color,border-color,color,opacity,transform] duration-150 ease-out active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-canvas disabled:pointer-events-none disabled:opacity-50";
 
 const variants: Record<Variant, string> = {
   primary: "bg-accent-strong text-white shadow-accent hover:bg-accent-strong/90 active:bg-accent-strong",
@@ -15,13 +15,24 @@ const variants: Record<Variant, string> = {
   danger: "bg-danger text-white hover:opacity-90",
 };
 
+// 13px text renders about 1px above its line's centre (baselines snap to whole pixels), so small buttons lift icons to match.
 const sizes: Record<Size, string> = {
-  sm: "h-[32px] px-3 text-small",
+  sm: "h-[32px] px-3 text-small [&>svg]:-translate-y-px",
   md: "h-[40px] px-4 text-body",
 };
 
-const buttonClasses = (variant: Variant = "secondary", size: Size = "md", className?: string) =>
-  cx(base, variants[variant], sizes[size], className);
+// Icons are cropped to their ink (./icons), so the icon side is set about 0.85× the text side, which reads as even.
+const iconSidePadding: Record<Size, { start: string; end: string }> = {
+  sm: { start: "ps-[11px]", end: "pe-[11px]" },
+  md: { start: "ps-[14px]", end: "pe-[14px]" },
+};
+
+const buttonClasses = (
+  variant: Variant = "secondary",
+  size: Size = "md",
+  { icon, iconRight, className }: { icon?: React.ReactNode; iconRight?: React.ReactNode; className?: string }
+) =>
+  cx(base, variants[variant], sizes[size], icon ? iconSidePadding[size].start : null, iconRight ? iconSidePadding[size].end : null, className);
 
 interface StyleProps {
   variant?: Variant;
@@ -34,7 +45,7 @@ interface ButtonProps extends StyleProps, React.ButtonHTMLAttributes<HTMLButtonE
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ variant, size, icon, iconRight, className, children, type = "button", ...rest }, ref) => (
-    <button ref={ref} type={type} className={buttonClasses(variant, size, className)} {...rest}>
+    <button ref={ref} type={type} className={buttonClasses(variant, size, { icon, iconRight, className })} {...rest}>
       {icon}
       {children}
       {iconRight}
@@ -49,7 +60,7 @@ interface ButtonLinkProps extends StyleProps, Omit<LinkProps, "className"> {
 }
 
 export const ButtonLink = ({ variant, size, icon, iconRight, className, children, ...rest }: ButtonLinkProps) => (
-  <Link className={buttonClasses(variant, size, className)} {...rest}>
+  <Link className={buttonClasses(variant, size, { icon, iconRight, className })} {...rest}>
     {icon}
     {children}
     {iconRight}

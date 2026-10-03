@@ -6,21 +6,20 @@ import NavButton from "./NavButton";
 import Logo from "./Logo";
 import Avatar from "./ui/Avatar";
 import { cx } from "./ui/cx";
+import { AccountCircleIcon, HomeIcon, LogoutIcon, SearchIcon } from "./ui/icons";
 
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 const focusRing = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
 
+// Icon ink starts at px-4, on the same edge as the name and email above the items.
 const menuItemClass =
-  "flex w-full items-center gap-2 px-4 py-2 text-body text-ink-secondary transition-colors duration-150 hover:bg-surface-muted hover:text-ink focus-visible:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent";
+  "flex w-full items-center gap-[5px] px-4 py-2 text-body text-ink-secondary transition-colors duration-150 hover:bg-surface-muted hover:text-ink focus-visible:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent";
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
   cx(
-    "flex h-[36px] items-center gap-2 rounded-control px-3 text-body font-medium transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.98]",
+    // Tighter on the icon side to look even (11px vs 12px); icon-only on phones, so both sides match there.
+    "flex h-[36px] items-center gap-[5px] rounded-control ps-[11px] pe-3 text-body font-medium max-sm:pe-[11px] transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.98]",
     focusRing,
     isActive ? "bg-accent-bg text-accent-strong" : "text-ink-secondary hover:bg-accent-bg/50 hover:text-ink"
   );
@@ -62,9 +61,9 @@ const NavBar = () => {
 
           <div className="flex items-center gap-1">
             {isProfessor && (
-              <NavButton name="Dashboard" Icon={HomeOutlinedIcon} links="/professor-dashboard" linkClass={linkClass} />
+              <NavButton name="Dashboard" Icon={HomeIcon} iconSize={12} links="/professor-dashboard" linkClass={linkClass} />
             )}
-            <NavButton name="Search" Icon={SearchOutlinedIcon} links="/" linkClass={linkClass} />
+            <NavButton name="Search" Icon={SearchIcon} iconSize={13} links="/" linkClass={linkClass} />
           </div>
 
           <div className="relative justify-self-end" ref={dropdownRef}>
@@ -99,7 +98,7 @@ const NavBar = () => {
                   {email ? <p className="truncate font-mono text-meta text-ink-muted">{email}</p> : null}
                 </div>
                 <NavLink role="menuitem" to={profileLink.to} onClick={() => setOpen(false)} className={menuItemClass}>
-                  <AccountCircleOutlinedIcon sx={{ fontSize: 16 }} />
+                  <AccountCircleIcon size={13} />
                   {profileLink.label}
                 </NavLink>
                 <button
@@ -111,7 +110,7 @@ const NavBar = () => {
                   }}
                   className={menuItemClass}
                 >
-                  <LogoutOutlinedIcon sx={{ fontSize: 16 }} />
+                  <LogoutIcon size={13} />
                   Sign out
                 </button>
               </div>

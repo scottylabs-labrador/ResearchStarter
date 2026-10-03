@@ -9,7 +9,7 @@ interface MetaProps {
 
 export const Meta = ({ icon, children, className }: MetaProps) => (
   <span className={cx("inline-flex min-w-0 items-center gap-1 font-mono text-meta text-ink-muted", className)}>
-    {icon ? <span className="flex shrink-0">{icon}</span> : null}
+    {icon ? <span className="flex shrink-0 -translate-y-[0.5px]">{icon}</span> : null}
     <span className="truncate">{children}</span>
   </span>
 );
