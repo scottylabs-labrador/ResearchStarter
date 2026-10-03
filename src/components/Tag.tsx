@@ -39,7 +39,7 @@ const Tag = ({ keyword, className, onRemove }: TagProps) => {
           aria-label={`Remove ${label}`}
           className="inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded text-ink-muted transition-colors duration-150 hover:bg-hairline hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
         >
-          <CloseIcon size={7} className="-translate-y-px" />
+          <CloseIcon size={7} />
         </button>
       ) : null}
     </span>

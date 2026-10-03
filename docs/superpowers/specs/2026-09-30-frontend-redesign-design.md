@@ -386,5 +386,5 @@ These record direction changes made after the plan was executed (commit 4be5908,
       - The ink gap between icon and word is 0.5–0.7 cap: `gap-[5px]` at 13–14px, `gap-1` at 12px. A capital's side bearing makes up the rest.
       - Glyph icons are about 1.3 cap by √(w·h), so wide glyphs (book, mail, school) come out shorter. Plus, arrows and chevrons are about 1 cap.
       - The icon side of a chip or button is about 0.85× the text side: `ps-[11px]` on small buttons and nav pills, `ps-[14px]` on medium buttons, `ps-[7px]` on badges.
-      - Icons centre on the capitals within 0.5px. Text baselines snap to whole pixels, so icons beside 13px text are lifted 1px and beside 12px text 0.5px.
+      - Icons centre on the capitals at any zoom. Each cropped icon sits in an inline wrapper that takes the surrounding font and line height, and hangs off that line's baseline with `vertical-align: calc((1cap - size) / 2)`. Browsers round a line's text position differently at each zoom level (13px text sits about 0.5px high at 100% but not when zoomed), and the wrapper's line is rounded exactly like the text's, so no fixed nudge is needed.
     - **Grid:** this spacing is set ink to ink and may be any whole pixel. It's the one exception to the 2px half-grid besides 1–3px nudges.

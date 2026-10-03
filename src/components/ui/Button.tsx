@@ -15,9 +15,8 @@ const variants: Record<Variant, string> = {
   danger: "bg-danger text-white hover:opacity-90",
 };
 
-// 13px text renders about 1px above its line's centre (baselines snap to whole pixels), so small buttons lift icons to match.
 const sizes: Record<Size, string> = {
-  sm: "h-[32px] px-3 text-small [&>svg]:-translate-y-px",
+  sm: "h-[32px] px-3 text-small",
   md: "h-[40px] px-4 text-body",
 };
 

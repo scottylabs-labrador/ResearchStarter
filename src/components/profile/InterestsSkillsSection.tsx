@@ -11,9 +11,8 @@ interface InterestsSkillsSectionProps {
   onRemoveItem?: (item: string) => void;
 }
 
-// The plus is lifted 1px to centre on the capitals of the 13px text.
 const chipButton =
-  "inline-flex h-6 items-center gap-1.5 rounded-chip border border-dashed border-accent/30 px-2 text-small text-accent-strong transition-[background-color,color,border-color,transform] duration-150 ease-out hover:border-accent/50 hover:bg-accent-bg/60 hover:text-accent-strong active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent [&>svg]:-translate-y-px";
+  "inline-flex h-6 items-center gap-1.5 rounded-chip border border-dashed border-accent/30 px-2 text-small text-accent-strong transition-[background-color,color,border-color,transform] duration-150 ease-out hover:border-accent/50 hover:bg-accent-bg/60 hover:text-accent-strong active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent";
 
 const InterestsSkillsSection = ({ items = [], onAddItem, onRemoveItem }: InterestsSkillsSectionProps) => {
   const [adding, setAdding] = useState(false);

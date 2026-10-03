@@ -151,7 +151,7 @@ const InfoPage = () => {
                       className={cx(linkHoverUnderline, "inline-flex max-w-full items-center gap-1 font-mono text-meta text-ink-secondary hover:text-ink")}
                     >
                       <span className="truncate">{link}</span>
-                      <OpenInNewIcon size={9} className="shrink-0 -translate-y-[0.5px]" />
+                      <OpenInNewIcon size={9} />
                     </a>
                   </li>
                 ))}

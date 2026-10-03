@@ -38,14 +38,21 @@ export interface IconProps {
  * around that square never matches what you see. These icons, for use beside text, are cropped to each
  * glyph's ink box (measured from its path data): the box is the visible shape, and gaps and padding set
  * around it are ink to ink.
+ *
+ * Each sits in a wrapper that takes the surrounding font and line height, and hangs off that line's baseline
+ * to centre on the capitals. Browsers round where text sits in its line differently at each zoom level, and
+ * the wrapper's line is rounded the same way as the text beside it, so the two stay aligned at any zoom.
  */
 const cropped = (Glyph: typeof AddOutlined, x: number, y: number, w: number, h: number) => {
   const Icon = ({ size, className }: IconProps) => (
-    <Glyph
-      viewBox={`${x} ${y} ${w} ${h}`}
-      className={className}
-      style={{ width: (size * w) / h, height: size, overflow: "visible" }}
-    />
+    <span className="inline-block shrink-0">
+      <Glyph
+        viewBox={`${x} ${y} ${w} ${h}`}
+        fontSize="inherit"
+        className={className}
+        style={{ width: (size * w) / h, height: size, overflow: "visible", verticalAlign: `calc((1cap - ${size}px) / 2)` }}
+      />
+    </span>
   );
   return Icon;
 };

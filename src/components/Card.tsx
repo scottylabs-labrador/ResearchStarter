@@ -24,8 +24,7 @@ interface CardProps {
   actions?: React.ReactNode;
 }
 
-// Lifted 1px onto the capitals of the 13px text beside them.
-const iconClass = "shrink-0 -translate-y-px text-ink-muted";
+const iconClass = "text-ink-muted";
 
 const Card = ({ research, showApplyButton, onApply, showBookmark = true, actions }: CardProps) => {
   const bookmark = useBookmark(research._id, showBookmark);
@@ -71,19 +70,19 @@ const Card = ({ research, showApplyButton, onApply, showBookmark = true, actions
       {professorName || college || research.position ? (
         <MetaRow className="mb-1.5 text-small text-ink-secondary">
           {professorName ? (
-            <span className="inline-flex min-w-0 items-center gap-[5px]">
+            <span className="inline-flex min-w-0 items-start gap-[5px]">
               <PersonIcon size={12} className={iconClass} />
               {professorName}
             </span>
           ) : null}
           {college ? (
-            <span className="inline-flex min-w-0 items-center gap-[5px]">
+            <span className="inline-flex min-w-0 items-start gap-[5px]">
               <AccountBalanceIcon size={12} className={iconClass} />
               {college}
             </span>
           ) : null}
           {research.position ? (
-            <span className="inline-flex min-w-0 items-center gap-[5px]">
+            <span className="inline-flex min-w-0 items-start gap-[5px]">
               <MenuBookIcon size={10.5} className={iconClass} />
               {research.position}
             </span>

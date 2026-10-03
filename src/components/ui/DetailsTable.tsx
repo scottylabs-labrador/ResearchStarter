@@ -19,7 +19,7 @@ const DetailsTable = ({ rows, className }: DetailsTableProps) => (
       {rows.map((row) => (
         <div key={row.label} className="contents [&:not(:first-child)>*]:border-t [&>*]:border-hairline">
           <dt className="flex items-center gap-[5px] whitespace-nowrap border-r px-4 py-3 text-small text-ink-muted">
-            {row.icon ? <span className="flex shrink-0 -translate-y-px">{row.icon}</span> : null}
+            {row.icon}
             {row.label}
           </dt>
           <dd className="m-0 flex min-w-0 items-center break-words px-4 py-3 text-small text-ink">{row.value}</dd>
