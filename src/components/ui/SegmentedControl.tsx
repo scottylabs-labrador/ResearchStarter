@@ -20,10 +20,10 @@ function SegmentedControl<T extends string>({ value, onChange, options, classNam
             aria-pressed={active}
             onClick={() => onChange(opt.value)}
             className={cx(
-              "h-[28px] rounded-[8px] px-3 text-small transition-[background-color,color,box-shadow,transform] duration-150 ease-out active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+              "h-[28px] rounded-[8px] px-3 text-small transition-[background-color,color,box-shadow] duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
               active
                 ? "bg-surface font-medium text-ink shadow-[0_1px_2px_rgb(24_24_27/0.08),0_0_0_1px_rgb(var(--hairline))]"
-                : "text-ink-secondary hover:text-ink"
+                : "text-ink-secondary hover:text-ink active:bg-surface/60"
             )}
           >
             {opt.label}

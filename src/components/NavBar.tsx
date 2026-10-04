@@ -19,9 +19,9 @@ const menuItemClass =
 const linkClass = ({ isActive }: { isActive: boolean }) =>
   cx(
     // Tighter on the icon side to look even (11px vs 12px); icon-only on phones, so both sides match there.
-    "flex h-[36px] items-center gap-[5px] rounded-control ps-[11px] pe-3 text-body font-medium max-sm:pe-[11px] transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.98]",
+    "flex h-[36px] items-center gap-[5px] rounded-control ps-[11px] pe-3 text-body font-medium max-sm:pe-[11px] transition-[background-color,color] duration-150 ease-out",
     focusRing,
-    isActive ? "bg-accent-bg text-accent-strong" : "text-ink-secondary hover:bg-accent-bg/50 hover:text-ink"
+    isActive ? "bg-accent-bg text-accent-strong" : "text-ink-secondary hover:bg-accent-bg/50 hover:text-ink active:bg-accent-bg"
   );
 
 const NavBar = () => {
