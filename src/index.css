@@ -59,8 +59,8 @@ html {
 
 @layer components {
   /* Sign-in backdrop: a soft mesh of the "Saudade" palette (lapis, pale crimson wisteria, indigo white) on moon white.
-     Each colour is a field with a long eased falloff that drifts on its own slow path, so the blend keeps shifting
-     without visibly looping. Only transforms animate, so it runs on the GPU without repainting. ::after is a fixed
+     Each colour is a field with a long eased falloff that drifts on its own path, so the blend keeps shifting without
+     visibly looping. Only transforms animate, so it runs on the GPU without repainting. ::after is a fixed
      fine grain that hides the faint 8-bit steps in the palest fades; it is grey noise blended normally, because an
      overlay blend all but vanishes on near-white. */
   .signin-backdrop {
@@ -87,13 +87,14 @@ html {
     background: #eaf4fc;
   }
 
+  /* Each field sways across, sways up and down, and swells, each on its own period. The three rarely line up, so the
+     field traces a looping curve instead of sliding back and forth on one line. */
   .signin-mesh > span {
     position: absolute;
-    left: var(--x);
-    top: var(--y);
+    left: calc(var(--x) - var(--size) / 2);
+    top: calc(var(--y) - var(--size) / 2);
     width: var(--size);
     aspect-ratio: 1;
-    translate: -50% -50%;
     background: radial-gradient(
       closest-side,
       rgb(var(--c)) 0%,
@@ -102,23 +103,25 @@ html {
       rgb(var(--c) / 0.18) 76%,
       rgb(var(--c) / 0) 100%
     );
-    animation: var(--drift) var(--period) cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
-    will-change: transform;
+    animation:
+      mesh-sway-x var(--tx) cubic-bezier(0.37, 0, 0.63, 1) infinite alternate,
+      mesh-sway-y var(--ty) cubic-bezier(0.37, 0, 0.63, 1) infinite alternate,
+      mesh-swell var(--ts) cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+    will-change: transform, translate, scale;
   }
 
   /* lapis, pooled bottom left */
-  .signin-mesh > :nth-child(1) { --c: 30 80 162; --size: 100vmax; --x: 6%; --y: 104%; --drift: mesh-a; --period: 26s; }
+  .signin-mesh > :nth-child(1) { --c: 30 80 162; --size: 100vmax; --x: 14%; --y: 92%; --dx: 12vmax; --dy: 8vmax; --tx: 13s; --ty: 17s; --ts: 11s; }
   /* a fainter lapis wash up the left edge */
-  .signin-mesh > :nth-child(2) { --c: 30 80 162; --size: 70vmax; --x: -4%; --y: 18%; --drift: mesh-b; --period: 50s; opacity: 0.45; }
+  .signin-mesh > :nth-child(2) { --c: 30 80 162; --size: 70vmax; --x: -4%; --y: 18%; --dx: 10vmax; --dy: 16vmax; --tx: 19s; --ty: 14s; --ts: 16s; opacity: 0.45; }
   /* pale crimson wisteria, bottom right */
-  .signin-mesh > :nth-child(3) { --c: 214 187 198; --size: 80vmax; --x: 104%; --y: 92%; --drift: mesh-c; --period: 32s; }
+  .signin-mesh > :nth-child(3) { --c: 214 187 198; --size: 80vmax; --x: 92%; --y: 84%; --dx: 12vmax; --dy: 9vmax; --tx: 15s; --ty: 21s; --ts: 12s; }
   /* indigo white, the bright seam between lapis and wisteria */
-  .signin-mesh > :nth-child(4) { --c: 235 246 247; --size: 55vmax; --x: 74%; --y: 62%; --drift: mesh-d; --period: 38s; }
+  .signin-mesh > :nth-child(4) { --c: 235 246 247; --size: 55vmax; --x: 74%; --y: 62%; --dx: 14vmax; --dy: 12vmax; --tx: 11s; --ty: 16s; --ts: 9s; }
 
-  @keyframes mesh-a { to { transform: translate3d(9vmax, -7vmax, 0) scale(1.12); } }
-  @keyframes mesh-b { to { transform: translate3d(7vmax, 11vmax, 0) scale(1.1); } }
-  @keyframes mesh-c { to { transform: translate3d(-11vmax, -8vmax, 0) scale(1.08); } }
-  @keyframes mesh-d { to { transform: translate3d(-9vmax, 7vmax, 0) scale(1.18); } }
+  @keyframes mesh-sway-x { from { transform: translateX(calc(var(--dx) * -1)); } to { transform: translateX(var(--dx)); } }
+  @keyframes mesh-sway-y { from { translate: 0 calc(var(--dy) * -1); } to { translate: 0 var(--dy); } }
+  @keyframes mesh-swell { from { scale: 0.88; } to { scale: 1.16; } }
 
   @media (prefers-reduced-motion: reduce) {
     .signin-mesh > span {
