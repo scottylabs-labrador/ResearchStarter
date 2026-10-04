@@ -9,7 +9,13 @@ const SignInPage = () => {
   };
 
   return (
-    <main className="flex min-h-screen w-full items-center justify-center bg-canvas bg-hairline-texture px-4">
+    <main className="signin-backdrop flex min-h-screen w-full items-center justify-center bg-canvas px-4">
+      <div aria-hidden="true" className="signin-mesh">
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
       <Surface className="w-full max-w-[400px] p-[40px] text-center shadow-popover">
         <Logo size="lg" alt="CMU Research" className="mx-auto mb-8" />
         <h1 className="text-title text-ink">Sign in to CMU Research</h1>
