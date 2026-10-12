@@ -23,7 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 .env
-server/config.env
+apps/api/config.env
 
 *storybook.log
 storybook-static
@@ -32,3 +32,12 @@ storybook-static
 # Agent skills (installed by `npx skills add` — machine-local, do not commit)
 .agents/
 skills-lock.json
+
+# Local Python environments, credentials, and build caches
+.venv/
+__pycache__/
+*.py[cod]
+private.json
+.env.*
+!.env.example
+*.tsbuildinfo

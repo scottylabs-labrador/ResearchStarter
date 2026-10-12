@@ -1,0 +1,10 @@
+# Any ONE listed maintainer can approve sensitive changes.
+# No wildcard owner: web-only changes can be reviewed by any eligible reviewer.
+/apps/api/ @nicholascui225 @jahuang24 @JennyPenguin
+/apps/scrapers/ @nicholascui225 @jahuang24 @JennyPenguin
+/.github/ @nicholascui225 @jahuang24 @JennyPenguin
+/package.json @nicholascui225 @jahuang24 @JennyPenguin
+/package-lock.json @nicholascui225 @jahuang24 @JennyPenguin
+/apps/*/package.json @nicholascui225 @jahuang24 @JennyPenguin
+/.npmrc @nicholascui225 @jahuang24 @JennyPenguin
+/.gitignore @nicholascui225 @jahuang24 @JennyPenguin
