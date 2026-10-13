@@ -1,93 +1,63 @@
-# CMU_Research
+# CMU Research
 
-## Overview
-CMU_Research is an advanced web-based platform designed to centralize and streamline research opportunities at Carnegie Mellon University. By leveraging automated web scraping and structured data integration, the platform dynamically aggregates research postings from CMU department websites, spreadsheets, and other faculty-curated repositories. This ensures that students have access to the most up-to-date opportunities while minimizing the manual effort required from faculty and administrators.
+Research opportunities at Carnegie Mellon University, maintained by ScottyLabs Labrador.
 
-## Contributors
-Team Leads: Rishi Prabhu, Jarrett Huang, Jennifer Zhu, Lily Qin, Bryan Huang
-CMU Scotty Labs Labrador Software Engineers
+## Apps
 
+| Directory | Purpose |
+| --- | --- |
+| `apps/web` | React, Vite, Tailwind, and Storybook frontend |
+| `apps/api` | Express, authentication, MongoDB routes, and `dbschemas/` |
+| `apps/scrapers` | Python collectors, CSV transforms, and database writers |
 
-## How to Run the Code
+Web and API use npm workspaces with one root `package-lock.json`. Python uses a separate virtual environment. No task runner or CI service is required.
 
-### **Step 1: Get the Code**
-1. Consult with the Team (**Jarrett or Jennifer**) on the status of the Git codebase.
-2. Pull the latest code from the GitHub repository to your local machine.
+## Development
 
-### Pulling from Github Main Branch
-Run this command in your terminal while being in the ResearchStarter Folder
-```sh
-git pull origin main
-```
-
-### **Step 2: Setup and Run the Development Server**
-Open a terminal in **VS Code** or your system terminal and execute the following commands:
+Use Node.js 22 or newer and Python 3.11 or newer. From the repository root:
 
 ```sh
-# Navigate to the project directory if not already in it
-cd ResearchStarter
-
-# Your terminal should now show that you are in the ResearchStarter directory (Ex: C:\Users\jarre\GithubRepos\ResearchStarter> )
-# Install dependencies
-npm install
-
-# Start development server
+npm ci
 npm run dev
-
-Step 3: Start the Application Server
-Open another terminal and run:
-
-# Start the application server
-npm run server
-
 ```
 
-## Core Features
-- **Automated Web Scraping & Data Aggregation**
-  - Crawls department websites, research databases, and spreadsheets for real-time updates.
-  - Parses and structures data for seamless presentation within the platform.
-  
-- **Research Opportunity Portal**
-  - Enables professors to post research openings with specific requirements.
-  - Students can browse, filter, and apply to opportunities based on interest and qualifications.
-  
-- **Seamless Student-Professor Interaction**
-  - Direct messaging system for streamlined communication.
-  - Professors can manage applications and connect with potential candidates.
+The web app runs at http://localhost:3000. In a second terminal, copy `apps/api/config.env.example` to `apps/api/config.env`, fill in your separately supplied database and authentication settings, and run:
 
-- **Data Synchronization & Validation**
-  - Incorporates input from 62 department heads to ensure comprehensive research listings.
-  - Merges faculty-managed spreadsheets with automatically scraped content.
+```sh
+npm run server
+```
 
-## Technical Architecture
-### **Frontend**
-- **Framework:** React with TypeScript for type safety and scalable UI components.
-- **Styling:** Tailwind CSS for modern, responsive, and efficient styling.
-- **State Management:** Context API for lightweight global state handling.
-- **UI Enhancements:** Dynamic filtering, real-time search, and accessibility-focused design.
+The API runs on port 5050. Vite forwards `/api/auth/*` unchanged and strips `/api` for the other API routes. Existing API endpoints and data schemas are unchanged.
 
-### **Backend & Data Processing**
-- **Web Scraper:** JavaScript-based scraping pipeline with structured JSON output.
-- **Data Processing:** Intelligent parsing and deduplication to merge multiple sources.
-- **API Layer:** RESTful API endpoints for fetching, updating, and managing research listings.
+Other root commands:
 
-### **Storage & Integration**
-- **JSON Data Layer:** Storing structured data for fast and lightweight retrieval.
-- **Cloud Deployment (Planned):** Future scalability with cloud-based hosting and database integration.
+```sh
+npm run build           # output: apps/web/dist
+npm run preview
+npm run lint
+npm run test_server     # JSON fixture server on port 8000
+npm run storybook       # port 6006
+npm run build-storybook # output: apps/web/storybook-static
+```
 
-## Roadmap & Future Enhancements
-- **AI-Powered Matching System** – Implementing machine learning models to recommend research opportunities based on student profiles and interests.
-- **Professor Dashboard Enhancements** – Improved analytics and opportunity management tools.
-- **Expanded Data Sources** – Incorporating additional research databases and funding opportunities.
+See [scraper setup and writer commands](apps/scrapers/README.md). Scrapers do not run during npm installation, frontend builds, or API startup.
 
-## Tech Stack
-- **Frontend:** JavaScript, TypeScript, React, Tailwind CSS, HTML, CSS
-- **Backend:** Express, NodeJS
-- **Database:** MongoDB
-- **Data Handling:** JSON, Web Scraping with JavaScript/AI
+Known inherited tooling issues: Storybook's `src/pages/Profile.stories.tsx` imports a removed `./Profile` module, so `build-storybook` currently fails. ESLint's existing Storybook rules have no TypeScript parser and report parsing errors on TypeScript stories/configuration. These are not required merge checks; the production Vite build is independent of them.
 
-## Contributors
-Developed by a team dedicated to making research opportunities more accessible and efficient at Carnegie Mellon University.
+## Migrating an existing checkout or deployment
 
----
-**CMU_Research: Empowering students and faculty through seamless research discovery.**
+- Frontend source, assets, and tool configuration now live in `apps/web`. Move local frontend `.env` files there.
+- Move the old `server/config.env` to `apps/api/config.env`; never commit its contents.
+- Deployment build commands can remain `npm ci` and `npm run build` at the repository root. Change the static output directory from `dist` to `apps/web/dist`.
+- API processes can keep using root `npm run server`; direct launch commands must use the new API directory.
+- External scraper schedules must be updated separately to the paths documented in the scraper README. The old backend repo is retained as historical reference; no schedules or deployments are changed by this migration.
+
+## Reviews
+
+Every PR to `main` requires one approval and resolved conversations, with no required CI/status checks. API, scraper, schema, GitHub configuration, and workspace dependency changes require approval from **one of** `@nicholascui225`, `@jahuang24`, or `@JennyPenguin`. Frontend-only changes can be approved by any eligible reviewer. Authors cannot approve their own PRs, and the latest push must be approved by someone else.
+
+See [protection settings and verification](.github/PROTECTION.md). Repository access does not grant database access; credentials are distributed separately.
+
+## Attribution
+
+Original project leads: Rishi Prabhu, Jarrett Huang, Jennifer Zhu, Lily Qin, and Bryan Huang, with CMU ScottyLabs Labrador contributors. Scraper source and attribution are recorded in [apps/scrapers/UPSTREAM.md](apps/scrapers/UPSTREAM.md).

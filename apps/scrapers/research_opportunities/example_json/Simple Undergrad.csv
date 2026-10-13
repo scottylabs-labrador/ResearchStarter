@@ -1,0 +1,11 @@
+"","","Date Added","Project Title","Accepting Applications?","Keywords","Location","Department","Time Commitment (Hours/Week)"
+"","Project Contact:
+ Zheyuan Hu - zheyuanh@andrew.cmu.edu 
+ Project Description:
+ This project aims to develop a general reasoning agent for bimanual robotic manipulation tasks, especially those that are long-horizon and requires exploration.  Imagine giving the robot a box of assembly toys and it needs to play with them with curiosities and figure out the correct strategy to build them.  Or imagine giving the robot a basket of laundry and it needs to figure out which ones to fold and store and which ones to hang on rack.
+ Prerequisite Knowledge:
+ Must have: taken linear algebra, able to code in python fluently, not afraid of hands-on work.  Nice to have: experience with LLM, VLM, AI agent, understandings of probability, statistics, machine learning, deep learning, robotics, 3D design, software or infra development experience. Most importantly, willingness to learn and at least 8 hours a week to spend on research.
+ Link(s) to Relevant Papers: 
+ https://rac-scaling-robot.github.io/
+ Project URLs:","09-16-2025","Reasoning for Robotic Manipulation","Yes","VLM, Robot Learning, AI","On Campus","RI","at least 8 hours a week"
+

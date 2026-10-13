@@ -1,5 +1,3 @@
-import { Opacity } from "@mui/icons-material";
-
 /** @type {import('tailwindcss').Config} */
 export default {
   mode: "jit",
