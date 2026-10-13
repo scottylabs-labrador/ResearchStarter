@@ -23,6 +23,10 @@ Writers require `apps/scrapers/private.json`. Copy `private.example.json` to tha
 
 ## Commands and effects
 
+For PostgreSQL writer development, first follow the [shared database setup and migration workflow](../api/db/README.md).
+Schema changes belong in `apps/api/db/migrations/` and are applied with the root npm commands, including changes needed by Python writers.
+PostgreSQL driver integration and writer conversions will be separate changes; the commands below still target MongoDB.
+
 Run from the repository root (absolute script paths also work from another directory):
 
 | Command | Effect |

@@ -14,7 +14,7 @@ Web and API use npm workspaces with one root `package-lock.json`. Python uses a 
 
 ## Development
 
-Use Node.js 22 or newer and Python 3.11 or newer. From the repository root:
+Use Node.js 22.12 or newer and Python 3.11 or newer. From the repository root:
 
 ```sh
 npm ci
@@ -43,6 +43,12 @@ npm run build-storybook # output: apps/web/storybook-static
 See [scraper setup and writer commands](apps/scrapers/README.md). Scrapers do not run during npm installation, frontend builds, or API startup.
 
 Known inherited tooling issues: Storybook's `src/pages/Profile.stories.tsx` imports a removed `./Profile` module, so `build-storybook` currently fails. ESLint's existing Storybook rules have no TypeScript parser and report parsing errors on TypeScript stories/configuration. These are not required merge checks; the production Vite build is independent of them.
+
+## PostgreSQL development tooling
+
+To start PostgreSQL schema or writer work, follow the [local database and SQL migration setup](apps/api/db/README.md).
+Use `npm run db:check` to verify your local connection and `npm run db:migrate -- up` to apply pending migrations.
+The shared migration history lives in `apps/api/db/migrations/`. The API and existing scrapers still use MongoDB until their follow-up migrations are implemented.
 
 ## Migrating an existing checkout or deployment
 
