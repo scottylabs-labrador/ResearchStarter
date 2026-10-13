@@ -4,14 +4,18 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "node --env-file=config.env server.js"
+    "start": "node --env-file=config.env server.js",
+    "db:check": "node scripts/check-postgres.js",
+    "db:migrate": "node-pg-migrate --envPath config.env --migrations-dir db/migrations --migration-file-language sql"
   },
   "dependencies": {
     "better-auth": "^1.5.5",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
-    "mongodb": "^6.18.0"
+    "mongodb": "^6.18.0",
+    "node-pg-migrate": "^9.0.0",
+    "pg": "^8.23.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
