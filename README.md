@@ -45,7 +45,6 @@ Other root commands:
 npm run build           # output: apps/web/dist
 npm run preview
 npm run lint
-npm run test_server     # JSON fixture server on port 8000
 ```
 
 See [scraper setup and writer commands](apps/scrapers/README.md). Scrapers do not run during npm installation, frontend builds, or API startup.
