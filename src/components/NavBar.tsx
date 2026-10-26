@@ -1,27 +1,43 @@
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import logo from "../assets/logo.png";
-import { useSession, signOut } from "../lib/authClient";
+import { signOut } from "../lib/authClient";
+import { useEffectiveSession } from "../lib/useEffectiveSession";
 import NavButton from "./NavButton";
-import { useNavBarHidden } from "../contexts/NavBarContext";
+import Logo from "./Logo";
+import Avatar from "./ui/Avatar";
+import { cx } from "./ui/cx";
+import { AccountCircleIcon, HomeIcon, LogoutIcon, SearchIcon } from "./ui/icons";
 
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
+const focusRing = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
+
+// Icon ink starts at px-4, on the same edge as the name and email above the items.
+const menuItemClass =
+  "flex w-full items-center gap-[5px] px-4 py-2 text-body text-ink-secondary transition-colors duration-150 hover:bg-surface-muted hover:text-ink focus-visible:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent";
+
+const linkClass = ({ isActive }: { isActive: boolean }) =>
+  cx(
+    // Tighter on the icon side to look even (11px vs 12px); icon-only on phones, so both sides match there.
+    "flex h-[36px] items-center gap-[5px] rounded-control ps-[11px] pe-3 text-body font-medium max-sm:pe-[11px] transition-[background-color,color] duration-150 ease-out",
+    focusRing,
+    isActive ? "bg-accent-bg text-accent-strong" : "text-ink-secondary hover:bg-accent-bg/50 hover:text-ink active:bg-accent-bg"
+  );
+
 const NavBar = () => {
-  const { data: session } = useSession();
+  const { data: session } = useEffectiveSession();
   const name = session?.user?.name ?? "";
   const email = session?.user?.email ?? "";
+  const image = session?.user?.image ?? undefined;
   const isProfessor = session?.user?.isProfessor ?? false;
-  const dashboardLink = isProfessor ? "/professor-dashboard" : "/dashboard";
-  const initial = name[0]?.toUpperCase() ?? "?";
+  const andrewId = session?.user?.andrewId || email.split("@")[0] || "";
+  // Professors can't edit their profile, so their menu links to the public page instead.
+  const profileLink =
+    isProfessor && andrewId
+      ? { to: `/professor/${encodeURIComponent(andrewId)}`, label: "View public profile" }
+      : { to: "/profile", label: "Manage account" };
 
   const [open, setOpen] = useState(false);
-  const hidden = useNavBarHidden();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
@@ -35,87 +51,67 @@ const NavBar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center gap-2 px-3 py-2 text-sm border-b-2 transition-[color,border-color] duration-150 ease-out active:scale-[0.97] ${
-      isActive
-        ? "text-tag-dark-color font-semibold border-tag-dark-color"
-        : "text-gray-700 font-medium border-transparent hover:text-tag-dark-color hover:border-violet-300"
-    }`;
-
   return (
     <>
-      <nav className={`bg-white block h-[10vh] w-full px-8 fixed z-20 border-nav-border-color border-[1px] transition-transform duration-300 ease-out ${hidden ? "-translate-y-full" : "translate-y-0"}`}>
-        <div className="grid grid-cols-12 justify-around w-full h-full items-center">
-          <div className="col-start-1 h-full flex items-center">
-            {/* Logo */}
-            <NavLink className="w-full h-full inline-block" to="/main">
-              <img
-                className="object-contain relative w-full h-full py-2"
-                src={logo}
-                alt="logo"
-              />
-            </NavLink>
-          </div>
-          <div className="p-4 text-base flex justify-center items-center gap-x-2 col-start-5 col-span-4 w-full">
+      {/* The hairline is an inset shadow, not a border, so items centre in the full 56px and land on whole pixels. */}
+      <nav className="fixed inset-x-0 top-0 z-20 h-nav bg-surface shadow-[inset_0_-1px_0_rgb(var(--hairline))]">
+        <div className="grid h-full grid-cols-[1fr_auto_1fr] items-center px-8">
+          <NavLink to="/" aria-label="CMU Research home" className={cx("flex items-center justify-self-start rounded-[6px]", focusRing)}>
+            <Logo />
+          </NavLink>
+
+          <div className="flex items-center gap-1">
             {isProfessor && (
-              <NavButton
-                name="Dashboard"
-                Icon={HomeOutlinedIcon}
-                links={dashboardLink}
-                linkClass={linkClass}
-              />
+              <NavButton name="Dashboard" Icon={HomeIcon} iconSize={12} links="/professor-dashboard" linkClass={linkClass} />
             )}
-            <NavButton
-              name="Search"
-              Icon={SearchOutlinedIcon}
-              links="/"
-              linkClass={linkClass}
-            />
+            <NavButton name="Search" Icon={SearchIcon} iconSize={13} links="/" linkClass={linkClass} />
           </div>
 
-          {/* User avatar + dropdown */}
-          <div className="col-start-11 col-span-2 h-full flex items-center justify-end relative" ref={dropdownRef}>
-            {/* Pill-shaped trigger: avatar disc + chevron. The chevron rotation
-                makes it immediately clear this is a menu, not a status badge. */}
+          <div className="relative justify-self-end" ref={dropdownRef}>
             <button
+              type="button"
               onClick={() => setOpen((prev) => !prev)}
               aria-label="Open user menu"
               aria-expanded={open}
-              className="flex items-center gap-1.5 pl-1 pr-2 py-1 rounded-full hover:bg-gray-100 transition-colors duration-150 ease-out active:scale-[0.97]"
+              aria-haspopup="menu"
+              className={cx(
+                "flex items-center gap-1 rounded-full py-1 pl-1 pr-2 transition-colors duration-150 ease-out hover:bg-surface-muted active:scale-[0.98]",
+                focusRing
+              )}
             >
-              <div className="w-8 h-8 rounded-full bg-brand-300 flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
-                {initial !== "?" ? initial : <AccountCircleOutlinedIcon fontSize="small" />}
-              </div>
+              <Avatar name={name} src={image} size="sm" />
               <KeyboardArrowDownIcon
-                fontSize="small"
-                className={`text-gray-500 transition-transform duration-200 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] ${open ? "rotate-180" : ""}`}
+                sx={{ fontSize: 18 }}
+                className={cx(
+                  "text-ink-muted transition-transform duration-200 ease-out",
+                  open && "rotate-180"
+                )}
               />
             </button>
 
             {open && (
-              <div className="animate-dropIn origin-top-right absolute right-0 top-12 w-64 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
-                {/* Identity */}
-                <div className="px-4 py-3 border-b border-gray-100">
-                  <p className="font-semibold text-sm text-gray-900 truncate">{name || "Signed in"}</p>
-                  <p className="text-xs text-gray-500 truncate">{email}</p>
+              <div
+                role="menu"
+                className="absolute right-0 top-[44px] z-50 w-64 origin-top-right animate-dropIn rounded-surface border border-hairline bg-surface py-1 shadow-popover motion-reduce:animate-none"
+              >
+                <div className="border-b border-hairline px-4 py-3">
+                  <p className="truncate text-body font-medium text-ink">{name || "Signed in"}</p>
+                  {email ? <p className="truncate font-mono text-meta text-ink-muted">{email}</p> : null}
                 </div>
-
-                {/* Profile link */}
-                <NavLink
-                  to="/profile"
-                  onClick={() => setOpen(false)}
-                  className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150 active:scale-[0.97]"
-                >
-                  <AccountCircleOutlinedIcon fontSize="small" />
-                  Manage account
+                <NavLink role="menuitem" to={profileLink.to} onClick={() => setOpen(false)} className={menuItemClass}>
+                  <AccountCircleIcon size={13} />
+                  {profileLink.label}
                 </NavLink>
-
-                {/* Sign out */}
                 <button
-                  onClick={() => { setOpen(false); signOut(); }}
-                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150 active:scale-[0.97]"
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setOpen(false);
+                    signOut();
+                  }}
+                  className={menuItemClass}
                 >
-                  <LogoutOutlinedIcon fontSize="small" />
+                  <LogoutIcon size={13} />
                   Sign out
                 </button>
               </div>
@@ -123,7 +119,7 @@ const NavBar = () => {
           </div>
         </div>
       </nav>
-      <div className="h-[10vh] w-full"></div>
+      <div className="h-nav w-full" />
     </>
   );
 };

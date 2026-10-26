@@ -1,130 +1,91 @@
-import React from 'react';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import BookmarkIconUnfilled from '@mui/icons-material/BookmarkBorderOutlined';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import Tag from '../Tag';
-import { v4 as uuidv4 } from 'uuid';
+import React from "react";
+import { Link } from "react-router-dom";
+import Tag from "../Tag";
+import Button from "../ui/Button";
+import { MetaRow } from "../ui/Meta";
+import { cx } from "../ui/cx";
+import { ArrowForwardIcon, BookmarkBorderIcon, BookmarkIcon } from "../ui/icons";
+import { linkUnderline } from "../ui/linkClass";
 
 interface InfoPageHeaderProps {
   title: string;
-  professorOrLabName: string;
+  contacts: [name: string, andrewId: string][];
   department: string[];
   college: string[];
-  tags: string[]; // Combines keywords, colleges, and departments for display
+  /** Topic keywords. Department and college already appear in the byline. */
+  tags: string[];
   isBookmarked: boolean;
   onBookmarkToggle: () => void;
   onApplyClick: () => void;
-  position?: string;
-  compensation?: string;
-  timeCommitment?: string;
 }
 
-interface SubtitlePart {
-  text: string;
-  emphasis?: boolean;
-}
+const profilePath = (andrewId: string) => `/professor/${encodeURIComponent(andrewId.split("@")[0] ?? andrewId)}`;
 
 const InfoPageHeader: React.FC<InfoPageHeaderProps> = ({
   title,
-  professorOrLabName,
+  contacts,
   department,
   college,
   tags,
   isBookmarked,
   onBookmarkToggle,
   onApplyClick,
-  position,
-  compensation,
-  timeCommitment,
 }) => {
-  const eyebrowParts = [
-    position,
-    compensation,
-    timeCommitment ? `${timeCommitment} hrs/week` : null,
-  ].filter(Boolean) as string[];
-
-  const subtitleParts: SubtitlePart[] = [
-    professorOrLabName ? { text: professorOrLabName, emphasis: true } : null,
-    department.length > 0 ? { text: department.join(', ') } : null,
-    college.length > 0 ? { text: college.join(', ') } : null,
-  ].filter(Boolean) as SubtitlePart[];
+  const hasSubtitle = contacts.length > 0 || department.length > 0 || college.length > 0;
 
   return (
-    <div className="bg-white px-6 lg:px-8 py-4 mb-8">
-      <div className="mb-6">
-        {/* Eyebrow */}
-        {eyebrowParts.length > 0 && (
-          <p className="text-xs font-semibold uppercase tracking-widest text-gray-600 mb-3">
-            {eyebrowParts.map((part, i) => (
-              <React.Fragment key={part}>
-                {i > 0 && (
-                  <span className="text-gray-400 mx-2" aria-hidden="true">
-                    &middot;
-                  </span>
-                )}
-                {part}
-              </React.Fragment>
-            ))}
-          </p>
-        )}
+    <header className="mb-10 mt-6">
+      <h1 className="-ms-0.5 mb-3 text-title text-ink sm:text-display">{title}</h1>
 
-        {/* Title */}
-        <h1 className="font-jersey text-7xl font-bold text-gray-900 mb-3 leading-none">
-          {title}
-        </h1>
+      {hasSubtitle ? (
+        <MetaRow className="mb-5 text-lead text-ink-secondary">
+          {contacts.length > 0 ? (
+            <span>
+              {contacts.map(([name, andrewId], i) => (
+                <React.Fragment key={andrewId}>
+                  {i > 0 ? ", " : null}
+                  <Link
+                    to={profilePath(andrewId)}
+                    className={cx(linkUnderline, "rounded font-medium text-ink decoration-hairline-strong transition-colors duration-150 hover:decoration-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink")}
+                  >
+                    {name}
+                  </Link>
+                </React.Fragment>
+              ))}
+            </span>
+          ) : null}
+          {department.length > 0 ? <span>{department.join(", ")}</span> : null}
+          {college.length > 0 ? <span>{college.join(", ")}</span> : null}
+        </MetaRow>
+      ) : null}
 
-        {/* Subtitle */}
-        {subtitleParts.length > 0 && (
-          <p className="text-lg mb-4">
-            {subtitleParts.map((part, i) => (
-              <React.Fragment key={part.text}>
-                {i > 0 && (
-                  <span className="text-gray-400 mx-2" aria-hidden="true">
-                    &middot;
-                  </span>
-                )}
-                <span
-                  className={part.emphasis ? 'text-gray-900 font-medium' : 'text-gray-600'}
-                >
-                  {part.text}
-                </span>
-              </React.Fragment>
-            ))}
-          </p>
-        )}
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2">
-          {tags.map((tag) => (
-            <Tag key={uuidv4()} keyword={tag} />
+      {tags.length > 0 ? (
+        <div className="mb-6 flex flex-wrap gap-1.5">
+          {tags.map((tag, i) => (
+            <Tag key={`${tag}-${i}`} keyword={tag} />
           ))}
         </div>
-      </div>
+      ) : null}
 
-      {/* CTAs */}
-      <div className="flex items-center gap-3">
-        <button
-          onClick={onApplyClick}
-          className="inline-flex items-center gap-2 h-11 px-6 bg-card-highlight text-white text-sm font-semibold rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(126,85,178,0.35)] active:translate-y-0 active:shadow-none active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-card-highlight focus-visible:ring-offset-2"
-        >
+      <div className="flex items-center gap-2">
+        <Button variant="primary" onClick={onApplyClick} iconRight={<ArrowForwardIcon size={10} />}>
           Apply now
-          <ArrowForwardIcon fontSize="small" />
-        </button>
-
-        <button
+        </Button>
+        <Button
           onClick={onBookmarkToggle}
           aria-pressed={isBookmarked}
-          className="inline-flex items-center gap-2 h-11 px-5 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg transition-colors duration-200 hover:bg-gray-50 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-card-highlight focus-visible:ring-offset-2"
+          icon={
+            isBookmarked ? (
+              <BookmarkIcon size={14.5} />
+            ) : (
+              <BookmarkBorderIcon size={14.5} className="text-ink-muted" />
+            )
+          }
         >
-          {isBookmarked ? (
-            <BookmarkIcon fontSize="small" className="text-card-highlight" />
-          ) : (
-            <BookmarkIconUnfilled fontSize="small" className="text-gray-500" />
-          )}
-          {isBookmarked ? 'Saved' : 'Save'}
-        </button>
+          {isBookmarked ? "Saved" : "Save"}
+        </Button>
       </div>
-    </div>
+    </header>
   );
 };
 

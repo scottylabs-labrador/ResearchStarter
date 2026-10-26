@@ -1,47 +1,22 @@
-import React from 'react';
-import OpportunityCard from './OpportunityCard';
-
-interface Opportunity {
-  opportunityName: string;
-  isBookmarked: boolean;
-  professorName: string;
-  department: string;
-  date: string;
-  semester: string;
-  tags: string[];
-}
+import { ResearchType } from "../../DataTypes";
+import Card from "../Card";
+import SectionLabel from "../ui/SectionLabel";
 
 interface RelatedOpportunitiesSectionProps {
-  opportunities: Opportunity[];
+  opportunities: ResearchType[];
 }
 
-const RelatedOpportunitiesSection: React.FC<RelatedOpportunitiesSectionProps> = ({ opportunities }) => {
-  return (
-    <div className="w-screen ml-[calc(50%-50vw)] mb-8">
-      <div className="bg-brand-50 border-t border-gray-200 px-10 lg:px-16 py-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">
-          Related opportunities
-        </h2>
-        <div className="flex overflow-x-auto gap-4 px-6 py-6 -mx-6 -my-6">
-          {opportunities.map((opportunity, index) => (
-            <OpportunityCard
-              key={index}
-              opportunityName={opportunity.opportunityName}
-              isBookmarked={opportunity.isBookmarked}
-              onBookmarkToggle={() =>
-                console.log(`Bookmark toggled for ${opportunity.opportunityName}`)
-              }
-              professorName={opportunity.professorName}
-              department={opportunity.department}
-              date={opportunity.date}
-              semester={opportunity.semester}
-              tags={opportunity.tags}
-            />
-          ))}
-        </div>
-      </div>
+const RelatedOpportunitiesSection = ({ opportunities }: RelatedOpportunitiesSectionProps) => (
+  <section className="mt-14 border-t border-hairline pt-10">
+    <SectionLabel as="h2" className="mb-2">
+      Related opportunities
+    </SectionLabel>
+    <div className="flex flex-col gap-3">
+      {opportunities.map((research) => (
+        <Card key={research._id} research={research} />
+      ))}
     </div>
-  );
-};
+  </section>
+);
 
 export default RelatedOpportunitiesSection;

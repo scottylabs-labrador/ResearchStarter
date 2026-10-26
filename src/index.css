@@ -1,39 +1,176 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Jersey+25&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --canvas: 247 246 244;
+  --surface: 255 255 255;
+  --surface-muted: 241 240 237;
+  --hairline: 231 229 225;
+  --hairline-strong: 214 211 206;
+  --ink: 24 24 27;
+  --ink-secondary: 82 82 91;
+  --ink-muted: 107 107 115;
+  --accent: 98 132 158;
+  --accent-strong: 72 107 132;
+  --accent-muted: 164 186 204;
+  --accent-bg: 236 243 249;
+  --positive: 21 128 61;
+  --positive-bg: 236 253 243;
+  --warning: 180 83 9;
+  --warning-bg: 255 247 237;
+  --danger: 185 28 28;
+  --danger-bg: 254 242 242;
+  --nav-h: 56px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
 html {
   font-size: 14px;
+  font-kerning: normal;
+  /* Geist ships no italic and only 400–600; never let the browser fake a face. */
+  font-synthesis: none;
+  /* The nav is always on screen, so anything scrolled into view (keyboard focus, anchors) stops below it. */
+  scroll-padding-top: calc(var(--nav-h) + 16px);
+}
+
+@layer base {
+  body {
+    @apply bg-canvas font-sans text-body text-ink antialiased;
+  }
+
+  /* Even line lengths in headings, and no one-word last line in running text. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  dd,
+  figcaption {
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  /* Sign-in backdrop: a soft mesh of the "Saudade" palette (lapis, pale crimson wisteria, indigo white) on moon white.
+     Each colour is a field with a long eased falloff that drifts on its own path, so the blend keeps shifting without
+     visibly looping. Only transforms animate, so it runs on the GPU without repainting. ::after is a fixed
+     fine grain that hides the faint 8-bit steps in the palest fades; it is grey noise blended normally, because an
+     overlay blend all but vanishes on near-white. */
+  .signin-backdrop {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .signin-backdrop::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='3 0 0 0 -1 3 0 0 0 -1 3 0 0 0 -1 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+    opacity: 0.025;
+    pointer-events: none;
+  }
+
+  .signin-mesh {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: #eaf4fc;
+  }
+
+  /* Each field sways across, sways up and down, and swells, each on its own period. The three rarely line up, so the
+     field traces a looping curve instead of sliding back and forth on one line. */
+  .signin-mesh > span {
+    position: absolute;
+    left: calc(var(--x) - var(--size) / 2);
+    top: calc(var(--y) - var(--size) / 2);
+    width: var(--size);
+    aspect-ratio: 1;
+    background: radial-gradient(
+      closest-side,
+      rgb(var(--c)) 0%,
+      rgb(var(--c) / 0.85) 25%,
+      rgb(var(--c) / 0.5) 52%,
+      rgb(var(--c) / 0.18) 76%,
+      rgb(var(--c) / 0) 100%
+    );
+    animation:
+      mesh-sway-x var(--tx) cubic-bezier(0.37, 0, 0.63, 1) infinite alternate,
+      mesh-sway-y var(--ty) cubic-bezier(0.37, 0, 0.63, 1) infinite alternate,
+      mesh-swell var(--ts) cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+    will-change: transform, translate, scale;
+  }
+
+  /* lapis, pooled bottom left */
+  .signin-mesh > :nth-child(1) { --c: 30 80 162; --size: 100vmax; --x: 14%; --y: 92%; --dx: 12vmax; --dy: 8vmax; --tx: 13s; --ty: 17s; --ts: 11s; }
+  /* a fainter lapis wash up the left edge */
+  .signin-mesh > :nth-child(2) { --c: 30 80 162; --size: 70vmax; --x: -4%; --y: 18%; --dx: 10vmax; --dy: 16vmax; --tx: 19s; --ty: 14s; --ts: 16s; opacity: 0.45; }
+  /* pale crimson wisteria, bottom right */
+  .signin-mesh > :nth-child(3) { --c: 214 187 198; --size: 80vmax; --x: 92%; --y: 84%; --dx: 12vmax; --dy: 9vmax; --tx: 15s; --ty: 21s; --ts: 12s; }
+  /* indigo white, the bright seam between lapis and wisteria */
+  .signin-mesh > :nth-child(4) { --c: 235 246 247; --size: 55vmax; --x: 74%; --y: 62%; --dx: 14vmax; --dy: 12vmax; --tx: 11s; --ty: 16s; --ts: 9s; }
+
+  @keyframes mesh-sway-x { from { transform: translateX(calc(var(--dx) * -1)); } to { transform: translateX(var(--dx)); } }
+  @keyframes mesh-sway-y { from { translate: 0 calc(var(--dy) * -1); } to { translate: 0 var(--dy); } }
+  @keyframes mesh-swell { from { scale: 0.88; } to { scale: 1.16; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .signin-mesh > span {
+      animation: none;
+    }
+  }
+}
+
+@layer utilities {
+  /* A mono space is a full cell wide; pull it in so phrases like "Spring 2027" read as one unit. */
+  .font-mono {
+    word-spacing: -0.3em;
+  }
+
+  .bg-hairline-texture {
+    background-image: repeating-linear-gradient(
+      135deg,
+      rgb(24 24 27 / 0.035) 0 1px,
+      transparent 1px 12px
+    );
+  }
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-/* Minimal scrollbar */
 .scrollbar-minimal {
-    scrollbar-width: thin;
-    scrollbar-color: #d8b4fe transparent;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--accent-muted)) transparent;
+  scrollbar-gutter: stable;
 }
 
 .scrollbar-minimal::-webkit-scrollbar {
-    width: 4px;
+  width: 4px;
 }
 
 .scrollbar-minimal::-webkit-scrollbar-track {
-    background: transparent;
+  background: transparent;
 }
 
 .scrollbar-minimal::-webkit-scrollbar-thumb {
-    background-color: #d8b4fe;
-    border-radius: 9999px;
+  background-color: rgb(var(--accent-muted));
+  border-radius: 9999px;
 }
