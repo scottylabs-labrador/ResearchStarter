@@ -1,33 +1,43 @@
 # CMU Research
 
-Research opportunities at Carnegie Mellon University, maintained by ScottyLabs Labrador.
+Webapp which consolidates research opportunities across every Carnegie Mellon department, scraping data from lab specific sites, department spreadsheets and university maintained lists. This project is maintained through ScottyLabs Labrador, a student-run organization at CMU. If you are interested in learning more or contributing, contact Jarrett (jarretth@andrew.cmu.edu) or Jennifer (jzhu6@andrew.cmu.edu).
 
-## Apps
+## File Structure
 
 | Directory | Purpose |
 | --- | --- |
-| `apps/web` | React, Vite, Tailwind, and Storybook frontend |
-| `apps/api` | Express, authentication, MongoDB routes, and `dbschemas/` |
+| `apps/web` | React, TypeScript, Tailwind and Vite frontend |
+| `apps/api` | Express, auth, MongoDB routes, and `dbschemas/` |
 | `apps/scrapers` | Python collectors, CSV transforms, and database writers |
 
 Web and API use npm workspaces with one root `package-lock.json`. Python uses a separate virtual environment. No task runner or CI service is required.
 
-## Development
+## How to run the code
 
-Use Node.js 22.12 or newer and Python 3.11 or newer. From the repository root:
+Requirements:
+- Node.js 22.12+
+- Python 3.11+
+- Consult with Jarrett or Jennifer for the config.env settings
+
+After cloning the repository onto your local machine, open a terminal from the repository root and install dependencies by running:
 
 ```sh
 npm ci
+```
+
+Next, to start the web application, run:
+
+```sh
 npm run dev
 ```
 
-The web app runs at http://localhost:3000. In a second terminal, copy `apps/api/config.env.example` to `apps/api/config.env`, fill in your separately supplied database and authentication settings, and run:
+The web app will run at http://localhost:3000. Since the server isn't running, no data will be connected. Copy `apps/api/config.env.example` to `apps/api/config.env` and fill in the separately supplied database and authentication settings. Then open a second terminal and run:
 
 ```sh
 npm run server
 ```
 
-The API runs on port 5050. Vite forwards `/api/auth/*` unchanged and strips `/api` for the other API routes. Existing API endpoints and data schemas are unchanged.
+The API runs on port 5050. Vite forwards `/api/auth/*` unchanged and strips `/api` for the other API routes. Existing API endpoints and data schemas are unchanged. Open http://localhost:3000 on your browser to view the web app. As always, send a message in the Slack channel if there are any difficulties with setup!
 
 Other root commands:
 
@@ -36,8 +46,6 @@ npm run build           # output: apps/web/dist
 npm run preview
 npm run lint
 npm run test_server     # JSON fixture server on port 8000
-npm run storybook       # port 6006
-npm run build-storybook # output: apps/web/storybook-static
 ```
 
 See [scraper setup and writer commands](apps/scrapers/README.md). Scrapers do not run during npm installation, frontend builds, or API startup.
@@ -66,4 +74,4 @@ See [protection settings and verification](.github/PROTECTION.md). Repository ac
 
 ## Attribution
 
-Original project leads: Rishi Prabhu, Jarrett Huang, Jennifer Zhu, Lily Qin, and Bryan Huang, with CMU ScottyLabs Labrador contributors. Scraper source and attribution are recorded in [apps/scrapers/UPSTREAM.md](apps/scrapers/UPSTREAM.md).
+Original project leads (Fall 2024): Jennifer Zhu, Jarrett Huang, Rishi Prabhu, Lily Qin, and Bryan Huang, alongside other ScottyLabs Labrador contributors. Scraper source and attribution are recorded in [apps/scrapers/UPSTREAM.md](apps/scrapers/UPSTREAM.md).
