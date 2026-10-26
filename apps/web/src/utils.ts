@@ -104,3 +104,9 @@ export function professorBioPlainText(bio: unknown): string {
 
   return stringEntries.map(([, v]) => stripHtmlToPlainText(v)).join("\n\n");
 }
+
+export function matchesCompensation(value: string | undefined, selected: "Paid" | "Unpaid"): boolean {
+  const v = (value ?? "").toLowerCase();
+  if (selected === "Unpaid") return v.includes("unpaid");
+  return v.includes("paid") && !v.includes("unpaid");
+}

@@ -14,7 +14,7 @@ type Story = StoryObj<typeof InfoPageHeader>;
 export const Default: Story = {
   args: {
     title: 'Default Title',
-    professorOrLabName: 'Default Professor',
+    contacts: [['Default Professor', 'dprof']],
     department: ['Default Department'],
     college: ['Default College'],
     tags: ['Default Tag'],

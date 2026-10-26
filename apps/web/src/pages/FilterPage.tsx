@@ -1,14 +1,28 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
+import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
+import SearchOffOutlinedIcon from "@mui/icons-material/SearchOffOutlined";
 import FilterSection from "../components/FilterSection";
 import Card from "../components/Card";
-import Spinner from "../components/Spinner";
-import SearchBar from "../components/SearchBar";
+import Tag from "../components/Tag";
+import Badge from "../components/ui/Badge";
+import Button from "../components/ui/Button";
+import Input from "../components/ui/Input";
+import Kbd from "../components/ui/Kbd";
+import Spinner from "../components/ui/Spinner";
+import EmptyState from "../components/ui/EmptyState";
+import SegmentedControl from "../components/ui/SegmentedControl";
+import { cx } from "../components/ui/cx";
+import { FilterListIcon, SearchIcon } from "../components/ui/icons";
+import { useSlashToFocus } from "../components/ui/useSlashToFocus";
 import { ResearchType } from "../DataTypes";
-import { parseContact, toArray } from "../utils";
-import { useNavBarHidden } from "../contexts/NavBarContext";
-import DEV_MOCK_RESEARCHES from "../data/devMockResearches";
+import { matchesCompensation } from "../utils";
+import { fetchOpportunities } from "../lib/opportunities";
 
-type FilterKeysType = { [key: string]: boolean };
+// The header and the results share one capped, centered column so wide screens keep side margins.
+const resultsColumn = "mx-auto w-full max-w-[80rem]";
+
+// The sidebar sits beside the results from the lg breakpoint; narrower, it opens over them, so it starts closed.
+const sidebarFitsBeside = () => window.matchMedia("(min-width: 1024px)").matches;
 
 interface ActiveFilter {
   label: string;
@@ -17,11 +31,13 @@ interface ActiveFilter {
 }
 
 const FilterPage = () => {
-  const navHidden = useNavBarHidden();
   const [researches, setResearches] = useState<ResearchType[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
   const [input, setInput] = useState("");
-  const [sidebarVisible, setSidebarVisible] = useState(true);
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [sidebarVisible, setSidebarVisible] = useState(sidebarFitsBeside);
+  const searchRef = useRef<HTMLInputElement>(null);
 
   // College checkboxes
   const [collegeChecks, setCollegeChecks] = useState<Record<string, boolean>>({});
@@ -38,55 +54,32 @@ const FilterPage = () => {
   // Infinite scroll
   const CARD_BATCH_LIMIT = 10;
   const [loadedBatches, setLoadedBatches] = useState(0);
-  const [searchBarHidden, setSearchBarHidden] = useState(false);
+  const scrollerRef = useRef<HTMLElement>(null);
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
-    // Only show search bar when scrolled to the very top
-    setSearchBarHidden(scrollTop > 0);
-    if (scrollHeight - scrollTop <= clientHeight + 50) {
-      setLoadedBatches((prev) => prev + 1);
-    }
+  useSlashToFocus(searchRef);
+
+  // Each filter toggle unmounts when pressed, so hand focus to the other one instead of dropping it on <body>.
+  const showFiltersRef = useRef<HTMLButtonElement>(null);
+  const hideFiltersRef = useRef<HTMLButtonElement>(null);
+  const moveFocusToToggle = useRef(false);
+  const setFiltersVisible = (visible: boolean) => {
+    moveFocusToToggle.current = true;
+    setSidebarVisible(visible);
   };
+  useEffect(() => {
+    if (!moveFocusToToggle.current) return;
+    moveFocusToToggle.current = false;
+    (sidebarVisible ? hideFiltersRef : showFiltersRef).current?.focus();
+  }, [sidebarVisible]);
 
   // Fetch data
   useEffect(() => {
     const fetchResearches = async () => {
       try {
-        const res = await fetch("http://localhost:5050/opportunities/");
-        if (!res.ok) return;
-        const data: any[] = await res.json();
-        const transformed = data
-          .filter((item) => item["Project Title"])
-          .map((item) => ({
-            _id: item._id,
-            projectTitle: item["Project Title"],
-            contact: parseContact(item.Contact),
-            department: toArray(item.Department),
-            description: item.Description,
-            desiredSkillLevel: item["Desired Skill Level"],
-            paidUnpaid: item["Paid/Unpaid"],
-            position: item.Position,
-            prereqs: toArray(item.Prereqs),
-            relevantLinks: toArray(item["Relevant Links"]),
-            source: item.Source,
-            timeAdded: item["Time Added"],
-            timeCommitment: item["Time Commitment"],
-            anticipatedEndDate: item["Anticipated End Date"],
-            keywords: toArray(item.Keywords),
-            college: toArray(item.College),
-          }));
-        setResearches(transformed);
-      } catch {
-        console.log("Error Fetching Data");
-        // Local-only design preview fallback. Active ONLY when running `vite` in
-        // DEV with VITE_DEV_BYPASS_AUTH=true. Stripped from production builds.
-        if (
-          import.meta.env.DEV &&
-          import.meta.env.VITE_DEV_BYPASS_AUTH === "true"
-        ) {
-          setResearches(DEV_MOCK_RESEARCHES);
-        }
+        setResearches(await fetchOpportunities());
+      } catch (err) {
+        console.error("Error fetching opportunities", err);
+        setLoadFailed(true);
       } finally {
         setLoading(false);
       }
@@ -206,10 +199,8 @@ const FilterPage = () => {
     }
 
     // Compensation filter
-    if (selectedCompensation) {
-      results = results.filter((r) =>
-        r.paidUnpaid?.toLowerCase().includes(selectedCompensation.toLowerCase())
-      );
+    if (selectedCompensation === "Paid" || selectedCompensation === "Unpaid") {
+      results = results.filter((r) => matchesCompensation(r.paidUnpaid, selectedCompensation));
     }
 
     // Semester filter
@@ -254,14 +245,28 @@ const FilterPage = () => {
     return results;
   }, [researches, collegeChecks, selectedDepartment, selectedEducation, selectedCompensation, selectedSemester, input, sortBy]);
 
-  const contentLeft = sidebarVisible ? "280px" : "0px";
+  const visibleCount = (loadedBatches + 1) * CARD_BATCH_LIMIT;
+  const hasMore = visibleCount < filteredData.length;
+
+  const handleScroll = (e: React.UIEvent<HTMLElement>) => {
+    const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
+    if (hasMore && scrollHeight - scrollTop <= clientHeight + 50) {
+      setLoadedBatches((prev) => prev + 1);
+    }
+  };
+
+  const resultLabel = `${filteredData.length} ${filteredData.length === 1 ? "result" : "results"}`;
 
   return (
     <>
+      {/* Below lg the sidebar opens over the results; tapping them closes it. */}
+      {sidebarVisible ? (
+        <div aria-hidden="true" className="fixed inset-x-0 bottom-0 top-nav z-10 bg-ink/20 lg:hidden" onClick={() => setFiltersVisible(false)} />
+      ) : null}
       <FilterSection
-        navHidden={navHidden}
         visible={sidebarVisible}
-        onToggleVisible={() => setSidebarVisible(false)}
+        onToggleVisible={() => setFiltersVisible(false)}
+        hideButtonRef={hideFiltersRef}
         collegeChecks={collegeChecks}
         onCollegeCheck={handleCollegeCheck}
         onCollegeReset={handleCollegeReset}
@@ -276,111 +281,125 @@ const FilterPage = () => {
         onResetAll={handleResetAll}
       />
 
-      {/* Main content area */}
-      <div
-        className="fixed right-0 bg-white transition-[left,top,height] duration-300 ease-out overflow-hidden flex flex-col"
-        style={{
-          top: navHidden ? 0 : "10vh",
-          left: contentLeft,
-          height: navHidden ? "100vh" : "90vh",
-        }}
+      {/* Scrolls as one page, so the header moves away with the results. */}
+      <main
+        ref={scrollerRef}
+        className={cx(
+          "scrollbar-minimal fixed bottom-0 left-0 right-0 top-nav overflow-y-auto bg-canvas px-8 pb-8 transition-[left] duration-200 ease-out motion-reduce:transition-none xl:px-12",
+          sidebarVisible && "lg:left-[296px]"
+        )}
+        onScroll={handleScroll}
       >
-        {/* Header: search bar + filters + sort — collapses on scroll like the navbar.
-            grid-rows-[1fr]→[0fr] gives a clean, self-sizing collapse without the
-            magic max-h-[300px] clip (which used to truncate wrapped filter chips). */}
-        <div
-          className={`grid transition-[grid-template-rows] duration-300 ease-out ${
-            searchBarHidden ? "grid-rows-[0fr]" : "grid-rows-[1fr]"
-          }`}
-        >
-          <div
-            className={`overflow-hidden transition-opacity duration-200 ease-out ${
-              searchBarHidden ? "opacity-0" : "opacity-100"
-            }`}
-          >
-            <div className="px-8 py-6">
-              {/* Show sidebar button when hidden */}
-              <div className="flex items-center gap-4 mb-4">
-                {!sidebarVisible && (
-                  <button
-                    onClick={() => setSidebarVisible(true)}
-                    className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full border border-gray-300 transition-colors duration-200 ease-out"
-                  >
-                    <span className="text-xs">›</span> Filter
-                  </button>
-                )}
-                <h1 className="text-2xl font-semibold text-gray-800">Search</h1>
+        <div className={resultsColumn}>
+          <header className="pb-6 pt-7">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="flex min-w-0 items-baseline gap-3">
+                <h1 className="text-title text-ink">Search</h1>
+                {!loading && !loadFailed ? <span className="whitespace-nowrap font-mono text-meta text-ink-muted">{resultLabel}</span> : null}
               </div>
-
-              <div className="w-full mb-6">
-                <SearchBar input={input} handleChange={setInput} />
-              </div>
-
-              {/* Active filter chips + sort */}
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex flex-wrap gap-2">
-                  {activeFilters.map((filter) => (
-                    <button
-                      key={`${filter.type}-${filter.value}`}
-                      onClick={() => removeFilter(filter)}
-                      className="flex items-center gap-1 px-3 py-1 bg-brand-50 border border-purple-300 rounded-full text-sm text-purple-700 transition-colors duration-200 ease-out hover:bg-purple-100 active:scale-[0.97]"
-                    >
-                      {filter.label}
-                      <span className="ml-1 text-xs font-bold">×</span>
-                    </button>
-                  ))}
-                </div>
-                {/* Sort: segmented control. Active option lifts to white over the
-                    gray track — same "active vs hover have different shapes"
-                    discipline used in the navbar underline. */}
-                <div className="inline-flex items-center bg-gray-100 rounded-md p-0.5 text-sm flex-shrink-0">
-                  <button
-                    onClick={() => setSortBy("year")}
-                    className={`px-3 py-1 rounded transition-colors duration-200 ease-out ${
-                      sortBy === "year"
-                        ? "bg-white text-gray-900 font-medium"
-                        : "text-gray-600 hover:text-gray-900"
-                    }`}
-                  >
-                    Year
-                  </button>
-                  <button
-                    onClick={() => setSortBy("time")}
-                    className={`px-3 py-1 rounded transition-colors duration-200 ease-out ${
-                      sortBy === "time"
-                        ? "bg-white text-gray-900 font-medium"
-                        : "text-gray-600 hover:text-gray-900"
-                    }`}
-                  >
-                    Time
-                  </button>
-                </div>
+              <div className="ml-auto flex shrink-0 items-center gap-2">
+                <span aria-hidden="true" className="hidden font-mono text-meta font-medium text-ink-muted sm:inline">
+                  Sort
+                </span>
+                <SegmentedControl
+                  aria-label="Sort by"
+                  value={sortBy}
+                  onChange={setSortBy}
+                  options={[
+                    { value: "year", label: "Year" },
+                    { value: "time", label: "Time" },
+                  ]}
+                />
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Cards */}
-        <div
-          className="px-8 pb-6 overflow-y-auto flex-1"
-          onScroll={handleScroll}
-        >
-          <div className="flex flex-col gap-4">
-            {loading ? (
-              <div className="flex flex-col items-center pt-10">
-                <h2>Loading...</h2>
-                <Spinner />
+            {/* With the sidebar hidden, its toggle sits in the search row. */}
+            <div className="flex items-center gap-2">
+              {!sidebarVisible && (
+                <Button
+                  ref={showFiltersRef}
+                  className="shrink-0"
+                  icon={<FilterListIcon size={9} />}
+                  aria-label={activeFilters.length > 0 ? `Show filters, ${activeFilters.length} active` : "Show filters"}
+                  onClick={() => setFiltersVisible(true)}
+                >
+                  Filters
+                  {activeFilters.length > 0 ? (
+                    <Badge tone="accent" className="-me-1 font-mono">
+                      {activeFilters.length}
+                    </Badge>
+                  ) : null}
+                </Button>
+              )}
+              <Input
+                ref={searchRef}
+                containerClassName="min-w-0 flex-1"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onFocus={() => {
+                  setSearchFocused(true);
+                  // Reached with "/" or Shift+Tab from further down: show the title with it.
+                  const scroller = scrollerRef.current;
+                  if (scroller && scroller.scrollTop > 0) scroller.scrollTo({ top: 0 });
+                }}
+                onBlur={() => setSearchFocused(false)}
+                placeholder="Search for research opportunities…"
+                aria-label="Search research opportunities"
+                icon={<SearchIcon size={13} />}
+                trailing={!searchFocused && input === "" ? <Kbd>/</Kbd> : null}
+              />
+            </div>
+
+            {activeFilters.length > 0 ? (
+              <div className="mt-3 flex min-w-0 flex-wrap items-center gap-1.5">
+                {activeFilters.map((filter) => (
+                  <Tag key={`${filter.type}-${filter.value}`} keyword={filter.label} onRemove={() => removeFilter(filter)} />
+                ))}
+                {activeFilters.length >= 2 ? (
+                  <Button size="sm" variant="ghost" onClick={handleResetAll}>
+                    Clear all
+                  </Button>
+                ) : null}
               </div>
+            ) : null}
+          </header>
+
+          <section aria-label="Search results">
+            {loading ? (
+              <div className="flex justify-center pt-16">
+                <Spinner label="Loading opportunities" />
+              </div>
+            ) : loadFailed ? (
+              <EmptyState
+                icon={<ErrorOutlineOutlinedIcon sx={{ fontSize: 20 }} />}
+                title="Couldn’t load opportunities"
+                message="Check your connection and refresh the page."
+              />
             ) : filteredData.length === 0 ? (
-              <p className="text-gray-500 text-center pt-10">No research opportunities found.</p>
+              <EmptyState
+                icon={<SearchOffOutlinedIcon sx={{ fontSize: 20 }} />}
+                title="No opportunities match"
+                message={activeFilters.length > 0 ? "Try removing a filter" : undefined}
+                action={
+                  activeFilters.length > 0 ? (
+                    <Button size="sm" onClick={handleResetAll}>
+                      Clear filters
+                    </Button>
+                  ) : undefined
+                }
+              />
             ) : (
-              filteredData
-                .slice(0, (loadedBatches + 1) * CARD_BATCH_LIMIT)
-                .map((research) => <Card key={research._id} research={research} />)
+              <div className="flex flex-col gap-3">
+                {filteredData
+                  .slice(0, visibleCount)
+                  .map((research) => (
+                    <Card key={research._id} research={research} />
+                  ))}
+              </div>
             )}
-          </div>
+          </section>
         </div>
-      </div>
+      </main>
     </>
   );
 };

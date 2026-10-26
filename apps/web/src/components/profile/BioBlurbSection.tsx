@@ -1,17 +1,17 @@
-// Currently an unused feature for the student dashboard.
-
-import React, { useState, useEffect } from 'react';
-import { FaPencil } from "react-icons/fa6";
+import React, { useState, useEffect } from "react";
+import AboutSection from "./AboutSection";
+import Surface from "../ui/Surface";
+import Button from "../ui/Button";
+import { fieldClass } from "../ui/Input";
+import { cx } from "../ui/cx";
+import { AddIcon, EditIcon } from "../ui/icons";
 
 interface BioBlurbSectionProps {
   initialBio?: string;
   onSave?: (bio: string) => void;
 }
 
-const BioBlurbSection: React.FC<BioBlurbSectionProps> = ({
-  initialBio = "",
-  onSave,
-}) => {
+const BioBlurbSection: React.FC<BioBlurbSectionProps> = ({ initialBio = "", onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentBio, setCurrentBio] = useState(initialBio);
 
@@ -19,14 +19,8 @@ const BioBlurbSection: React.FC<BioBlurbSectionProps> = ({
     setCurrentBio(initialBio);
   }, [initialBio]);
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
-
   const handleSaveBio = () => {
-    if (onSave) {
-      onSave(currentBio);
-    }
+    onSave?.(currentBio.trim());
     setIsEditing(false);
   };
 
@@ -35,56 +29,62 @@ const BioBlurbSection: React.FC<BioBlurbSectionProps> = ({
     setIsEditing(false);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setCurrentBio(e.target.value);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Escape") handleCancel();
+    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleSaveBio();
   };
 
+  const canEdit = Boolean(onSave);
+  const editAction =
+    canEdit && !isEditing && initialBio ? (
+      <Button size="sm" variant="ghost" className="-my-1 -me-3" icon={<EditIcon size={12.5} />} onClick={() => setIsEditing(true)}>
+        Edit
+      </Button>
+    ) : null;
+
   return (
-    <section className="mb-6">
-      <div className="flex items-center gap-2 mb-4">
-        <h2 className="font-jersey text-3xl font-semibold text-gray-800">Bio</h2>
-        {!isEditing && (
-          <button
-            onClick={handleEditClick}
-            className="text-black hover:text-gray-600 transition-colors"
-            aria-label="Edit bio"
-          >
-            <FaPencil size={18} />
-          </button>
-        )}
-      </div>
-      <div className="bg-magenta-100 p-4 rounded-md">
-        {isEditing ? (
-          <>
-            <textarea
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none bg-white"
-              rows={5}
-              value={currentBio}
-              onChange={handleChange}
-              autoFocus
-            ></textarea>
-            <div className="flex justify-end space-x-2 mt-3">
-              <button
-                onClick={handleCancel}
-                className="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg transition-colors duration-150 ease-out hover:bg-gray-50 active:scale-[0.97]"
-              >
+    <AboutSection title="Bio" action={editAction}>
+      {isEditing ? (
+        <Surface className="p-4">
+          <textarea
+            aria-label="Bio"
+            className={cx(fieldClass, "resize-none text-lead")}
+            rows={5}
+            value={currentBio}
+            onChange={(e) => setCurrentBio(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="What do you want to research, and what have you worked on so far?"
+            autoFocus
+          />
+          <div className="mt-3 flex items-center justify-between gap-2">
+            <span className="hidden font-mono text-meta text-ink-muted sm:inline">Ctrl + Enter to save</span>
+            <div className="ml-auto flex gap-2">
+              <Button size="sm" onClick={handleCancel}>
                 Cancel
-              </button>
-              <button
-                onClick={handleSaveBio}
-                className="px-4 py-2 bg-card-highlight text-white text-sm font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]"
-              >
+              </Button>
+              <Button size="sm" variant="primary" onClick={handleSaveBio}>
                 Save
-              </button>
+              </Button>
             </div>
-          </>
-        ) : (
-          <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-            {initialBio || "No bio yet. Click edit to add one."}
-          </p>
-        )}
-      </div>
-    </section>
+          </div>
+        </Surface>
+      ) : initialBio ? (
+        <Surface className="px-5 py-4">
+          <p className="w-full whitespace-pre-wrap text-lead text-ink-secondary">{initialBio}</p>
+        </Surface>
+      ) : canEdit ? (
+        <Surface className="flex flex-col items-start gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-body text-ink-muted">A few sentences on what you want to research helps professors say yes.</p>
+          <Button size="sm" icon={<AddIcon size={9} />} onClick={() => setIsEditing(true)}>
+            Add bio
+          </Button>
+        </Surface>
+      ) : (
+        <Surface className="px-5 py-4">
+          <p className="text-body text-ink-muted">No bio available.</p>
+        </Surface>
+      )}
+    </AboutSection>
   );
 };
 

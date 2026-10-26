@@ -1,22 +1,44 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
-import { ProfessorType } from "../DataTypes";
-import { getDummyResearchForProfessor } from "../data/dummyProfessorResearch";
+import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
+import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
+import { ProfessorType, ResearchType } from "../DataTypes";
 import { professorBioPlainText } from "../utils";
+import { useEffectiveSession } from "../lib/useEffectiveSession";
+import { fetchOpportunities, listingsBy } from "../lib/opportunities";
+import { fetchProfessor } from "../lib/professors";
 import Card from "../components/Card";
-import ProfessorPlaceholderImg from "../assets/professor_dashboard_placeholder.png";
-
-const professorApiUrl = (param: string) =>
-  `http://localhost:5050/professors/${encodeURIComponent(param.trim())}`;
-
-const professorProjectsApiUrl = (param: string) =>
-  `http://localhost:5050/opportunities/professor/${encodeURIComponent(param.trim())}`;
+import ProfilePageShell from "../components/profile/ProfilePageShell";
+import ProfileHeader from "../components/profile/ProfileHeader";
+import AboutSection from "../components/profile/AboutSection";
+import ProfessorProfileDetails from "../components/profile/ProfessorProfileDetails";
+import BioBlurbSection from "../components/profile/BioBlurbSection";
+import ResearchAreasSection from "../components/profile/ResearchAreasSection";
+import { professorSummaryLine } from "../components/profile/professorSummary";
+import Alert from "../components/ui/Alert";
+import { ButtonLink } from "../components/ui/Button";
+import Spinner from "../components/ui/Spinner";
+import EmptyState from "../components/ui/EmptyState";
+import { SchoolIcon } from "../components/ui/icons";
+import { Meta } from "../components/ui/Meta";
 
 const ProfessorProfile = () => {
   const { andrewId } = useParams<{ andrewId: string }>();
+  const { data: session } = useEffectiveSession();
   const [professor, setProfessor] = useState<ProfessorType | null>(null);
+  const [bio, setBio] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [opportunities, setOpportunities] = useState<ResearchType[] | null>(null);
+  const [listingsFailed, setListingsFailed] = useState(false);
+
+  const isOwnProfile = useMemo(() => {
+    if (!session?.user?.isProfessor || !andrewId) return false;
+    const param = andrewId.trim().toLowerCase();
+    const sessionId = session.user.andrewId?.trim().toLowerCase();
+    const emailId = session.user.email?.split("@")[0]?.trim().toLowerCase();
+    return param === sessionId || param === emailId;
+  }, [session, andrewId]);
 
   useEffect(() => {
     const id = andrewId?.trim();
@@ -26,157 +48,123 @@ const ProfessorProfile = () => {
       return;
     }
 
-    const fetchProfessor = async () => {
-      try {
-        const res = await fetch(professorApiUrl(id));
-        if (!res.ok) {
+    let cancelled = false;
+    setLoading(true);
+    setError(false);
+    fetchProfessor(id)
+      .then((record) => {
+        if (cancelled) return;
+        if (!record) {
           setError(true);
           return;
         }
-        const data = await res.json();
-        setProfessor({
-          _id: data._id,
-          name: data.Name ?? "",
-          department: Array.isArray(data.Department)
-            ? data.Department
-            : data.Department
-              ? [data.Department]
-              : [],
-          college: Array.isArray(data.College)
-            ? data.College
-            : data.College
-              ? [data.College]
-              : [],
-          email: data.Email ?? data.email ?? "",
-          phoneNumber: data["Phone Number"],
-          bio: data.Bio,
-          media: data.Media,
-          positions: data.Positions,
-          tags: data.Tags,
-          profilePicture: data["Profile Picture"],
-        });
-
-        let andrew_id = data.Email.split("@")[0];
-        const resProjects = await fetch(professorProjectsApiUrl(andrew_id));
-        const projects_data = await resProjects.json();
-        console.log(projects_data);
-      } catch {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
+        setProfessor(record);
+        setBio(professorBioPlainText(record.bio));
+      })
+      .catch((err) => {
+        console.error("Error fetching professor", err);
+        if (!cancelled) setError(true);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
     };
-
-    void fetchProfessor();
   }, [andrewId]);
+
+  // Fetched alongside the professor rather than after; filtered once both have arrived.
+  useEffect(() => {
+    let cancelled = false;
+    fetchOpportunities()
+      .then((result) => {
+        if (!cancelled) setOpportunities(result);
+      })
+      .catch((err) => {
+        console.error("Error fetching listings", err);
+        if (!cancelled) setListingsFailed(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // The record's email is canonical; the URL may hold an email or a record id instead of an Andrew ID.
+  const owner = professor ? professor.email.split("@")[0] || andrewId || "" : "";
+  const listings = useMemo(
+    () => (professor && opportunities ? listingsBy(opportunities, owner) : null),
+    [professor, opportunities, owner]
+  );
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p className="text-gray-500 text-lg">Loading...</p>
-      </div>
+      <main className="flex min-h-[60vh] items-center justify-center">
+        <Spinner label="Loading professor" />
+      </main>
     );
   }
 
   if (error || !professor) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p className="text-gray-500 text-lg">Professor not found.</p>
-      </div>
+      <ProfilePageShell breadcrumbRoot="Professors" breadcrumbCurrent="Not found" breadcrumbIcon={<SchoolIcon size={12} />}>
+        <EmptyState icon={<ErrorOutlineOutlinedIcon sx={{ fontSize: 20 }} />} title="Professor not found" titleAs="h1" />
+      </ProfilePageShell>
     );
   }
 
-  const dummyResearch = getDummyResearchForProfessor(
-    professor.name,
-    andrewId ?? ""
-  );
-
-  const bioText = professorBioPlainText(professor.bio);
+  const listingCount = listings?.length ?? 0;
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-white pt-32 px-8">
-      {/* Header: profile picture + info */}
-      <div className="flex flex-row items-start gap-24 max-w-4xl w-full">
-        <div className="w-48 h-48 flex-shrink-0">
-          <img
-            src={professor.profilePicture || ProfessorPlaceholderImg}
-            alt={professor.name}
-            className="w-full h-full object-cover rounded-full"
-          />
-        </div>
+    <ProfilePageShell
+      breadcrumbRoot={isOwnProfile ? "Account" : "Professors"}
+      breadcrumbCurrent={isOwnProfile ? "Public profile" : professor.name}
+      breadcrumbIcon={isOwnProfile ? undefined : <SchoolIcon size={12} />}
+    >
+      <ProfileHeader
+        profileImage={professor.profilePicture}
+        name={professor.name}
+        summary={professorSummaryLine(professor)}
+        readOnly
+        action={
+          isOwnProfile ? (
+            <ButtonLink size="sm" to="/professor-dashboard">
+              Manage listings
+            </ButtonLink>
+          ) : null
+        }
+      />
 
-        <div className="flex flex-col pt-2 pb-16">
-          <h1 className="text-5xl font-extrabold text-black mb-8 tracking-tight">
-            Professor {professor.name}
-          </h1>
+      <AboutSection title="Details" className="mt-8">
+        <ProfessorProfileDetails college={professor.college} department={professor.department} email={professor.email} />
+      </AboutSection>
 
-          <div className="grid grid-cols-[140px_1fr] gap-y-4 text-xl">
-            <span className="font-bold text-gray-900 text-right pr-6">
-              College
-            </span>
-            <span className="text-gray-800">
-              {professor.college.length > 0
-                ? professor.college.join(", ")
-                : "Not set"}
-            </span>
+      <BioBlurbSection initialBio={bio} />
 
-            <span className="font-bold text-gray-900 text-right pr-6">
-              Department
-            </span>
-            <span className="text-gray-800">
-              {professor.department.length > 0
-                ? professor.department.join(", ")
-                : "Not set"}
-            </span>
+      <ResearchAreasSection tags={professor.tags ?? []} />
 
-            <span className="font-bold text-gray-900 text-right pr-6">
-              Email
-            </span>
-            <span className="text-gray-700">{professor.email}</span>
+      <AboutSection
+        title="Research listings"
+        action={listings ? <Meta>{listingCount === 1 ? "1 listing" : `${listingCount} listings`}</Meta> : null}
+      >
+        {listingsFailed ? (
+          <Alert>
+            Couldn&rsquo;t load research listings. Refresh the page to try again.
+          </Alert>
+        ) : listings === null ? (
+          <div className="flex justify-center py-10">
+            <Spinner label="Loading research listings" />
           </div>
-        </div>
-      </div>
-
-      {/* Tab bar */}
-      <div className="max-w-4xl w-full border-b border-gray-300 flex justify-center">
-        <button className="px-6 py-3 text-gray-900 border-b-2 border-card-highlight font-medium">
-          Research Listing
-        </button>
-      </div>
-
-      {/* Bio section */}
-      <div className="max-w-4xl w-full mt-8">
-        <h2 className="text-3xl font-extrabold text-black mb-4">Bio</h2>
-        <div className="bg-violet-100 rounded-lg p-6">
-          <p className="text-gray-800 leading-relaxed whitespace-pre-line">
-            {bioText || "No bio available."}
-          </p>
-        </div>
-      </div>
-
-      {/* Research Listings */}
-      <div className="max-w-4xl w-full mt-10">
-        <h2 className="text-3xl font-extrabold text-black mb-6">
-          Research Listings
-        </h2>
-        <div className="flex flex-col gap-5">
-          {dummyResearch.map((research) => (
-            <Card
-              key={research._id}
-              research={research}
-              showApplyButton={true}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* View All button */}
-      <div className="max-w-4xl w-full my-10">
-        <button className="w-full py-3 bg-card-highlight text-white text-lg font-semibold rounded-lg transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.97]">
-          View All
-        </button>
-      </div>
-    </div>
+        ) : listings.length === 0 ? (
+          <EmptyState icon={<PostAddOutlinedIcon sx={{ fontSize: 20 }} />} title="No open listings right now" />
+        ) : (
+          <div className="flex flex-col gap-3">
+            {listings.map((research) => (
+              <Card key={research._id} research={research} showApplyButton={!isOwnProfile} showBookmark={!isOwnProfile} />
+            ))}
+          </div>
+        )}
+      </AboutSection>
+    </ProfilePageShell>
   );
 };
 
