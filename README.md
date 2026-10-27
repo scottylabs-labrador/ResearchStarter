@@ -45,12 +45,9 @@ Other root commands:
 npm run build           # output: apps/web/dist
 npm run preview
 npm run lint
-npm run test_server     # JSON fixture server on port 8000
 ```
 
 See [scraper setup and writer commands](apps/scrapers/README.md). Scrapers do not run during npm installation, frontend builds, or API startup.
-
-Known inherited tooling issues: Storybook's `src/pages/Profile.stories.tsx` imports a removed `./Profile` module, so `build-storybook` currently fails. ESLint's existing Storybook rules have no TypeScript parser and report parsing errors on TypeScript stories/configuration. These are not required merge checks; the production Vite build is independent of them.
 
 ## PostgreSQL development tooling
 
